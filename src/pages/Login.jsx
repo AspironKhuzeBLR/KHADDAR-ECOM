@@ -40,6 +40,24 @@ const Login = () => {
     }
     setLoading(true);
     setError('');
+
+    const isAdminEmail = email.toLowerCase() === 'admin@gmail.com';
+    const adminPassword = 'admin123';
+
+    if (isAdminEmail) {
+      if (password === adminPassword) {
+        localStorage.setItem('adminToken', 'admin-auth-token-12345');
+        localStorage.setItem('adminUser', JSON.stringify({ username: 'admin', email }));
+        setLoading(false);
+        navigate('/admin/dashboard');
+        return;
+      }
+
+      setLoading(false);
+      setError('Invalid admin credentials. Please try again.');
+      return;
+    }
+
     try {
       const result = await signIn({ email, password });
       const userProfile =

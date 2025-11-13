@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import { useAuth } from '../context/AuthContext';
+import { FaSignOutAlt } from 'react-icons/fa';
 
 const logo = '/logo_file_page-0001.png';
+
+const adminNavItems = [
+  { label: 'Overview', hash: 'overview' },
+  { label: 'Products', hash: 'products' },
+  { label: 'Orders', hash: 'orders' },
+  { label: 'Users', hash: 'users' },
+  { label: 'Settings', hash: 'settings' }
+];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +21,22 @@ const Header = () => {
   const [isBlackScrolled, setIsBlackScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  
+  // Check admin authentication separately for admin routes
+  const isAdminAuthenticated = isAdminRoute 
+    ? !!localStorage.getItem('adminToken')
+    : false;
+  
+  // Show icons if either regular auth or admin auth
+  const showAuthIcons = isAuthenticated || isAdminAuthenticated;
+  
+  // Get admin user info for display
+  const adminUser = isAdminRoute && isAdminAuthenticated
+    ? JSON.parse(localStorage.getItem('adminUser') || '{}')
+    : null;
   const displayName = useMemo(() => {
     if (user?.name) {
       return user.name.trim().split(/\s+/)[0];
@@ -26,8 +50,8 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (location.pathname === '/' || 
-          location.pathname === '/collections' || 
+      if (location.pathname === '/' ||
+          location.pathname === '/collections' ||
           location.pathname === '/community' ||
           location.pathname === '/sustainability' ||
           location.pathname === '/contact') {
@@ -62,6 +86,16 @@ const Header = () => {
     setHoveredMenu(null);
   };
 
+  const handleLogout = () => {
+    if (isAdminRoute) {
+      window.localStorage.removeItem('adminToken');
+      window.localStorage.removeItem('adminUser');
+    }
+    logout();
+    setIsMenuOpen(false);
+    navigate(isAdminRoute ? '/login' : '/');
+  };
+
   return (
     <>
       <header className={`header ${isScrolled ? 'scrolled' : ''} ${isBlackScrolled ? 'black-scrolled' : ''}`}>
@@ -72,8 +106,8 @@ const Header = () => {
           </Link>
 
           <div className="header-icons-left">
-            <button 
-              className="icon-btn search-btn" 
+            <button
+              className="icon-btn search-btn"
               aria-label="Search"
               onClick={(e) => {
                 e.preventDefault();
@@ -86,23 +120,35 @@ const Header = () => {
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
             </button>
-            {isAuthenticated ? (
-              <button
-                type="button"
-                className="icon-btn account-btn"
-                aria-label="Logout"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  logout();
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 17 21 12 16 7"></polyline>
-                  <line x1="21" y1="12" x2="9" y2="12"></line>
-                  <path d="M12 19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h7"></path>
-                </svg>
-              </button>
+            {showAuthIcons ? (
+              <>
+                <button
+                  type="button"
+                  className="icon-btn account-btn"
+                  aria-label="Account"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  className="icon-btn logout-btn"
+                  aria-label="Logout"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleLogout();
+                  }}
+                >
+                  <FaSignOutAlt size={20} />
+                </button>
+              </>
             ) : (
               <Link to="/login" className="icon-btn account-btn" aria-label="Account">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -111,7 +157,7 @@ const Header = () => {
                 </svg>
               </Link>
             )}
-            {isAuthenticated && (
+            {showAuthIcons && !isAdminRoute && (
               <button className="icon-btn cart-btn" aria-label="Shopping Cart">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -121,7 +167,13 @@ const Header = () => {
                 <span className="cart-count">0</span>
               </button>
             )}
-            {isAuthenticated && (
+            {isAdminRoute && isAdminAuthenticated && adminUser && (
+              <div className="header-welcome">
+                <span className="header-welcome-text">Welcome back</span>
+                <span className="header-welcome-name">{adminUser.username || adminUser.email || 'Admin'}</span>
+              </div>
+            )}
+            {showAuthIcons && !isAdminRoute && (
               <div className="auth-indicator">
                 <span className="auth-email">{displayName}</span>
               </div>
@@ -129,67 +181,81 @@ const Header = () => {
           </div>
 
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-            <Link to="/" className="nav-link" onClick={closeMenu}>HOME</Link>
-            
-            <div 
-              className="nav-link-wrapper"
-              onMouseEnter={() => handleMenuHover('collections')}
-              onMouseLeave={handleMenuLeave}
-            >
-              <Link to="/collections" className="nav-link" onClick={closeMenu}>COLLECTIONS</Link>
-            </div>
-
-            <div 
-              className="nav-link-wrapper"
-              onMouseEnter={() => handleMenuHover('shop')}
-              onMouseLeave={(e) => {
-                // Only close if we're not moving to the dropdown menu
-                if (!e.currentTarget.contains(e.relatedTarget)) {
-                  handleMenuLeave();
-                }
-              }}
-            >
-              <span className="nav-link">SHOP BY CATEGORY</span>
-              {hoveredMenu === 'shop' && (
-                <div 
-                  className="dropdown-menu"
-                  onMouseEnter={() => handleMenuHover('shop')}
-                  onMouseLeave={handleMenuLeave}
-                  onClick={(e) => e.stopPropagation()}
+            {isAdminRoute ? (
+              adminNavItems.map((item) => (
+                <Link
+                  key={item.hash}
+                  to={`/admin/dashboard#${item.hash}`}
+                  className="nav-link"
+                  onClick={closeMenu}
                 >
-                  <Link to="/shop/mens-wear" className="dropdown-item" onClick={closeMenu}>
-                    MEN'S WEAR
-                    <div className="dropdown-submenu">
-                      <Link to="/shop/mens-wear?category=shirts" className="dropdown-subitem" onClick={closeMenu}>Shirts</Link>
-                      <Link to="/shop/mens-wear?category=trousers" className="dropdown-subitem" onClick={closeMenu}>Trousers</Link>
-                      <Link to="/shop/mens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
-                      <Link to="/shop/mens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers / Jackets</Link>
-                      <Link to="/shop/mens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
-                    </div>
-                  </Link>
-                  <Link to="/shop/womens-wear" className="dropdown-item" onClick={closeMenu}>
-                    WOMEN'S WEAR
-                    <div className="dropdown-submenu">
-                      <Link to="/shop/womens-wear?category=blouses" className="dropdown-subitem" onClick={closeMenu}>Blouses</Link>
-                      <Link to="/shop/womens-wear?category=skirts-trousers" className="dropdown-subitem" onClick={closeMenu}>Skirts/ Trousers</Link>
-                      <Link to="/shop/womens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
-                      <Link to="/shop/womens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers/ Jackets</Link>
-                      <Link to="/shop/womens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
-                      <Link to="/shop/womens-wear?category=dresses" className="dropdown-subitem" onClick={closeMenu}>Dresses</Link>
-                      <Link to="/shop/womens-wear?category=sarees" className="dropdown-subitem" onClick={closeMenu}>Sarees</Link>
-                    </div>
-                  </Link>
-                </div>
-              )}
-            </div>
+                  {item.label.toUpperCase()}
+                </Link>
+              ))
+            ) : (
+              <>
+                <Link to="/" className="nav-link" onClick={closeMenu}>HOME</Link>
 
-            <Link to="/community" className="nav-link" onClick={closeMenu}>COMMUNITY / COLLABORATION</Link>
-            <Link to="/sustainability" className="nav-link" onClick={closeMenu}>SUSTAINABILITY</Link>
-            <Link to="/contact" className="nav-link" onClick={closeMenu}>CONTACT US</Link>
+                <div
+                  className="nav-link-wrapper"
+                  onMouseEnter={() => handleMenuHover('collections')}
+                  onMouseLeave={handleMenuLeave}
+                >
+                  <Link to="/collections" className="nav-link" onClick={closeMenu}>COLLECTIONS</Link>
+                </div>
+
+                <div
+                  className="nav-link-wrapper"
+                  onMouseEnter={() => handleMenuHover('shop')}
+                  onMouseLeave={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget)) {
+                      handleMenuLeave();
+                    }
+                  }}
+                >
+                  <span className="nav-link">SHOP BY CATEGORY</span>
+                  {hoveredMenu === 'shop' && (
+                    <div
+                      className="dropdown-menu"
+                      onMouseEnter={() => handleMenuHover('shop')}
+                      onMouseLeave={handleMenuLeave}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Link to="/shop/mens-wear" className="dropdown-item" onClick={closeMenu}>
+                        MEN'S WEAR
+                        <div className="dropdown-submenu">
+                          <Link to="/shop/mens-wear?category=shirts" className="dropdown-subitem" onClick={closeMenu}>Shirts</Link>
+                          <Link to="/shop/mens-wear?category=trousers" className="dropdown-subitem" onClick={closeMenu}>Trousers</Link>
+                          <Link to="/shop/mens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
+                          <Link to="/shop/mens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers / Jackets</Link>
+                          <Link to="/shop/mens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
+                        </div>
+                      </Link>
+                      <Link to="/shop/womens-wear" className="dropdown-item" onClick={closeMenu}>
+                        WOMEN'S WEAR
+                        <div className="dropdown-submenu">
+                          <Link to="/shop/womens-wear?category=blouses" className="dropdown-subitem" onClick={closeMenu}>Blouses</Link>
+                          <Link to="/shop/womens-wear?category=skirts-trousers" className="dropdown-subitem" onClick={closeMenu}>Skirts/ Trousers</Link>
+                          <Link to="/shop/womens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
+                          <Link to="/shop/womens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers/ Jackets</Link>
+                          <Link to="/shop/womens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
+                          <Link to="/shop/womens-wear?category=dresses" className="dropdown-subitem" onClick={closeMenu}>Dresses</Link>
+                          <Link to="/shop/womens-wear?category=sarees" className="dropdown-subitem" onClick={closeMenu}>Sarees</Link>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                <Link to="/community" className="nav-link" onClick={closeMenu}>COMMUNITY / COLLABORATION</Link>
+                <Link to="/sustainability" className="nav-link" onClick={closeMenu}>SUSTAINABILITY</Link>
+                <Link to="/contact" className="nav-link" onClick={closeMenu}>CONTACT US</Link>
+              </>
+            )}
           </nav>
 
-          <button 
-            className="mobile-menu-btn" 
+          <button
+            className="mobile-menu-btn"
             onClick={toggleMenu}
             type="button"
             aria-label="Toggle menu"
@@ -212,7 +278,7 @@ const Header = () => {
               className="search-input"
               autoFocus
             />
-            <button 
+            <button
               type="button"
               className="search-close-btn"
               onClick={(e) => {

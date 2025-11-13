@@ -70,7 +70,19 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
           <div className="hero-content">
             <h1 className="hero-title">{title}</h1>
             <p className="hero-subtitle">{subtitle}</p>
-            <Link to="/collections" className="hero-cta">EXPLORE COLLECTIONS</Link>
+            <Link
+              to="/collections"
+              className="hero-cta hero-cta-fullwidth"
+              style={{
+                display: 'block',
+                width: '95vw',
+                transform: 'translateX(-50%)',
+                position: 'relative',
+                boxSizing: 'border-box'
+              }}
+            >
+              EXPLORE COLLECTIONS
+            </Link>
           </div>
         </div>
         <button className="mute-toggle" onClick={toggleMute}>
