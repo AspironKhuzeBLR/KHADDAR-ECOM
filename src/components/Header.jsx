@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
+import { useAuth } from '../context/AuthContext';
 
 const logo = '/logo_file_page-0001.png';
 
@@ -11,7 +12,16 @@ const Header = () => {
   const [isBlackScrolled, setIsBlackScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
-  const [isLoggedIn] = useState(false); // Set to true when user is logged in
+  const { isAuthenticated, user, logout } = useAuth();
+  const displayName = useMemo(() => {
+    if (user?.name) {
+      return user.name.trim().split(/\s+/)[0];
+    }
+    if (user?.email) {
+      return user.email.split('@')[0];
+    }
+    return 'Account';
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,13 +86,32 @@ const Header = () => {
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
             </button>
-            <Link to="/login" className="icon-btn account-btn" aria-label="Account">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </Link>
-            {isLoggedIn && (
+            {isAuthenticated ? (
+              <button
+                type="button"
+                className="icon-btn account-btn"
+                aria-label="Logout"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  logout();
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                  <path d="M12 19H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h7"></path>
+                </svg>
+              </button>
+            ) : (
+              <Link to="/login" className="icon-btn account-btn" aria-label="Account">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </Link>
+            )}
+            {isAuthenticated && (
               <button className="icon-btn cart-btn" aria-label="Shopping Cart">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -91,6 +120,11 @@ const Header = () => {
                 </svg>
                 <span className="cart-count">0</span>
               </button>
+            )}
+            {isAuthenticated && (
+              <div className="auth-indicator">
+                <span className="auth-email">{displayName}</span>
+              </div>
             )}
           </div>
 

@@ -1,120 +1,142 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { signIn } from '../services/authService';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { isAuthenticated, login, isBootstrapped } = useAuth();
 
-  const [showResetPassword, setShowResetPassword] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
+  useEffect(() => {
+    if (!isBootstrapped) return;
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, isBootstrapped, navigate]);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const deriveNameFromEmail = (value) => {
+    if (!value) return 'Khaddar Member';
+    const localPart = value.split('@')[0] || '';
+    const cleaned = localPart.replace(/[\W_]+/g, ' ').trim();
+    if (!cleaned) return 'Khaddar Member';
+    return cleaned
+      .split(' ')
+      .filter(Boolean)
+      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+      .join(' ');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login here
-    console.log('Login submitted:', formData);
-    alert('Login functionality will be implemented soon!');
-  };
-
-  const handleResetSubmit = (e) => {
-    e.preventDefault();
-    // Handle password reset here
-    console.log('Password reset requested for:', resetEmail);
-    alert('Password reset email will be sent!');
-    setShowResetPassword(false);
-    setResetEmail('');
+    if (!email || !password) {
+      setError('Please enter your email and password.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const result = await signIn({ email, password });
+      const userProfile =
+        result?.user || {
+          email,
+          name: deriveNameFromEmail(email)
+        };
+      login(result.token, {
+        user: userProfile,
+        persist: rememberMe
+      });
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Invalid email or password. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="auth-page">
       <div className="container">
         <div className="auth-container">
-          {showResetPassword ? (
-            <>
-              <h1 className="auth-title">Reset your password</h1>
-              <p className="auth-subtitle">We will send you an email to reset your password</p>
-              <form className="auth-form" onSubmit={handleResetSubmit}>
-                <div className="form-group">
-                  <label htmlFor="reset-email" className="form-label">Email</label>
-                  <input
-                    type="email"
-                    id="reset-email"
-                    name="resetEmail"
-                    value={resetEmail}
-                    onChange={(e) => setResetEmail(e.target.value)}
-                    className="form-input"
-                    required
-                  />
-                </div>
-                <div className="form-actions">
-                  <button type="submit" className="auth-button">Submit</button>
-                  <button
-                    type="button"
-                    className="auth-button cancel-button"
-                    onClick={() => setShowResetPassword(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <>
-              <h1 className="auth-title">Login</h1>
-              <form className="auth-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-input"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="form-input"
-                    required
-                  />
-                </div>
-                <div className="form-options">
-                  <button
-                    type="button"
-                    className="forgot-password-link"
-                    onClick={() => setShowResetPassword(true)}
-                  >
-                    Forgot your password?
-                  </button>
-                </div>
-                <div className="form-actions">
-                  <button type="submit" className="auth-button">Sign in</button>
-                </div>
-                <div className="auth-footer">
-                  <p>
-                    Don't have an account? <Link to="/register" className="auth-link">Create account</Link>
-                  </p>
-                </div>
-              </form>
-            </>
-          )}
+          <h1 className="auth-title">Sign in</h1>
+          <p className="auth-subtitle">
+            Enter your email and password to access your account.
+          </p>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            {error && <div className="auth-message error">{error}</div>}
+
+            <div className="form-group">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-input"
+                placeholder="you@example.com"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-input"
+                placeholder="Enter your password"
+                required
+                disabled={loading}
+              />
+            </div>
+
+            <div className="form-options">
+              <Link to="/forgot-password" className="forgot-password-link">
+                Forgot your password?
+              </Link>
+            </div>
+
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={loading}
+                />
+                Keep me signed in on this device
+              </label>
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="submit"
+                className="auth-button"
+                disabled={loading || !email || !password}
+              >
+                {loading ? 'Signing in...' : 'Sign in'}
+              </button>
+            </div>
+
+            <div className="auth-footer">
+              <p>
+                Don't have an account?{' '}
+                <Link to="/register" className="auth-link">
+                  Create account
+                </Link>
+              </p>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -122,4 +144,3 @@ const Login = () => {
 };
 
 export default Login;
-

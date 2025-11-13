@@ -15,6 +15,7 @@
  */
 
 import { API_CONFIG } from './config';
+import { getStoredAuthToken } from './authService';
 
 // Mock product database - This will be replaced with API calls later
 const MOCK_PRODUCTS_MEN = [
@@ -411,7 +412,14 @@ export const fetchProducts = async (gender, category = null) => {
     // Real API call - Replace this when backend is ready
     try {
       const url = `${API_BASE_URL}/products?gender=${gender}${category ? `&category=${category}` : ''}`;
-      const response = await fetch(url);
+      const token = getStoredAuthToken();
+      const response = await fetch(url, {
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`
+            }
+          : {}
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch products');
@@ -443,7 +451,14 @@ export const fetchProductDetail = async (productSlug) => {
     // Real API call - Replace this when backend is ready
     try {
       const url = `${API_BASE_URL}/products/${productSlug}`;
-      const response = await fetch(url);
+      const token = getStoredAuthToken();
+      const response = await fetch(url, {
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`
+            }
+          : {}
+      });
       
       if (!response.ok) {
         if (response.status === 404) {
@@ -494,7 +509,14 @@ export const fetchCategories = async (gender) => {
     // Real API call
     try {
       const url = `${API_BASE_URL}/categories?gender=${gender}`;
-      const response = await fetch(url);
+      const token = getStoredAuthToken();
+      const response = await fetch(url, {
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`
+            }
+          : {}
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
