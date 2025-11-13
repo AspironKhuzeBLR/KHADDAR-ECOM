@@ -14,34 +14,40 @@ import Sustainability from './pages/Sustainability';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import ProductDetail from './pages/ProductDetail';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <ScrollToTop />
-        <Header />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/shop/mens-wear" element={<ShopMen />} />
-            <Route path="/shop/womens-wear" element={<ShopWomen />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/sustainability" element={<Sustainability />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/product/:productSlug" element={<ProductDetail />} />
-          </Routes>
-        </main>
-        <Footer />
-        <ScrollUpButton />
-      </div>
+      <AuthProvider>
+        <div className="App">
+          <ScrollToTop />
+          <Header />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/shop/mens-wear" element={<ShopMen />} />
+              <Route path="/shop/womens-wear" element={<ShopWomen />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/sustainability" element={<Sustainability />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/product/:productSlug" element={<ProductDetail />} />
+            </Routes>
+          </main>
+          <Footer />
+          <ScrollUpButton />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }
 
 export default App;
-

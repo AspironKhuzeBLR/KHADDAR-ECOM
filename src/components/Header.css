@@ -195,6 +195,33 @@
   z-index: 10;
 }
 
+.auth-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+.auth-email {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.header.scrolled .auth-indicator {
+  color: #1a1a1a;
+}
+
+.header.scrolled.black-scrolled .auth-indicator {
+  color: #ffffff;
+}
+
 .header-icons {
   position: absolute;
   top: 50%;
@@ -517,6 +544,10 @@
   .icon-btn svg {
     width: 18px;
     height: 18px;
+  }
+
+  .auth-indicator {
+    display: none;
   }
 }
 
