@@ -3,6 +3,26 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import './AdminDashboard.css';
 
+// --- CONFIGURATION: PREDEFINED CATEGORIES BASED ON YOUR IMAGES ---
+const PRODUCT_CATEGORIES = {
+  "Men's Wear": [
+    "Shirts",
+    "Trousers",
+    "Co-ords",
+    "Blazers / Jackets",
+    "Kurtas"
+  ],
+  "Women's Wear": [
+    "Blouses",
+    "Skirts / Trousers",
+    "Co-ords",
+    "Blazers/ Jackets",
+    "Kurtas",
+    "Dresses",
+    "Sarees"
+  ]
+};
+
 const analysisCards = [
   {
     title: 'Payments Completed',
@@ -25,7 +45,12 @@ const AdminDashboard = () => {
   const [adminUser, setAdminUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
- 
+
+  // --- State for Password Change Modal ---
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
   useEffect(() => {
     const adminToken = localStorage.getItem('adminToken');
@@ -37,8 +62,6 @@ const AdminDashboard = () => {
       setAdminUser(JSON.parse(storedUser));
     }
   }, [navigate]);
-
-
 
   const validTabs = useMemo(
     () => ['overview', 'products', 'orders', 'users', 'settings'],
@@ -52,7 +75,7 @@ const AdminDashboard = () => {
     }
     if (!hash && activeTab !== 'overview') {
       setActiveTab('overview');
-      navigate('#overview', { replace: true }); // Ensure hash is set on initial load
+      navigate('#overview', { replace: true }); 
     }
   }, [location.hash, activeTab, validTabs, navigate]);
 
@@ -68,17 +91,19 @@ const AdminDashboard = () => {
     totalUsers: 3421
   };
 
+  // --- RECENT ORDERS DATA (With Payment Mode & Status) ---
   const recentOrders = useMemo(
     () => [
-      { id: 1, customer: 'John Doe', product: 'Khaddar Shirt', amount: 2500, paymentStatus: 'Paid', date: '2024-01-15' },
-      { id: 2, customer: 'Jane Smith', product: 'Khaddar Kurta', amount: 3200, paymentStatus: 'COD', date: '2024-01-14' },
-      { id: 3, customer: 'Mike Johnson', product: 'Khaddar Blazer', amount: 4500, paymentStatus: 'Paid', date: '2024-01-13' },
-      { id: 4, customer: 'Sarah Williams', product: 'Khaddar Dress', amount: 3800, paymentStatus: 'COD', date: '2024-01-12' },
-      { id: 5, customer: 'David Brown', product: 'Khaddar Co-ord', amount: 4200, paymentStatus: 'Paid', date: '2024-01-11' }
+      { id: 1, customer: 'John Doe', product: 'Khaddar Shirt', amount: 2500, paymentMode: 'HDFC Bank', paymentStatus: 'Paid', date: '2024-01-15' },
+      { id: 2, customer: 'Jane Smith', product: 'Khaddar Kurta', amount: 3200, paymentMode: 'HDFC Bank', paymentStatus: 'Pending', date: '2024-01-14' },
+      { id: 3, customer: 'Mike Johnson', product: 'Khaddar Blazer', amount: 4500, paymentMode: 'Credit Card', paymentStatus: 'Paid', date: '2024-01-13' },
+      { id: 4, customer: 'Sarah Williams', product: 'Khaddar Dress', amount: 3800, paymentMode: 'UPI', paymentStatus: 'Failed', date: '2024-01-12' },
+      { id: 5, customer: 'David Brown', product: 'Khaddar Co-ord', amount: 4200, paymentMode: 'HDFC Bank', paymentStatus: 'Paid', date: '2024-01-11' }
     ],
     []
   );
 
+  // --- UPDATED INITIAL PRODUCTS (With subCategories) ---
   const [products, setProducts] = useState(() => {
     const storedProducts = localStorage.getItem('products');
     return storedProducts ? JSON.parse(storedProducts) : [
@@ -86,46 +111,46 @@ const AdminDashboard = () => {
         id: 1,
         name: 'Classic Khaddar Shirt',
         category: "Men's Wear",
+        subCategory: "Shirts", // Added Sub Category
         price: 2500,
         stock: 45,
-        image:
-          'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=60'
+        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=60'
       },
       {
         id: 2,
         name: 'Elegant Khaddar Kurta',
         category: "Women's Wear",
+        subCategory: "Kurtas", // Added Sub Category
         price: 3200,
         stock: 32,
-        image:
-          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
+        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
       },
       {
         id: 3,
         name: 'Premium Khaddar Blazer',
         category: "Men's Wear",
+        subCategory: "Blazers / Jackets", // Added Sub Category
         price: 4500,
         stock: 18,
-        image:
-          'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=60'
+        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=60'
       },
       {
         id: 4,
         name: 'Traditional Khaddar Dress',
         category: "Women's Wear",
+        subCategory: "Dresses", // Added Sub Category
         price: 3800,
         stock: 28,
-        image:
-          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
+        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
       },
       {
         id: 5,
         name: 'Designer Khaddar Saree',
         category: "Women's Wear",
+        subCategory: "Sarees", // Added Sub Category
         price: 5500,
         stock: 15,
-        image:
-          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
+        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
       }
     ];
   });
@@ -135,10 +160,12 @@ const AdminDashboard = () => {
   }, [products]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // Updated state to include subCategory
   const [currentProduct, setCurrentProduct] = useState({
     id: null,
     name: '',
     category: '',
+    subCategory: '', // New field
     price: '',
     stock: '',
     image: ''
@@ -157,6 +184,7 @@ const AdminDashboard = () => {
         id: null,
         name: '',
         category: '',
+        subCategory: '',
         price: '',
         stock: '',
         image: ''
@@ -173,6 +201,7 @@ const AdminDashboard = () => {
       id: null,
       name: '',
       category: '',
+      subCategory: '',
       price: '',
       stock: '',
       image: ''
@@ -196,7 +225,17 @@ const AdminDashboard = () => {
 
   const handleProductChange = (event) => {
     const { name, value } = event.target;
-    setCurrentProduct((prev) => ({ ...prev, [name]: value }));
+    
+    // If changing the main category, reset the subcategory
+    if (name === 'category') {
+      setCurrentProduct((prev) => ({ 
+        ...prev, 
+        [name]: value,
+        subCategory: '' 
+      }));
+    } else {
+      setCurrentProduct((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleImageFileChange = (event) => {
@@ -217,7 +256,8 @@ const AdminDashboard = () => {
 
   const handleSaveProduct = (event) => {
     event.preventDefault();
-    if (!currentProduct.name || !currentProduct.category || !currentProduct.price || !currentProduct.stock) {
+    // Validation updated to check subCategory
+    if (!currentProduct.name || !currentProduct.category || !currentProduct.subCategory || !currentProduct.price || !currentProduct.stock) {
       showNotification('Please fill in all required fields.', 'error');
       return;
     }
@@ -267,7 +307,36 @@ const AdminDashboard = () => {
     }
   }, []);
 
+  // --- Password Change Handlers ---
+  const openPasswordModal = () => {
+    setIsPasswordModalOpen(true);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+  };
 
+  const closePasswordModal = () => {
+    setIsPasswordModalOpen(false);
+  };
+
+  const handleChangePassword = (event) => {
+    event.preventDefault();
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      showNotification('All password fields are required.', 'error');
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      showNotification('New password and confirm password do not match.', 'error');
+      return;
+    }
+    if (newPassword.length < 6) {
+        showNotification('New password must be at least 6 characters long.', 'error');
+        return;
+    }
+    console.log({ currentPassword, newPassword });
+    showNotification('Password changed successfully!', 'success');
+    closePasswordModal();
+  };
 
 
   if (!adminUser) {
@@ -386,7 +455,8 @@ const AdminDashboard = () => {
                             <th>Product</th>
                             <th>Amount</th>
                             <th>Date</th>
-                            <th>Payment</th>
+                            <th>Mode of Payment</th>
+                            <th>Payment Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -398,7 +468,15 @@ const AdminDashboard = () => {
                               <td className="amount-cell">₹{order.amount.toLocaleString()}</td>
                               <td>{order.date}</td>
                               <td>
-                                <span className={`status-badge ${order.paymentStatus === 'Paid' ? 'paid' : 'cod'}`}>
+                                <span style={{ fontWeight: '500', color: '#555' }}>
+                                  {order.paymentMode}
+                                </span>
+                              </td>
+                              <td>
+                                <span className={`status-badge ${
+                                  order.paymentStatus === 'Paid' ? 'paid' : 
+                                  order.paymentStatus === 'Pending' ? 'cod' : 'low-stock'
+                                }`}>
                                   {order.paymentStatus}
                                 </span>
                               </td>
@@ -442,7 +520,7 @@ const AdminDashboard = () => {
                         <th>Category</th>
                         <th>Price</th>
                         <th>Stock</th>
-                        <th>Actions</th> {/* Added Actions column */}
+                        <th>Actions</th> 
                       </tr>
                     </thead>
                     <tbody>
@@ -462,7 +540,13 @@ const AdminDashboard = () => {
                             </div>
                           </td>
                           <td><span className="product-name">{product.name}</span></td>
-                          <td><span className="category-tag">{product.category}</span></td>
+                          <td>
+                            <span className="category-tag">
+                              {product.category} 
+                              {/* Display subcategory if exists */}
+                              {product.subCategory && ` - ${product.subCategory}`}
+                            </span>
+                          </td>
                           <td className="amount-cell">₹{product.price.toLocaleString()}</td>
                           <td>
                             <span className={`stock-badge ${product.stock > 20 ? 'in-stock' : 'low-stock'}`}>
@@ -492,6 +576,8 @@ const AdminDashboard = () => {
                     </tbody>
                   </table>
                 </div>
+                
+                {/* --- MODAL FOR ADD/EDIT PRODUCT --- */}
                 {isModalOpen && (
                   <div className="modal-overlay" role="dialog" aria-modal="true" onClick={closeModal}>
                     <div
@@ -527,23 +613,50 @@ const AdminDashboard = () => {
                             </div>
                           </div>
 
+                          {/* --- UPDATED CATEGORY SELECTION (DROPDOWNS) --- */}
                           <div className="form-row">
-                            <div className="form-group full-width">
+                            <div className="form-group">
                               <label className="form-label" htmlFor="product-category">
-                                Category <span className="required">*</span>
+                                Main Category <span className="required">*</span>
                               </label>
-                              <input
+                              <select
                                 className="form-input"
                                 id="product-category"
                                 name="category"
-                                type="text"
-                                placeholder="e.g., Men's Wear, Women's Wear"
                                 value={currentProduct.category}
                                 onChange={handleProductChange}
                                 required
-                              />
+                              >
+                                <option value="">Select Main Category</option>
+                                {Object.keys(PRODUCT_CATEGORIES).map((cat) => (
+                                  <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            <div className="form-group">
+                              <label className="form-label" htmlFor="product-subcategory">
+                                Sub Category <span className="required">*</span>
+                              </label>
+                              <select
+                                className="form-input"
+                                id="product-subcategory"
+                                name="subCategory"
+                                value={currentProduct.subCategory}
+                                onChange={handleProductChange}
+                                disabled={!currentProduct.category} // Disable if no main category selected
+                                required
+                              >
+                                <option value="">Select Sub Category</option>
+                                {currentProduct.category && 
+                                  PRODUCT_CATEGORIES[currentProduct.category]?.map((subCat) => (
+                                    <option key={subCat} value={subCat}>{subCat}</option>
+                                  ))
+                                }
+                              </select>
                             </div>
                           </div>
+                          {/* --- END UPDATED CATEGORY SELECTION --- */}
 
                           <div className="form-row">
                             <div className="form-group">
@@ -675,7 +788,8 @@ const AdminDashboard = () => {
                         <th>Product</th>
                         <th>Amount</th>
                         <th>Date</th>
-                        <th>Payment</th>
+                        <th>Mode of Payment</th>
+                        <th>Payment Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -687,7 +801,15 @@ const AdminDashboard = () => {
                           <td className="amount-cell">₹{order.amount.toLocaleString()}</td>
                           <td>{order.date}</td>
                           <td>
-                            <span className={`status-badge ${order.paymentStatus === 'Paid' ? 'paid' : 'cod'}`}>
+                            <span style={{ fontWeight: '500', color: '#555' }}>
+                              {order.paymentMode}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`status-badge ${
+                              order.paymentStatus === 'Paid' ? 'paid' : 
+                              order.paymentStatus === 'Pending' ? 'cod' : 'low-stock'
+                            }`}>
                               {order.paymentStatus}
                             </span>
                           </td>
@@ -741,10 +863,94 @@ const AdminDashboard = () => {
                     <h3 className="settings-section-title">Security</h3>
                     <div className="settings-item">
                       <label className="settings-label">Change Password</label>
-                      <button className="admin-action-btn">Change Password</button>
+                      <button className="admin-action-btn" onClick={openPasswordModal}>
+                        Change Password
+                      </button>
                     </div>
                   </div>
                 </div>
+
+                {/* --- Password Change Modal --- */}
+                {isPasswordModalOpen && (
+                  <div className="modal-overlay" role="dialog" aria-modal="true" onClick={closePasswordModal}>
+                    <div
+                      className="modal-content product-modal-content"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ maxWidth: '400px', padding: '25px' }}
+                    >
+                      <div className="modal-header">
+                        <h3>Change Password</h3>
+                        <button type="button" className="modal-close" onClick={closePasswordModal} aria-label="Close">
+                          &times;
+                        </button>
+                      </div>
+                      <form onSubmit={handleChangePassword} className="product-form">
+                        <div className="form-body">
+                          <div className="form-row">
+                            <div className="form-group full-width">
+                              <label className="form-label" htmlFor="current-password">
+                                Current Password <span className="required">*</span>
+                              </label>
+                              <input
+                                className="form-input"
+                                id="current-password"
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="form-row">
+                            <div className="form-group full-width">
+                              <label className="form-label" htmlFor="new-password">
+                                New Password <span className="required">*</span>
+                              </label>
+                              <input
+                                className="form-input"
+                                id="new-password"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="form-row">
+                            <div className="form-group full-width">
+                              <label className="form-label" htmlFor="confirm-new-password">
+                                Confirm New Password <span className="required">*</span>
+                              </label>
+                              <input
+                                className="form-input"
+                                id="confirm-new-password"
+                                type="password"
+                                value={confirmNewPassword}
+                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-actions">
+                          <button
+                            type="button"
+                            className="form-btn form-btn-secondary"
+                            onClick={closePasswordModal}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            className="form-btn form-btn-primary"
+                          >
+                            Update Password
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
