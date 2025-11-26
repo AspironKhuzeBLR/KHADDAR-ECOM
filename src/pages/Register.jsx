@@ -9,6 +9,7 @@ import {
   RESEND_COOLDOWN_SECONDS
 } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const OTP_LENGTH = 6;
 
@@ -25,11 +26,10 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [infoMessage, setInfoMessage] = useState('');
   const [cooldown, setCooldown] = useState(0);
   const navigate = useNavigate();
   const { isAuthenticated, isBootstrapped } = useAuth();
+  const toast = useToast();
   const otpInputsRef = useRef([]);
 
   useEffect(() => {
@@ -115,20 +115,18 @@ const Register = () => {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      setError('Please enter your email address.');
+      toast.error('Please enter your email address.');
       return;
     }
     setLoading(true);
-    setError('');
-    setInfoMessage('');
     try {
       await requestOtp(email);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
       setStep('otp');
-      setInfoMessage('Check your email for the verification OTP.');
+      toast.success('Check your email for the verification OTP.');
       setCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (err) {
-      setError(err.message || 'Could not send OTP. Please try again.');
+      toast.error(err.message || 'Could not send OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -138,40 +136,48 @@ const Register = () => {
     e.preventDefault();
     const otpValue = otpDigits.join('');
     if (otpValue.length < OTP_LENGTH) {
-      setError('Please enter the 6-digit OTP sent to your email.');
+      toast.error('Please enter the 6-digit OTP sent to your email.');
       return;
     }
     setLoading(true);
-    setError('');
-    setInfoMessage('');
     try {
       await verifyOtp({ email, otp: otpValue });
       setStep('details');
-      setInfoMessage('OTP verified! Please complete your profile.');
+      toast.success('OTP verified! Please complete your profile.');
     } catch (err) {
-      setError(err.message || 'Invalid OTP. Please try again.');
+      toast.error(err.message || 'Invalid OTP. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Password validation - must contain letters, numbers, and symbols
+  const validatePassword = (password) => {
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+    return hasLetter && hasNumber && hasSymbol && password.length >= 6;
+  };
+
   const handleDetailsSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.address || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all fields.');
+      toast.error('Please fill in all fields.');
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match.');
+      toast.error('Passwords do not match.');
       return;
     }
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long.');
+      toast.error('Password must be at least 6 characters long.');
+      return;
+    }
+    if (!validatePassword(formData.password)) {
+      toast.error('Password must contain letters, numbers, and symbols.');
       return;
     }
     setLoading(true);
-    setError('');
-    setInfoMessage('');
     try {
       await signup({
         name: formData.name,
@@ -181,12 +187,12 @@ const Register = () => {
       });
       // Store name and email from signup so it can be used during login
       storeSignupData(email, formData.name);
-      setInfoMessage('Account created successfully! Redirecting to login...');
+      toast.success('Account created successfully! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
       }, 1500);
     } catch (err) {
-      setError(err.message || 'Could not complete signup. Please try again.');
+      toast.error(err.message || 'Could not complete signup. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -195,15 +201,13 @@ const Register = () => {
   const handleResendOtp = async () => {
     if (cooldown > 0 || loading) return;
     setLoading(true);
-    setError('');
-    setInfoMessage('');
     try {
       await requestOtp(email);
       setOtpDigits(Array(OTP_LENGTH).fill(''));
-      setInfoMessage('OTP resent. Check your email.');
+      toast.success('OTP resent. Check your email.');
       setCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (err) {
-      setError(err.message || 'Could not resend OTP. Please try again.');
+      toast.error(err.message || 'Could not resend OTP. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -220,16 +224,7 @@ const Register = () => {
     setStep('email');
     setOtpDigits(Array(OTP_LENGTH).fill(''));
     setCooldown(0);
-    setInfoMessage('');
-    setError('');
   };
-
-  const renderMessages = () => (
-    <>
-      {error && <div className="auth-message error">{error}</div>}
-      {infoMessage && <div className="auth-message success">{infoMessage}</div>}
-    </>
-  );
 
   return (
     <div className="auth-page">
@@ -251,7 +246,6 @@ const Register = () => {
                   : handleDetailsSubmit
             }
           >
-            {renderMessages()}
 
             {step === 'email' && (
               <div className="form-group">
@@ -366,6 +360,9 @@ const Register = () => {
                       disabled={loading}
                       minLength={6}
                     />
+                    <span className="password-hint">
+                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
+                    </span>
                     <button
                       type="button"
                       className="password-toggle"

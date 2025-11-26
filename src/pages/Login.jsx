@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 import { signIn, getStoredSignupName, clearSignupData } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,9 +11,9 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { isAuthenticated, login, isBootstrapped } = useAuth();
+  const toast = useToast();
 
   useEffect(() => {
     if (!isBootstrapped) return;
@@ -36,11 +37,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Please enter your email and password.');
+      toast.error('Please enter your email and password.');
       return;
     }
     setLoading(true);
-    setError('');
 
     const isAdminEmail = email.toLowerCase() === 'admin@gmail.com';
     const adminPassword = 'admin123';
@@ -50,12 +50,13 @@ const Login = () => {
         localStorage.setItem('adminToken', 'admin-auth-token-12345');
         localStorage.setItem('adminUser', JSON.stringify({ username: 'admin', email }));
         setLoading(false);
+        toast.success('Welcome back, Admin!');
         navigate('/admin/dashboard');
         return;
       }
 
       setLoading(false);
-      setError('Invalid admin credentials. Please try again.');
+      toast.error('Invalid admin credentials. Please try again.');
       return;
     }
 
@@ -115,12 +116,14 @@ const Login = () => {
       // Clear signup data after successful login
       clearSignupData();
       
+      toast.success('Welcome back! You have signed in successfully.');
+      
       // Navigate after a brief delay to ensure state is updated
       setTimeout(() => {
         navigate('/');
       }, 100);
     } catch (err) {
-      setError(err.message || 'Invalid email or password. Please try again.');
+      toast.error(err.message || 'Invalid email or password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -135,8 +138,6 @@ const Login = () => {
             Enter your email and password to access your account.
           </p>
           <form className="auth-form" onSubmit={handleSubmit}>
-            {error && <div className="auth-message error">{error}</div>}
-
             <div className="form-group">
               <label htmlFor="email" className="form-label">Email</label>
               <input

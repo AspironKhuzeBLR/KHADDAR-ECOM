@@ -156,6 +156,21 @@ textarea.form-input {
   display: block;
 }
 
+.password-input-wrapper {
+  flex-wrap: wrap;
+}
+
+.password-hint {
+  display: block;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: #8C6C5F;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
 .profile-info {
   margin-bottom: 30px;
 }

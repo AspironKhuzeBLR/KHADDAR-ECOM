@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { getUserProfile, getUserOrders } from '../services/authService';
 
 const Profile = () => {
   const { isAuthenticated, user, token, isBootstrapped, logout } = useAuth();
   const navigate = useNavigate();
+  const toast = useToast();
   const [profileData, setProfileData] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -283,6 +285,7 @@ const Profile = () => {
               className="auth-button cancel-button"
               onClick={() => {
                 logout();
+                toast.success('You have been logged out successfully.');
                 navigate('/login');
               }}
             >

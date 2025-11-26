@@ -2,27 +2,28 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Auth.css';
 import { requestPasswordReset } from '../services/authService';
+import { useToast } from '../context/ToastContext';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
-      setError('Please enter your email address.');
+      toast.error('Please enter your email address.');
       return;
     }
     setLoading(true);
-    setError('');
     setSuccess(false);
     try {
       await requestPasswordReset(email);
       setSuccess(true);
+      toast.success('Password reset link has been sent to your email.');
     } catch (err) {
-      setError(err.message || 'Could not send password reset link. Please try again.');
+      toast.error(err.message || 'Could not send password reset link. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -37,7 +38,6 @@ const ForgotPassword = () => {
             Enter your registered email address and we'll send you a password reset link.
           </p>
           <form className="auth-form" onSubmit={handleSubmit}>
-            {error && <div className="auth-message error">{error}</div>}
             {success && (
               <div className="auth-message success">
                 Password reset link has been sent to your email. Please check your inbox and click
