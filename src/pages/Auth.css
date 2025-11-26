@@ -171,6 +171,63 @@ textarea.form-input {
   line-height: 1.4;
 }
 
+/* Email Sent Confirmation */
+.email-sent-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.email-sent-icon {
+  margin-bottom: 24px;
+}
+
+.email-sent-icon svg {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.email-sent-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #6F3132;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.email-sent-message {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #6F3132;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.email-sent-message strong {
+  font-weight: 500;
+  color: #A15F22;
+}
+
+.email-sent-note {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #8C6C5F;
+  line-height: 1.5;
+}
+
 .profile-info {
   margin-bottom: 30px;
 }

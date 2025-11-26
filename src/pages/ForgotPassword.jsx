@@ -38,14 +38,32 @@ const ForgotPassword = () => {
             Enter your registered email address and we'll send you a password reset link.
           </p>
           <form className="auth-form" onSubmit={handleSubmit}>
-            {success && (
-              <div className="auth-message success">
-                Password reset link has been sent to your email. Please check your inbox and click
-                the link to reset your password.
+            {success ? (
+              <div className="email-sent-container">
+                <div className="email-sent-icon">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                </div>
+                <h2 className="email-sent-title">Check Your Email</h2>
+                <p className="email-sent-message">
+                  We've sent a password reset link to <strong>{email}</strong>. 
+                  Please check your inbox and click the link to reset your password.
+                </p>
+                <p className="email-sent-note">
+                  Didn't receive the email? Check your spam folder or try again.
+                </p>
+                <button
+                  type="button"
+                  className="auth-button"
+                  onClick={() => setSuccess(false)}
+                  style={{ marginTop: '20px' }}
+                >
+                  Try Different Email
+                </button>
               </div>
-            )}
-
-            {!success && (
+            ) : (
               <>
                 <div className="form-group">
                   <label htmlFor="email" className="form-label">Email</label>

@@ -25,6 +25,14 @@ const ResetPassword = () => {
     }
   }, [token, toast]);
 
+  // Password validation - must contain letters, numbers, and symbols
+  const validatePassword = (pwd) => {
+    const hasLetter = /[a-zA-Z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pwd);
+    return hasLetter && hasNumber && hasSymbol && pwd.length >= 6;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!password || !confirmPassword) {
@@ -37,6 +45,10 @@ const ResetPassword = () => {
     }
     if (password.length < 6) {
       toast.error('Password must be at least 6 characters long.');
+      return;
+    }
+    if (!validatePassword(password)) {
+      toast.error('Password must contain letters, numbers, and symbols.');
       return;
     }
     if (!token) {
@@ -92,6 +104,9 @@ const ResetPassword = () => {
                       disabled={loading || tokenError}
                       minLength={6}
                     />
+                    <span className="password-hint">
+                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
+                    </span>
                     <button
                       type="button"
                       className="password-toggle"
