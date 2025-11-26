@@ -17,6 +17,8 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import ProductDetail from './pages/ProductDetail';
+import Profile from './pages/Profile';
+import Cart from './pages/Cart';
 import AdminDashboard from './admin/AdminDashboard';
 import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
 import { AuthProvider } from './context/AuthContext';
@@ -43,6 +45,8 @@ function AppContent() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/product/:productSlug" element={<ProductDetail />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
           <Route
             path="/admin/dashboard"
             element={

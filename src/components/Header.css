@@ -434,6 +434,10 @@
   }
 }
 
+.dropdown-item-wrapper {
+  position: relative;
+}
+
 .dropdown-item {
   display: block;
   padding: 12px 30px;
@@ -461,7 +465,7 @@
   display: none;
 }
 
-.dropdown-item:hover .dropdown-submenu {
+.dropdown-item-wrapper:hover .dropdown-submenu {
   display: block;
 }
 

@@ -1,13 +1,13 @@
 import { API_CONFIG } from './config';
 
 const TOKEN_STORAGE_KEY = 'khaddar.auth.token';
+const REFRESH_TOKEN_STORAGE_KEY = 'khaddar.auth.refreshToken';
 const EMAIL_STORAGE_KEY = 'khaddar.auth.email';
 const USER_STORAGE_KEY = 'khaddar.auth.user';
+const SIGNUP_NAME_KEY = 'khaddar.signup.name';
+const SIGNUP_EMAIL_KEY = 'khaddar.signup.email';
 
-const USE_MOCK_DATA = API_CONFIG.USE_MOCK_DATA;
 const REQUEST_TIMEOUT = API_CONFIG.TIMEOUT || 10000;
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const withTimeout = (promise, timeout = REQUEST_TIMEOUT) => {
   if (!timeout) {
@@ -59,40 +59,12 @@ const handleResponse = async (response) => {
   return response.text();
 };
 
-const mockDatabase = {
-  otpStore: new Map()
-};
-
-const generateMockOtp = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
-
-const deriveNameFromEmail = (email) => {
-  if (!email) return 'Khaddar Member';
-  const localPart = email.split('@')[0] || '';
-  const cleaned = localPart.replace(/[\W_]+/g, ' ').trim();
-  if (!cleaned) return 'Khaddar Member';
-  return cleaned
-    .split(' ')
-    .filter(Boolean)
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(' ');
-};
-
 export const requestOtp = async (email) => {
   if (!email) {
     throw new Error('Email is required.');
   }
 
-  if (USE_MOCK_DATA) {
-    await delay(800);
-    const otp = generateMockOtp();
-    mockDatabase.otpStore.set(email.toLowerCase(), otp);
-    console.info('[Mock OTP]', email, otp);
-    return { message: 'OTP sent successfully.' };
-  }
-
-  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/request-otp`);
+  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/send-otp`);
   return withTimeout(
     fetch(url, {
       method: 'POST',
@@ -109,19 +81,6 @@ export const verifyOtp = async ({ email, otp }) => {
     throw new Error('Email and OTP are required.');
   }
 
-  if (USE_MOCK_DATA) {
-    await delay(600);
-    const storedOtp = mockDatabase.otpStore.get(email.toLowerCase());
-    if (!storedOtp || storedOtp !== otp) {
-      throw new Error('Invalid OTP. Please check and try again.');
-    }
-    mockDatabase.otpStore.delete(email.toLowerCase());
-    // Mock JWT payload
-    const token = `mock-jwt-token-${Date.now()}`;
-    const name = deriveNameFromEmail(email);
-    return { token, user: { email, name } };
-  }
-
   const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/verify-otp`);
   return withTimeout(
     fetch(url, {
@@ -136,7 +95,7 @@ export const verifyOtp = async ({ email, otp }) => {
 
 const isBrowser = typeof window !== 'undefined';
 
-export const storeAuthToken = (token, user = null) => {
+export const storeAuthToken = (token, refreshToken = null, user = null) => {
   if (!isBrowser) return;
 
   const normalizedUser =
@@ -154,6 +113,12 @@ export const storeAuthToken = (token, user = null) => {
       window.sessionStorage.removeItem(TOKEN_STORAGE_KEY);
     }
 
+    if (refreshToken) {
+      window.sessionStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, refreshToken);
+    } else {
+      window.sessionStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
+    }
+
     if (normalizedUser) {
       const serialized = JSON.stringify(normalizedUser);
       window.sessionStorage.setItem(USER_STORAGE_KEY, serialized);
@@ -169,6 +134,7 @@ export const storeAuthToken = (token, user = null) => {
 
     // Clean up any existing localStorage entries (one-time cleanup)
     window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+    window.localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
     window.localStorage.removeItem(USER_STORAGE_KEY);
     window.localStorage.removeItem(EMAIL_STORAGE_KEY);
   } catch (error) {
@@ -202,19 +168,98 @@ export const getStoredEmail = () => {
   return window.sessionStorage.getItem(EMAIL_STORAGE_KEY);
 };
 
+export const getStoredRefreshToken = () => {
+  if (!isBrowser) return null;
+  return window.sessionStorage.getItem(REFRESH_TOKEN_STORAGE_KEY);
+};
+
+// Store signup data temporarily (until user logs in)
+export const storeSignupData = (email, name) => {
+  if (!isBrowser) return;
+  try {
+    if (email) {
+      window.sessionStorage.setItem(SIGNUP_EMAIL_KEY, email);
+    }
+    if (name) {
+      window.sessionStorage.setItem(SIGNUP_NAME_KEY, name);
+    }
+  } catch (error) {
+    console.warn('Failed to store signup data', error);
+  }
+};
+
+// Get stored signup name
+export const getStoredSignupName = (email) => {
+  if (!isBrowser) return null;
+  try {
+    const storedEmail = window.sessionStorage.getItem(SIGNUP_EMAIL_KEY);
+    if (storedEmail === email) {
+      return window.sessionStorage.getItem(SIGNUP_NAME_KEY);
+    }
+  } catch (error) {
+    console.warn('Failed to get signup data', error);
+  }
+  return null;
+};
+
+// Clear signup data after successful login
+export const clearSignupData = () => {
+  if (!isBrowser) return;
+  window.sessionStorage.removeItem(SIGNUP_NAME_KEY);
+  window.sessionStorage.removeItem(SIGNUP_EMAIL_KEY);
+};
+
 export const clearStoredAuth = () => {
   if (!isBrowser) return;
   // Clear sessionStorage only
   window.sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+  window.sessionStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   window.sessionStorage.removeItem(EMAIL_STORAGE_KEY);
   window.sessionStorage.removeItem(USER_STORAGE_KEY);
   // Also clear localStorage as a safety measure (in case old data exists)
   window.localStorage.removeItem(TOKEN_STORAGE_KEY);
+  window.localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   window.localStorage.removeItem(EMAIL_STORAGE_KEY);
   window.localStorage.removeItem(USER_STORAGE_KEY);
 };
 
 export const RESEND_COOLDOWN_SECONDS = 30;
+
+// Get user profile
+export const getUserProfile = async (token) => {
+  if (!token) {
+    throw new Error('Token is required.');
+  }
+
+  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/profile`);
+  return withTimeout(
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }).then(handleResponse)
+  );
+};
+
+// Get user orders
+export const getUserOrders = async (token) => {
+  if (!token) {
+    throw new Error('Token is required.');
+  }
+
+  const url = buildUrl(`${API_CONFIG.ENDPOINTS.ORDERS}`);
+  return withTimeout(
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }).then(handleResponse)
+  );
+};
 
 // Sign in with email and password
 export const signIn = async ({ email, password }) => {
@@ -222,15 +267,7 @@ export const signIn = async ({ email, password }) => {
     throw new Error('Email and password are required.');
   }
 
-  if (USE_MOCK_DATA) {
-    await delay(800);
-    // Mock validation - accept any password for demo
-    const token = `mock-jwt-token-${Date.now()}`;
-    const name = deriveNameFromEmail(email);
-    return { token, user: { email, name } };
-  }
-
-  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/signin`);
+  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/login`);
   return withTimeout(
     fetch(url, {
       method: 'POST',
@@ -242,32 +279,24 @@ export const signIn = async ({ email, password }) => {
   );
 };
 
-// Complete signup after OTP verification
-export const completeSignup = async ({ email, name, address, password, otp }) => {
-  if (!email || !name || !address || !password || !otp) {
-    throw new Error('All fields are required.');
+// Signup after OTP verification
+export const signup = async ({ name, address, password, email }) => {
+  if (!name || !address || !password) {
+    throw new Error('Name, address, and password are required.');
+  }
+  if (!email) {
+    throw new Error('Email is required.');
   }
 
-  if (USE_MOCK_DATA) {
-    await delay(800);
-    // Verify OTP first
-    const storedOtp = mockDatabase.otpStore.get(email.toLowerCase());
-    if (!storedOtp || storedOtp !== otp) {
-      throw new Error('Invalid OTP. Please verify again.');
-    }
-    mockDatabase.otpStore.delete(email.toLowerCase());
-    const token = `mock-jwt-token-${Date.now()}`;
-    return { token, user: { email, name, address } };
-  }
-
-  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/complete-signup`);
+  const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/signup`);
   return withTimeout(
     fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-signup-email': email
       },
-      body: JSON.stringify({ email, name, address, password, otp })
+      body: JSON.stringify({ name, address, password })
     }).then(handleResponse)
   );
 };
@@ -276,12 +305,6 @@ export const completeSignup = async ({ email, name, address, password, otp }) =>
 export const requestPasswordReset = async (email) => {
   if (!email) {
     throw new Error('Email is required.');
-  }
-
-  if (USE_MOCK_DATA) {
-    await delay(800);
-    console.info('[Mock] Password reset link sent to', email);
-    return { message: 'Password reset link sent to your email.' };
   }
 
   const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/forgot-password`);
@@ -297,19 +320,9 @@ export const requestPasswordReset = async (email) => {
 };
 
 // Reset password with token
-export const resetPassword = async ({ token, password, confirmPassword }) => {
-  if (!token || !password || !confirmPassword) {
-    throw new Error('Token, password, and confirmation are required.');
-  }
-
-  if (password !== confirmPassword) {
-    throw new Error('Passwords do not match.');
-  }
-
-  if (USE_MOCK_DATA) {
-    await delay(800);
-    console.info('[Mock] Password reset successful');
-    return { message: 'Password reset successfully. Please sign in with your new password.' };
+export const resetPassword = async ({ token, newPassword }) => {
+  if (!token || !newPassword) {
+    throw new Error('Token and new password are required.');
   }
 
   const url = buildUrl(`${API_CONFIG.ENDPOINTS.AUTH}/reset-password`);
@@ -319,7 +332,7 @@ export const resetPassword = async ({ token, password, confirmPassword }) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ token, password, confirmPassword })
+      body: JSON.stringify({ token, newPassword })
     }).then(handleResponse)
   );
 };

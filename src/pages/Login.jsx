@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
-import { signIn } from '../services/authService';
+import { signIn, getStoredSignupName, clearSignupData } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -60,16 +61,64 @@ const Login = () => {
 
     try {
       const result = await signIn({ email, password });
-      const userProfile =
-        result?.user || {
-          email,
-          name: deriveNameFromEmail(email)
-        };
-      login(result.token, {
-        user: userProfile,
-        persist: rememberMe
+      
+      // Decode JWT to extract email
+      let userEmail = email;
+      
+      if (result.accessToken) {
+        try {
+          const base64Url = result.accessToken.split('.')[1];
+          if (base64Url) {
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+              atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+            );
+            const decoded = JSON.parse(jsonPayload);
+            userEmail = decoded.email || email;
+          }
+        } catch (e) {
+          // If decoding fails, use provided email
+          userEmail = email;
+        }
+      }
+      
+      // Get name from signup data (stored during registration)
+      let userName = getStoredSignupName(userEmail);
+      
+      // If name not found from signup, try to get from login response
+      if (!userName && result?.user?.name) {
+        userName = result.user.name;
+      }
+      if (!userName && result?.name) {
+        userName = result.name;
+      }
+      
+      // If still no name, derive from email as last resort
+      if (!userName) {
+        userName = deriveNameFromEmail(userEmail);
+      }
+      
+      const userProfile = {
+        email: userEmail,
+        name: userName,
+        role: result?.role || 'user'
+      };
+      
+      // Store the user profile with the name
+      login(result.accessToken, result.refreshToken, {
+        user: userProfile
       });
-      navigate('/');
+      
+      // Clear signup data after successful login
+      clearSignupData();
+      
+      // Navigate after a brief delay to ensure state is updated
+      setTimeout(() => {
+        navigate('/');
+      }, 100);
     } catch (err) {
       setError(err.message || 'Invalid email or password. Please try again.');
     } finally {
@@ -105,17 +154,38 @@ const Login = () => {
 
             <div className="form-group">
               <label htmlFor="password" className="form-label">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
-                placeholder="Enter your password"
-                required
-                disabled={loading}
-              />
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-input"
+                  placeholder="Enter your password"
+                  required
+                  disabled={loading}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  disabled={loading}
+                >
+                  {showPassword ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             <div className="form-options">

@@ -122,12 +122,11 @@ const Header = () => {
             </button>
             {showAuthIcons ? (
               <>
-                <button
-                  type="button"
+                <Link
+                  to="/profile"
                   className="icon-btn account-btn"
                   aria-label="Account"
                   onClick={(e) => {
-                    e.preventDefault();
                     e.stopPropagation();
                   }}
                 >
@@ -135,7 +134,7 @@ const Header = () => {
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
-                </button>
+                </Link>
                 <button
                   type="button"
                   className="icon-btn logout-btn"
@@ -158,14 +157,21 @@ const Header = () => {
               </Link>
             )}
             {showAuthIcons && !isAdminRoute && (
-              <button className="icon-btn cart-btn" aria-label="Shopping Cart">
+              <Link
+                to="/cart"
+                className="icon-btn cart-btn"
+                aria-label="Shopping Cart"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
                 <span className="cart-count">0</span>
-              </button>
+              </Link>
             )}
             {isAdminRoute && isAdminAuthenticated && adminUser && (
               <div className="header-welcome">
@@ -221,8 +227,10 @@ const Header = () => {
                       onMouseLeave={handleMenuLeave}
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <Link to="/shop/mens-wear" className="dropdown-item" onClick={closeMenu}>
-                        MEN'S WEAR
+                      <div className="dropdown-item-wrapper">
+                        <Link to="/shop/mens-wear" className="dropdown-item" onClick={closeMenu}>
+                          MEN'S WEAR
+                        </Link>
                         <div className="dropdown-submenu">
                           <Link to="/shop/mens-wear?category=shirts" className="dropdown-subitem" onClick={closeMenu}>Shirts</Link>
                           <Link to="/shop/mens-wear?category=trousers" className="dropdown-subitem" onClick={closeMenu}>Trousers</Link>
@@ -230,9 +238,11 @@ const Header = () => {
                           <Link to="/shop/mens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers / Jackets</Link>
                           <Link to="/shop/mens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
                         </div>
-                      </Link>
-                      <Link to="/shop/womens-wear" className="dropdown-item" onClick={closeMenu}>
-                        WOMEN'S WEAR
+                      </div>
+                      <div className="dropdown-item-wrapper">
+                        <Link to="/shop/womens-wear" className="dropdown-item" onClick={closeMenu}>
+                          WOMEN'S WEAR
+                        </Link>
                         <div className="dropdown-submenu">
                           <Link to="/shop/womens-wear?category=blouses" className="dropdown-subitem" onClick={closeMenu}>Blouses</Link>
                           <Link to="/shop/womens-wear?category=skirts-trousers" className="dropdown-subitem" onClick={closeMenu}>Skirts/ Trousers</Link>
@@ -242,7 +252,7 @@ const Header = () => {
                           <Link to="/shop/womens-wear?category=dresses" className="dropdown-subitem" onClick={closeMenu}>Dresses</Link>
                           <Link to="/shop/womens-wear?category=sarees" className="dropdown-subitem" onClick={closeMenu}>Sarees</Link>
                         </div>
-                      </Link>
+                      </div>
                     </div>
                   )}
                 </div>

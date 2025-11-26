@@ -1,19 +1,16 @@
 /**
  * API Configuration
  * 
- * To switch from mock data to real API:
- * 1. Set USE_MOCK_DATA to false
- * 2. Update API_BASE_URL with your backend URL
- * 3. Ensure backend API endpoints match the expected format
+ * Backend API base URL configuration
+ * Update BACKEND_BASE_URL or set REACT_APP_API_BASE_URL environment variable
  */
 
+// Backend API Configuration
+const BACKEND_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://apikhadar-production-9635.up.railway.app';
+
 export const API_CONFIG = {
-  // Set to false when ready to use real API
-  USE_MOCK_DATA: true,
-  
-  // Your backend API base URL
-  // Can also be set via environment variable: REACT_APP_API_BASE_URL
-  API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'https://api.yourdomain.com/api',
+  // Backend API base URL
+  API_BASE_URL: BACKEND_BASE_URL,
   
   // API endpoints (relative to base URL)
   ENDPOINTS: {
