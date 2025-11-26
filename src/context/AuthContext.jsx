@@ -46,11 +46,11 @@ export const AuthProvider = ({ children }) => {
     setIsBootstrapped(true);
   }, []);
 
-  const login = useCallback((newToken, options = {}) => {
-    if (!newToken) return;
+  const login = useCallback((accessToken, refreshToken = null, options = {}) => {
+    if (!accessToken) return;
     const userProfile = options.user || (options.email ? { email: options.email } : null);
-    storeAuthToken(newToken, userProfile);
-    setToken(newToken);
+    storeAuthToken(accessToken, refreshToken, userProfile);
+    setToken(accessToken);
     setUser(userProfile);
   }, []);
 
