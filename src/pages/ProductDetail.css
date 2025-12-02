@@ -8,7 +8,7 @@
 
 .breadcrumb {
   margin-bottom: 30px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   /* Updated Text Color: Muted Clay/Taupe (#8C6C5F) - was #6b6b6b */
   color: #8C6C5F;
@@ -110,7 +110,7 @@
   background-color: rgba(111, 49, 50, 0.7); /* 6F3132 with opacity */
   /* Updated Counter Text: Pale Beige/Cream (#F7F7F0) - was white */
   color: #F7F7F0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   padding: 5px 10px;
   z-index: 2;
@@ -157,7 +157,7 @@
 }
 
 .product-detail-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -181,7 +181,7 @@
 }
 
 .price-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   /* Updated Label Color: Muted Clay/Taupe (#8C6C5F) - was #6b6b6b */
@@ -190,7 +190,7 @@
 
 .regular-price,
 .sale-price {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   /* Updated Price Color: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
@@ -198,7 +198,7 @@
 }
 
 .original-price {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   /* Updated Original Price Color: Muted Clay/Taupe (#8C6C5F) - was #6b6b6b */
@@ -207,7 +207,7 @@
 }
 
 .unit-price {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 300;
   /* Updated Unit Price Color: Muted Clay/Taupe (#8C6C5F) - was #6b6b6b */
@@ -231,7 +231,7 @@
 }
 
 .option-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -243,7 +243,7 @@
 .option-select {
   width: 100%;
   padding: 12px 15px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 300;
   /* Updated Select Text Color: Deep Coffee Brown (#6F3132) - was #1a1a1a */
@@ -299,7 +299,7 @@
 }
 
 .quantity-value {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   /* Updated Quantity Text Color: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
@@ -318,7 +318,7 @@
 .buy-now-btn {
   width: 100%;
   padding: 14px 30px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -371,7 +371,7 @@
 }
 
 .tab-btn {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -404,7 +404,7 @@
 }
 
 .tab-panel {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 300;
   line-height: 1.8;
@@ -413,7 +413,7 @@
 }
 
 .tab-panel h4 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.125rem;
   font-weight: 400;
   margin-bottom: 15px;
@@ -425,7 +425,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
 }
 
@@ -463,7 +463,7 @@
 }
 
 .product-not-found h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 400;
   /* Updated Not Found Heading: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
@@ -472,7 +472,7 @@
 }
 
 .back-link {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   /* Updated Back Link Color: Deep Coffee Brown (#6F3132) - was #1a1a1a */
   color: #6F3132;

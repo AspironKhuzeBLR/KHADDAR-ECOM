@@ -33,7 +33,7 @@
 }
 
 .sustainability-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 4.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -43,7 +43,7 @@
 }
 
 .sustainability-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: 300;
   letter-spacing: 0.03em;
@@ -167,7 +167,7 @@
 }
 
 .practice-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.03em;
@@ -177,7 +177,7 @@
 }
 
 .practice-description {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.8;
   /* Updated Body Text Color: Deep Coffee Brown (#6F3132) - was #2a2a2a */
@@ -218,7 +218,7 @@
 }
 
 .sustainability-quote {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   font-style: italic;
@@ -243,7 +243,7 @@
 }
 
 .commitment-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -253,7 +253,7 @@
 }
 
 .commitment-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.125rem;
   line-height: 1.9;
   /* Updated Body Text Color: Deep Coffee Brown (#6F3132) - was #2a2a2a */
@@ -427,7 +427,7 @@
 }
 
 .footer-section h4 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   margin-bottom: 20px;

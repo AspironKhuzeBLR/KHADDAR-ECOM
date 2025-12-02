@@ -41,7 +41,7 @@
 }
 
 .section-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3.5rem;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -98,7 +98,7 @@
 }
 
 .vision-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   line-height: 2.2;
   color: #2a2a2a;
@@ -124,7 +124,7 @@
 }
 
 .mission-item {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   line-height: 2.1;
   color: #2a2a2a;

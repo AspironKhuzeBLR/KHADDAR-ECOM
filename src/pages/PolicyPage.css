@@ -20,7 +20,7 @@
 }
 
 .policy-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   color: #1a1a1a;
@@ -29,7 +29,7 @@
 }
 
 .policy-updated {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   color: #666;
   letter-spacing: 0.05em;
@@ -48,7 +48,7 @@
 }
 
 .policy-section-heading {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.4rem;
   font-weight: 500;
   color: #1a1a1a;
@@ -57,7 +57,7 @@
 }
 
 .policy-section-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
   line-height: 1.8;
   color: #444;
@@ -71,7 +71,7 @@
 }
 
 .policy-footer p {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   color: #666;
 }
@@ -92,7 +92,7 @@
 
 .back-link {
   display: inline-block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   color: #1a1a1a;

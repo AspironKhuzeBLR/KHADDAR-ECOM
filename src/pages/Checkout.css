@@ -31,7 +31,7 @@
 }
 
 .back-to-cart {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   color: #6F3132;
   text-decoration: none;
@@ -71,7 +71,7 @@
 }
 
 .checkout-empty p {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: #8C6C5F;
   margin-bottom: 30px;
 }
@@ -79,7 +79,7 @@
 .checkout-btn {
   display: inline-block;
   padding: 15px 40px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -150,7 +150,7 @@
 }
 
 .form-group label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   color: #6F3132;
@@ -162,7 +162,7 @@
 .form-group textarea,
 .form-group select {
   padding: 14px 16px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   color: #1a1a1a;
   background-color: #F7F7F0;
@@ -196,7 +196,7 @@
 
 /* Payment Methods */
 .payment-note {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   color: #8C6C5F;
   margin-bottom: 20px;
@@ -246,14 +246,14 @@
 }
 
 .payment-name {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   color: #1a1a1a;
 }
 
 .payment-desc {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   color: #8C6C5F;
 }
@@ -291,7 +291,7 @@
 }
 
 .secure-payment-badge span:last-child {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   color: #6F3132;
 }
@@ -364,7 +364,7 @@
   height: 22px;
   background-color: #6F3132;
   color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   border-radius: 50%;
@@ -381,7 +381,7 @@
 }
 
 .item-name {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 400;
   color: #1a1a1a;
@@ -389,13 +389,13 @@
 }
 
 .item-variant {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: #8C6C5F;
 }
 
 .item-price {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
   color: #1a1a1a;
@@ -412,7 +412,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
 }
 
@@ -430,7 +430,7 @@
 }
 
 .shipping-note {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: #8C6C5F;
   margin-bottom: 15px;
@@ -457,7 +457,7 @@
   margin-top: 25px;
   background-color: #6F3132;
   color: #F7F7F0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -490,7 +490,7 @@
 }
 
 .terms-note {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: #8C6C5F;
   text-align: center;

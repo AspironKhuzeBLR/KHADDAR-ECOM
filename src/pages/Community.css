@@ -34,7 +34,7 @@
 }
 
 .community-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 4.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -44,7 +44,7 @@
 }
 
 .community-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 300;
   letter-spacing: 0.05em;
@@ -168,7 +168,7 @@
 }
 
 .collaboration-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.75rem;
   font-weight: 400;
   /* Title Text Color: Pale Beige/Cream (#F7F7F0) */
@@ -198,7 +198,7 @@
 }
 
 .collaboration-description-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.125rem;
   line-height: 1.9;
   /* Description Text Color: Pale Beige/Cream (#F7F7F0) */
@@ -241,7 +241,7 @@
 }
 
 .video-quote-community {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   font-style: italic;
@@ -266,7 +266,7 @@
 }
 
 .cta-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -276,7 +276,7 @@
 }
 
 .cta-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.125rem;
   line-height: 1.9;
   /* Updated Body Text Color: Deep Coffee Brown (#6F3132) */
@@ -286,7 +286,7 @@
 }
 
 .cta-button {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.2em;
@@ -367,7 +367,7 @@
 }
 
 .community-modal-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -378,7 +378,7 @@
 }
 
 .community-modal-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   /* Updated Modal Text Color: Deep Coffee Brown (#6F3132) */
@@ -404,7 +404,7 @@
   /* Updated Input Border: Muted Clay/Taupe (#8C6C5F) */
   border: 1px solid #8C6C5F;
   border-radius: 4px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   /* Updated Input Text Color: Deep Coffee Brown (#6F3132) */
   color: #6F3132;
@@ -426,7 +426,7 @@
 }
 
 .community-modal-button {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.1em;

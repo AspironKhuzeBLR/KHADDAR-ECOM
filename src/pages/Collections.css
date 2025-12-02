@@ -20,7 +20,7 @@
 }
 
 .collections-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -124,7 +124,7 @@
 }
 
 .gallery-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -166,7 +166,7 @@
 }
 
 .video-quote {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   font-style: italic;
