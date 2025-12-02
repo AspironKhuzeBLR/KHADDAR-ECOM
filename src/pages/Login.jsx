@@ -42,29 +42,12 @@ const Login = () => {
     }
     setLoading(true);
 
-    const isAdminEmail = email.toLowerCase() === 'admin@gmail.com';
-    const adminPassword = 'admin123';
-
-    if (isAdminEmail) {
-      if (password === adminPassword) {
-        localStorage.setItem('adminToken', 'admin-auth-token-12345');
-        localStorage.setItem('adminUser', JSON.stringify({ username: 'admin', email }));
-        setLoading(false);
-        toast.success('Welcome back, Admin!');
-        navigate('/admin/dashboard');
-        return;
-      }
-
-      setLoading(false);
-      toast.error('Invalid admin credentials. Please try again.');
-      return;
-    }
-
     try {
       const result = await signIn({ email, password });
       
-      // Decode JWT to extract email
+      // Decode JWT to extract email and role
       let userEmail = email;
+      let userRole = 'user';
       
       if (result.accessToken) {
         try {
@@ -79,12 +62,20 @@ const Login = () => {
             );
             const decoded = JSON.parse(jsonPayload);
             userEmail = decoded.email || email;
+            userRole = decoded.role || result?.role || result?.user?.role || 'user';
           }
         } catch (e) {
-          // If decoding fails, use provided email
+          // If decoding fails, use provided email and check response
           userEmail = email;
+          userRole = result?.role || result?.user?.role || 'user';
         }
       }
+      
+      // Check if user is admin from API response
+      const isAdmin = userRole === 'admin' || 
+                      result?.role === 'admin' || 
+                      result?.user?.role === 'admin' ||
+                      result?.is_admin === true;
       
       // Get name from signup data (stored during registration)
       let userName = getStoredSignupName(userEmail);
@@ -105,23 +96,42 @@ const Login = () => {
       const userProfile = {
         email: userEmail,
         name: userName,
-        role: result?.role || 'user'
+        role: isAdmin ? 'admin' : 'user'
       };
       
-      // Store the user profile with the name
-      login(result.accessToken, result.refreshToken, {
-        user: userProfile
-      });
-      
-      // Clear signup data after successful login
-      clearSignupData();
-      
-      toast.success('Welcome back! You have signed in successfully.');
-      
-      // Navigate after a brief delay to ensure state is updated
-      setTimeout(() => {
-        navigate('/');
-      }, 100);
+      if (isAdmin) {
+        // Store admin tokens and redirect to dashboard
+        sessionStorage.setItem('adminToken', result.accessToken);
+        sessionStorage.setItem('adminUser', JSON.stringify({ 
+          username: userName, 
+          email: userEmail,
+          role: 'admin'
+        }));
+        
+        // Also login via AuthContext
+        login(result.accessToken, result.refreshToken, {
+          user: userProfile
+        });
+        
+        clearSignupData();
+        toast.success('Welcome back, Admin!');
+        
+        setTimeout(() => {
+          navigate('/admin/dashboard');
+        }, 100);
+      } else {
+        // Regular user - store and redirect to home
+        login(result.accessToken, result.refreshToken, {
+          user: userProfile
+        });
+        
+        clearSignupData();
+        toast.success('Welcome back! You have signed in successfully.');
+        
+        setTimeout(() => {
+          navigate('/');
+        }, 100);
+      }
     } catch (err) {
       toast.error(err.message || 'Invalid email or password. Please try again.');
     } finally {

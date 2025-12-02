@@ -27,14 +27,17 @@ const withTimeout = (promise, timeout = REQUEST_TIMEOUT) => {
 };
 
 const buildUrl = (path) => {
-  if (!path) return API_CONFIG.API_BASE_URL;
-  try {
-    return new URL(path, API_CONFIG.API_BASE_URL).toString();
-  } catch (error) {
-    const base = API_CONFIG.API_BASE_URL.replace(/\/$/, '');
-    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-    return `${base}${normalizedPath}`;
+  const baseUrl = API_CONFIG.API_BASE_URL;
+  
+  // Handle empty base URL (development with proxy)
+  if (!baseUrl) {
+    return path.startsWith('/') ? path : `/${path}`;
   }
+  
+  // Handle full URL
+  const base = baseUrl.replace(/\/$/, '');
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
 };
 
 const parseErrorMessage = async (response) => {

@@ -1,0 +1,592 @@
+/* Checkout Page Styles */
+.checkout-page {
+  min-height: 100vh;
+  background-color: #F7F7F0;
+  padding-top: 120px;
+  padding-bottom: 60px;
+}
+
+.checkout-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.checkout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #8C6C5F;
+}
+
+.checkout-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #6F3132;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.back-to-cart {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  color: #6F3132;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.back-to-cart:hover {
+  color: #A15F22;
+}
+
+/* Loading & Empty States */
+.checkout-loading,
+.checkout-empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.checkout-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #6F3132;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.checkout-empty h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  color: #6F3132;
+  margin-bottom: 15px;
+}
+
+.checkout-empty p {
+  font-family: 'Montserrat', sans-serif;
+  color: #8C6C5F;
+  margin-bottom: 30px;
+}
+
+.checkout-btn {
+  display: inline-block;
+  padding: 15px 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkout-btn.primary {
+  background-color: #6F3132;
+  color: #F7F7F0;
+}
+
+.checkout-btn.primary:hover {
+  background-color: #A15F22;
+}
+
+/* Main Content Layout */
+.checkout-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Form Sections */
+.checkout-forms {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.checkout-section {
+  background-color: #ffffff;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+}
+
+.checkout-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #6F3132;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6F3132;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 14px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  background-color: #F7F7F0;
+  border: 1px solid #d0d0d0;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #6F3132;
+  box-shadow: 0 0 0 3px rgba(111, 49, 50, 0.1);
+}
+
+.form-group input:disabled {
+  background-color: #e8e8e8;
+  color: #8C6C5F;
+  cursor: not-allowed;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #b0b0b0;
+}
+
+/* Payment Methods */
+.payment-note {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #8C6C5F;
+  margin-bottom: 20px;
+}
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 20px;
+  background-color: #F7F7F0;
+  border: 2px solid #e0e0e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+  border-color: #8C6C5F;
+}
+
+.payment-option.selected {
+  border-color: #6F3132;
+  background-color: rgba(111, 49, 50, 0.05);
+}
+
+.payment-option input[type="radio"] {
+  display: none;
+}
+
+.payment-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  text-align: center;
+}
+
+.payment-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.payment-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.payment-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #8C6C5F;
+}
+
+.payment-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #6F3132;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.payment-option.selected .payment-check {
+  opacity: 1;
+}
+
+.secure-payment-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(111, 49, 50, 0.05);
+  border-left: 3px solid #6F3132;
+}
+
+.secure-payment-badge .lock-icon {
+  font-size: 1.2rem;
+}
+
+.secure-payment-badge span:last-child {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #6F3132;
+}
+
+/* Order Summary */
+.checkout-summary {
+  position: sticky;
+  top: 140px;
+}
+
+.summary-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  padding: 30px;
+}
+
+.summary-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #6F3132;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-items {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-image .placeholder-image {
+  width: 100%;
+  height: 100%;
+  background-color: #e8e8e8;
+}
+
+.item-qty {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  background-color: #6F3132;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+
+.item-variant {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+}
+
+.item-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.summary-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 15px 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+}
+
+.summary-row span:first-child {
+  color: #6b6b6b;
+}
+
+.summary-row span:last-child {
+  color: #1a1a1a;
+}
+
+.summary-row .free-shipping {
+  color: #2e7d32;
+  font-weight: 500;
+}
+
+.shipping-note {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #F7F7F0;
+  text-align: center;
+}
+
+.summary-row.total {
+  margin-top: 15px;
+  padding-top: 15px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.summary-row.total span {
+  color: #6F3132;
+}
+
+/* Place Order Button */
+.place-order-btn {
+  width: 100%;
+  padding: 18px;
+  margin-top: 25px;
+  background-color: #6F3132;
+  color: #F7F7F0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.place-order-btn:hover:not(:disabled) {
+  background-color: #A15F22;
+}
+
+.place-order-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.terms-note {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+.terms-note a {
+  color: #6F3132;
+  text-decoration: underline;
+}
+
+.terms-note a:hover {
+  color: #A15F22;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .checkout-content {
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .checkout-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkout-summary {
+    position: static;
+    order: -1;
+  }
+  
+  .summary-items {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-page {
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+  
+  .checkout-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .checkout-header h1 {
+    font-size: 2rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-group.full-width {
+    grid-column: 1;
+  }
+  
+  .checkout-section {
+    padding: 20px;
+  }
+  
+  .summary-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    padding: 0 15px;
+  }
+  
+  .checkout-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .payment-option {
+    padding: 15px;
+  }
+  
+  .payment-icon {
+    font-size: 1.25rem;
+    width: 30px;
+  }
+  
+  .payment-name {
+    font-size: 0.85rem;
+  }
+  
+  .payment-desc {
+    font-size: 0.75rem;
+  }
+}
+

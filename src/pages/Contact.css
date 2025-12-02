@@ -33,7 +33,7 @@
 }
 
 .contact-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 4.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -43,7 +43,7 @@
 }
 
 .contact-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 300;
   letter-spacing: 0.03em;
@@ -83,7 +83,7 @@
 }
 
 .info-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -93,7 +93,7 @@
 }
 
 .info-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.8;
   /* Updated Body Text Color: Deep Coffee Brown (#6F3132) - was #2a2a2a */
@@ -102,7 +102,7 @@
 }
 
 .info-subheading {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.15em;
@@ -113,7 +113,7 @@
 }
 
 .info-link {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   /* Updated Link Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
   color: #6F3132;
@@ -128,7 +128,7 @@
 }
 
 .info-address {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.8;
   /* Updated Address Text Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
@@ -143,7 +143,7 @@
 }
 
 .social-link-contact {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9375rem;
   /* Updated Social Link Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
   color: #6F3132;
@@ -164,7 +164,7 @@
 }
 
 .form-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -186,7 +186,7 @@
 }
 
 .form-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -197,7 +197,7 @@
 
 .form-input,
 .form-textarea {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   padding: 15px;
   /* Updated Input Border: Dark Maroon/Reddish Brown (#6F3132) - was #e8e8e8 */
@@ -223,7 +223,7 @@
 }
 
 .form-button {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.2em;

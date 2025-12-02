@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchProductDetail } from '../services/productService';
+import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
 import './ProductDetail.css';
 
 // Legacy product database - kept for backward compatibility
@@ -158,6 +160,9 @@ womenProducts.forEach(({ key, product, gender }) => addProduct(key, product, gen
 
 const ProductDetail = () => {
   const { productSlug } = useParams();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { isAuthenticated } = useAuth();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -173,14 +178,22 @@ const ProductDetail = () => {
       try {
         const data = await fetchProductDetail(productSlug);
         setProduct(data);
+        // Set default selections if available
+        if (data?.sizes?.length > 0) {
+          setSelectedSize(data.sizes[0]);
+        }
+        if (data?.colors?.length > 0) {
+          setSelectedColor(data.colors[0]);
+        }
       } catch (error) {
         console.error('Error loading product:', error);
+        toast.error('Failed to load product details');
       } finally {
         setLoading(false);
       }
     };
     loadProduct();
-  }, [productSlug]);
+  }, [productSlug, toast]);
 
   if (loading) {
     return (
@@ -212,19 +225,82 @@ const ProductDetail = () => {
     : `/shop/womens-wear?category=${product.category}`;
 
   const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select size and color');
+    if (!isAuthenticated) {
+      toast.error('Please login to add items to cart');
+      navigate('/login');
       return;
     }
-    alert('Product added to cart!');
+    
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+    if (!selectedColor) {
+      toast.error('Please select a color');
+      return;
+    }
+    
+    // Get existing cart items from sessionStorage
+    const existingCart = JSON.parse(sessionStorage.getItem('cartItems') || '[]');
+    
+    // Check if product already exists with same size and color
+    const existingItemIndex = existingCart.findIndex(
+      item => item.id === product.id && item.size === selectedSize && item.color === selectedColor
+    );
+    
+    if (existingItemIndex > -1) {
+      // Update quantity of existing item
+      existingCart[existingItemIndex].quantity += quantity;
+    } else {
+      // Add new item
+      existingCart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        priceRaw: product.priceRaw,
+        image: product.image || product.images?.[0],
+        size: selectedSize,
+        color: selectedColor,
+        quantity: quantity
+      });
+    }
+    
+    // Save to sessionStorage
+    sessionStorage.setItem('cartItems', JSON.stringify(existingCart));
+    toast.success(`${product.name} added to cart!`);
   };
 
   const handleBuyNow = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select size and color');
+    if (!isAuthenticated) {
+      toast.error('Please login to proceed');
+      navigate('/login');
       return;
     }
-    alert('Redirecting to checkout...');
+    
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+    if (!selectedColor) {
+      toast.error('Please select a color');
+      return;
+    }
+    
+    // Add to cart first
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      priceRaw: product.priceRaw,
+      image: product.image || product.images?.[0],
+      size: selectedSize,
+      color: selectedColor,
+      quantity: quantity
+    };
+    
+    // Save single item for checkout
+    sessionStorage.setItem('cartItems', JSON.stringify([cartItem]));
+    navigate('/checkout');
   };
 
   const increaseQuantity = () => {

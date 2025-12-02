@@ -29,7 +29,8 @@ const ResetPassword = () => {
   const validatePassword = (pwd) => {
     const hasLetter = /[a-zA-Z]/.test(pwd);
     const hasNumber = /[0-9]/.test(pwd);
-    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(pwd);
+    // eslint-disable-next-line no-useless-escape
+    const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
     return hasLetter && hasNumber && hasSymbol && pwd.length >= 6;
   };
 

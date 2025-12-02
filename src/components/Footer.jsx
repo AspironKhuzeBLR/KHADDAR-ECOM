@@ -44,12 +44,12 @@ const Footer = () => {
           </div>
 
           <div className="footer-section">
-            <h4 className="footer-heading">CUSTOMER CARE</h4>
+            <h4 className="footer-heading">POLICIES</h4>
             <ul className="footer-links">
-              <li><Link to="/contact" onClick={(e) => handleLinkClick(e, '/contact')}>Contact Us</Link></li>
-              <li><a href="#shipping">Shipping Information</a></li>
-              <li><a href="#returns">Returns & Exchanges</a></li>
-              <li><a href="#faq">FAQ</a></li>
+              <li><Link to="/privacy-policy" onClick={(e) => handleLinkClick(e, '/privacy-policy')}>Privacy Policy</Link></li>
+              <li><Link to="/refund-policy" onClick={(e) => handleLinkClick(e, '/refund-policy')}>Refund Policy</Link></li>
+              <li><Link to="/cancellation-policy" onClick={(e) => handleLinkClick(e, '/cancellation-policy')}>Cancellation Policy</Link></li>
+              <li><Link to="/shipping-policy" onClick={(e) => handleLinkClick(e, '/shipping-policy')}>Shipping Policy</Link></li>
             </ul>
           </div>
 
@@ -68,9 +68,9 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Khaddar. All rights reserved.
           </p>
           <div className="footer-legal">
-            <a href="#privacy">Privacy Policy</a>
+            <Link to="/contact">Contact Us</Link>
             <span>|</span>
-            <a href="#terms">Terms of Use</a>
+            <a href="#faq">FAQ</a>
           </div>
         </div>
       </div>

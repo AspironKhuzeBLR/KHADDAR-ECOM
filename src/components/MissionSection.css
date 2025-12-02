@@ -22,7 +22,7 @@
 }
 
 .section-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3.5rem;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -73,7 +73,7 @@
 .mission-paragraph {
   max-width: 800px; /* Limit width for centered text readability */
   margin: 0 auto; /* Center the text block */
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   line-height: 2.1;
   /* Body Text Color: Deep Coffee Brown (#6F3132) */

@@ -5,7 +5,7 @@ const ProtectedAdminRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const adminToken = localStorage.getItem('adminToken');
+    const adminToken = sessionStorage.getItem('adminToken');
     setIsAuthenticated(!!adminToken);
   }, []);
 

@@ -155,7 +155,8 @@ const Register = () => {
   const validatePassword = (password) => {
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
-    const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+    // eslint-disable-next-line no-useless-escape
+    const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
     return hasLetter && hasNumber && hasSymbol && password.length >= 6;
   };
 

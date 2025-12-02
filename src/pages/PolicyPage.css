@@ -1,0 +1,149 @@
+.policy-page {
+  min-height: 100vh;
+  padding: 120px 20px 60px;
+  background-color: #faf8f5;
+}
+
+.policy-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 50px;
+  border: 1px solid #e8e4de;
+}
+
+.policy-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e8e4de;
+}
+
+.policy-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.policy-updated {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  color: #666;
+  letter-spacing: 0.05em;
+}
+
+.policy-content {
+  margin-bottom: 40px;
+}
+
+.policy-section {
+  margin-bottom: 35px;
+}
+
+.policy-section:last-child {
+  margin-bottom: 0;
+}
+
+.policy-section-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  letter-spacing: 0.01em;
+}
+
+.policy-section-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: #444;
+}
+
+.policy-footer {
+  padding: 25px;
+  background-color: #faf8f5;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.policy-footer p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.policy-footer a {
+  color: #8b6914;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.policy-footer a:hover {
+  text-decoration: underline;
+}
+
+.policy-navigation {
+  text-align: center;
+}
+
+.back-link {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 12px 25px;
+  border: 1px solid #1a1a1a;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .policy-page {
+    padding: 100px 15px 40px;
+  }
+
+  .policy-container {
+    padding: 30px 25px;
+  }
+
+  .policy-title {
+    font-size: 2rem;
+  }
+
+  .policy-section-heading {
+    font-size: 1.2rem;
+  }
+
+  .policy-section-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .policy-container {
+    padding: 25px 20px;
+  }
+
+  .policy-title {
+    font-size: 1.75rem;
+  }
+
+  .policy-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+}
+

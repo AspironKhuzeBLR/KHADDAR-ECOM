@@ -10,7 +10,6 @@ const adminNavItems = [
   { label: 'Overview', hash: 'overview' },
   { label: 'Products', hash: 'products' },
   { label: 'Orders', hash: 'orders' },
-  { label: 'Users', hash: 'users' },
   { label: 'Settings', hash: 'settings' }
 ];
 
@@ -18,7 +17,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isBlackScrolled, setIsBlackScrolled] = useState(false);
+  const [isTransparent, setIsTransparent] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
@@ -27,7 +26,7 @@ const Header = () => {
   
   // Check admin authentication separately for admin routes
   const isAdminAuthenticated = isAdminRoute 
-    ? !!localStorage.getItem('adminToken')
+    ? !!sessionStorage.getItem('adminToken')
     : false;
   
   // Show icons if either regular auth or admin auth
@@ -35,7 +34,7 @@ const Header = () => {
   
   // Get admin user info for display
   const adminUser = isAdminRoute && isAdminAuthenticated
-    ? JSON.parse(localStorage.getItem('adminUser') || '{}')
+    ? JSON.parse(sessionStorage.getItem('adminUser') || '{}')
     : null;
   const displayName = useMemo(() => {
     if (user?.name) {
@@ -48,20 +47,20 @@ const Header = () => {
   }, [user]);
 
   useEffect(() => {
+    // Pages that should have transparent header initially (have hero images/videos)
+    const transparentPages = ['/', '/collections', '/community', '/sustainability', '/contact'];
+    const isTransparentPage = transparentPages.includes(location.pathname);
+    
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      if (location.pathname === '/' ||
-          location.pathname === '/collections' ||
-          location.pathname === '/community' ||
-          location.pathname === '/sustainability' ||
-          location.pathname === '/contact') {
-        setIsScrolled(scrollPosition > 100);
-        setIsBlackScrolled(false);
-      } else {
-        setIsScrolled(true);
-        setIsBlackScrolled(scrollPosition > 100);
-      }
+      setIsScrolled(scrollPosition > 50);
     };
+
+    // Set initial transparent state based on page
+    setIsTransparent(isTransparentPage);
+    
+    // Initial scroll check
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -88,8 +87,8 @@ const Header = () => {
 
   const handleLogout = () => {
     if (isAdminRoute) {
-      window.localStorage.removeItem('adminToken');
-      window.localStorage.removeItem('adminUser');
+      window.sessionStorage.removeItem('adminToken');
+      window.sessionStorage.removeItem('adminUser');
     }
     logout();
     setIsMenuOpen(false);
@@ -98,7 +97,7 @@ const Header = () => {
 
   return (
     <>
-      <header className={`header ${isScrolled ? 'scrolled' : ''} ${isBlackScrolled ? 'black-scrolled' : ''}`}>
+      <header className={`header ${isScrolled || !isTransparent ? 'scrolled' : ''} ${isTransparent ? 'transparent-page' : ''}`}>
         <div className="header-main">
           <div className="header-main-container">
           <Link to="/" className="logo-link">
@@ -122,19 +121,21 @@ const Header = () => {
             </button>
             {showAuthIcons ? (
               <>
-                <Link
-                  to="/profile"
-                  className="icon-btn account-btn"
-                  aria-label="Account"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                </Link>
+                {!isAdminRoute && (
+                  <Link
+                    to="/profile"
+                    className="icon-btn account-btn"
+                    aria-label="Account"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </Link>
+                )}
                 <button
                   type="button"
                   className="icon-btn logout-btn"

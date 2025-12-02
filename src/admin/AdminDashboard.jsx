@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { fetchAdminProducts, addProduct, updateProduct, deleteProduct, fetchCategories } from '../services/productService';
+import { requestPasswordReset } from '../services/authService';
 
 import './AdminDashboard.css';
 
@@ -7,38 +9,23 @@ import './AdminDashboard.css';
 const PRODUCT_CATEGORIES = {
   "Men's Wear": [
     "Shirts",
-    "Trousers",
+    "Pants",
     "Co-ords",
-    "Blazers / Jackets",
+    "Blazers",
     "Kurtas"
   ],
   "Women's Wear": [
     "Blouses",
-    "Skirts / Trousers",
+    "Skirts",
+    "Pants",
     "Co-ords",
-    "Blazers/ Jackets",
+    "Blazers",
     "Kurtas",
     "Dresses",
+    "Corsets",
     "Sarees"
   ]
 };
-
-const analysisCards = [
-  {
-    title: 'Payments Completed',
-    value: '92%',
-    description: 'Orders with successful payments this week',
-    detail: '23 of 25 orders paid',
-    progress: 92
-  },
-  {
-    title: 'Orders Received',
-    value: '80%',
-    description: 'Orders confirmed and ready for processing',
-    detail: '20 of 25 orders received',
-    progress: 80
-  }
-];
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -46,15 +33,171 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // --- State for Password Change Modal ---
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  // --- Dashboard Stats State ---
+  const [dashboardStats, setDashboardStats] = useState({
+    totalOrders: 0,
+    totalRevenue: 0,
+    totalProducts: 0,
+    pendingOrders: 0,
+    completedOrders: 0,
+    cancelledOrders: 0
+  });
+
+  // --- Products Overview State ---
+  const [selectedMainCategory, setSelectedMainCategory] = useState("Men's Wear");
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [subCategories, setSubCategories] = useState([]);
+  const [overviewProducts, setOverviewProducts] = useState([]);
+  const [overviewLoading, setOverviewLoading] = useState(false);
+
+  // --- State for Password Reset ---
+  const [isResetLinkSending, setIsResetLinkSending] = useState(false);
+
+  // --- Mock Orders Data with detailed information ---
+  const [orders] = useState([
+    { 
+      id: 'ORD-1001', 
+      customer: 'Rahul Sharma',
+      email: 'rahul.sharma@email.com',
+      phone: '+91 9876543210',
+      products: [
+        { name: 'Black Khadi Shirt', quantity: 1, price: 4200, size: 'M' }
+      ],
+      amount: 4200, 
+      paymentMode: 'UPI', 
+      status: 'completed', 
+      date: '2024-01-20',
+      shippingAddress: '42, MG Road, Koramangala, Bangalore, Karnataka - 560034',
+      billingAddress: '42, MG Road, Koramangala, Bangalore, Karnataka - 560034'
+    },
+    { 
+      id: 'ORD-1002', 
+      customer: 'Priya Patel',
+      email: 'priya.patel@email.com',
+      phone: '+91 9123456789',
+      products: [
+        { name: 'White Khadi Pants', quantity: 2, price: 3200, size: 'S' }
+      ],
+      amount: 6400, 
+      paymentMode: 'Card', 
+      status: 'pending', 
+      date: '2024-01-20',
+      shippingAddress: '15, Jubilee Hills, Hyderabad, Telangana - 500033',
+      billingAddress: '15, Jubilee Hills, Hyderabad, Telangana - 500033'
+    },
+    { 
+      id: 'ORD-1003', 
+      customer: 'Amit Kumar',
+      email: 'amit.kumar@email.com',
+      phone: '+91 9988776655',
+      products: [
+        { name: 'Naqsh Blazer', quantity: 1, price: 5400, size: 'L' },
+        { name: 'White Khadi Shirt', quantity: 1, price: 3800, size: 'L' }
+      ],
+      amount: 9200, 
+      paymentMode: 'Net Banking', 
+      status: 'completed', 
+      date: '2024-01-19',
+      shippingAddress: '78, Sector 15, Noida, Uttar Pradesh - 201301',
+      billingAddress: '78, Sector 15, Noida, Uttar Pradesh - 201301'
+    },
+    { 
+      id: 'ORD-1004', 
+      customer: 'Sneha Reddy',
+      email: 'sneha.reddy@email.com',
+      phone: '+91 9876123456',
+      products: [
+        { name: 'Kutchi Bird Skirt', quantity: 1, price: 5500, size: 'M' }
+      ],
+      amount: 5500, 
+      paymentMode: 'UPI', 
+      status: 'completed', 
+      date: '2024-01-19',
+      shippingAddress: '23, Anna Nagar, Chennai, Tamil Nadu - 600040',
+      billingAddress: '23, Anna Nagar, Chennai, Tamil Nadu - 600040'
+    },
+    { 
+      id: 'ORD-1005', 
+      customer: 'Vikram Singh',
+      email: 'vikram.singh@email.com',
+      phone: '+91 9765432109',
+      products: [
+        { name: 'Laal Tara Shirt', quantity: 1, price: 4200, size: 'XL' }
+      ],
+      amount: 4200, 
+      paymentMode: 'Card', 
+      status: 'pending', 
+      date: '2024-01-18',
+      shippingAddress: '56, Civil Lines, Jaipur, Rajasthan - 302006',
+      billingAddress: '56, Civil Lines, Jaipur, Rajasthan - 302006'
+    },
+    { 
+      id: 'ORD-1006', 
+      customer: 'Anjali Gupta',
+      email: 'anjali.gupta@email.com',
+      phone: '+91 9654321098',
+      products: [
+        { name: 'Morah Dress', quantity: 1, price: 16100, size: 'S' }
+      ],
+      amount: 16100, 
+      paymentMode: 'UPI', 
+      status: 'completed', 
+      date: '2024-01-18',
+      shippingAddress: '12, Bandra West, Mumbai, Maharashtra - 400050',
+      billingAddress: '89, Lower Parel, Mumbai, Maharashtra - 400013'
+    },
+    { 
+      id: 'ORD-1007', 
+      customer: 'Karthik R',
+      email: 'karthik.r@email.com',
+      phone: '+91 9543210987',
+      products: [
+        { name: 'Nira Shirt', quantity: 1, price: 3800, size: 'M' }
+      ],
+      amount: 3800, 
+      paymentMode: 'Net Banking', 
+      status: 'cancelled', 
+      date: '2024-01-17',
+      shippingAddress: '34, Indiranagar, Bangalore, Karnataka - 560038',
+      billingAddress: '34, Indiranagar, Bangalore, Karnataka - 560038'
+    },
+    { 
+      id: 'ORD-1008', 
+      customer: 'Meera Joshi',
+      email: 'meera.joshi@email.com',
+      phone: '+91 9432109876',
+      products: [
+        { name: 'Sandal Corset', quantity: 1, price: 2800, size: 'XS' },
+        { name: 'White Khadi Pants', quantity: 1, price: 3200, size: 'XS' }
+      ],
+      amount: 6000, 
+      paymentMode: 'Card', 
+      status: 'completed', 
+      date: '2024-01-17',
+      shippingAddress: '67, Aundh, Pune, Maharashtra - 411007',
+      billingAddress: '67, Aundh, Pune, Maharashtra - 411007'
+    }
+  ]);
+
+  // --- Sales Data for Graph ---
+  const salesData = useMemo(() => [
+    { month: 'Jan', sales: 125000, orders: 45 },
+    { month: 'Feb', sales: 158000, orders: 52 },
+    { month: 'Mar', sales: 142000, orders: 48 },
+    { month: 'Apr', sales: 189000, orders: 63 },
+    { month: 'May', sales: 210000, orders: 71 },
+    { month: 'Jun', sales: 178000, orders: 58 },
+    { month: 'Jul', sales: 225000, orders: 78 },
+    { month: 'Aug', sales: 198000, orders: 66 },
+    { month: 'Sep', sales: 245000, orders: 85 },
+    { month: 'Oct', sales: 267000, orders: 92 },
+    { month: 'Nov', sales: 312000, orders: 108 },
+    { month: 'Dec', sales: 285000, orders: 96 }
+  ], []);
 
   useEffect(() => {
-    const adminToken = localStorage.getItem('adminToken');
-    const storedUser = localStorage.getItem('adminUser');
+    const adminToken = sessionStorage.getItem('adminToken');
+    const storedUser = sessionStorage.getItem('adminUser');
 
     if (!adminToken) {
       navigate('/login');
@@ -63,8 +206,91 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+  // Calculate order stats
+  useEffect(() => {
+    const completed = orders.filter(o => o.status === 'completed').length;
+    const pending = orders.filter(o => o.status === 'pending').length;
+    const cancelled = orders.filter(o => o.status === 'cancelled').length;
+    const revenue = orders.filter(o => o.status === 'completed').reduce((sum, o) => sum + o.amount, 0);
+
+    setDashboardStats(prev => ({
+      ...prev,
+      totalOrders: completed, // Total Orders = Completed Orders
+      completedOrders: completed,
+      pendingOrders: pending,
+      cancelledOrders: cancelled,
+      totalRevenue: revenue
+    }));
+  }, [orders]);
+
+  // Fetch total products count
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const result = await fetchAdminProducts({ page: 1, limit: 1 });
+        setDashboardStats(prev => ({
+          ...prev,
+          totalProducts: result.pagination?.total || result.products?.length || 0
+        }));
+      } catch (error) {
+        console.error('Error fetching product count:', error);
+      }
+    };
+    fetchProductCount();
+  }, []);
+
+  // Fetch subcategories when main category changes
+  useEffect(() => {
+    const loadSubCategories = async () => {
+      try {
+        const allCategories = await fetchCategories();
+        const categoriesArray = Array.isArray(allCategories) ? allCategories : (allCategories?.categories || []);
+        
+        // Find the main category ID
+        const mainCatId = selectedMainCategory === "Men's Wear" ? 1 : 4;
+        
+        // Filter subcategories for the selected main category
+        const subs = categoriesArray.filter(cat => cat.parent_id === mainCatId && cat.type === 'sub');
+        setSubCategories(subs);
+        setSelectedSubCategory(''); // Reset subcategory when main category changes
+      } catch (error) {
+        console.error('Error loading subcategories:', error);
+        // Fallback to predefined categories
+        setSubCategories(PRODUCT_CATEGORIES[selectedMainCategory]?.map((name, idx) => ({ id: idx, name })) || []);
+      }
+    };
+    loadSubCategories();
+  }, [selectedMainCategory]);
+
+  // Fetch products for overview based on category selection
+  useEffect(() => {
+    const loadOverviewProducts = async () => {
+      setOverviewLoading(true);
+      try {
+        const params = {
+          page: 1,
+          limit: 50,
+          mainCategory: selectedMainCategory
+        };
+        
+        if (selectedSubCategory) {
+          params.category = selectedSubCategory;
+        }
+        
+        const result = await fetchAdminProducts(params);
+        setOverviewProducts(result.products || []);
+      } catch (error) {
+        console.error('Error loading overview products:', error);
+        setOverviewProducts([]);
+      } finally {
+        setOverviewLoading(false);
+      }
+    };
+    loadOverviewProducts();
+  }, [selectedMainCategory, selectedSubCategory]);
+
   const validTabs = useMemo(
-    () => ['overview', 'products', 'orders', 'users', 'settings'],
+    () => ['overview', 'products', 'orders', 'settings'],
     []
   );
 
@@ -79,96 +305,47 @@ const AdminDashboard = () => {
     }
   }, [location.hash, activeTab, validTabs, navigate]);
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-    navigate(`#${tabName}`);
-  };
-
-  const stats = {
-    totalOrders: 1247,
-    totalRevenue: 125000,
-    totalProducts: 156,
-    totalUsers: 3421
-  };
-
-  // --- RECENT ORDERS DATA (With Payment Mode & Status) ---
-  const recentOrders = useMemo(
-    () => [
-      { id: 1, customer: 'John Doe', product: 'Khaddar Shirt', amount: 2500, paymentMode: 'HDFC Bank', paymentStatus: 'Paid', date: '2024-01-15' },
-      { id: 2, customer: 'Jane Smith', product: 'Khaddar Kurta', amount: 3200, paymentMode: 'HDFC Bank', paymentStatus: 'Pending', date: '2024-01-14' },
-      { id: 3, customer: 'Mike Johnson', product: 'Khaddar Blazer', amount: 4500, paymentMode: 'Credit Card', paymentStatus: 'Paid', date: '2024-01-13' },
-      { id: 4, customer: 'Sarah Williams', product: 'Khaddar Dress', amount: 3800, paymentMode: 'UPI', paymentStatus: 'Failed', date: '2024-01-12' },
-      { id: 5, customer: 'David Brown', product: 'Khaddar Co-ord', amount: 4200, paymentMode: 'HDFC Bank', paymentStatus: 'Paid', date: '2024-01-11' }
-    ],
-    []
-  );
-
-  // --- UPDATED INITIAL PRODUCTS (With subCategories) ---
-  const [products, setProducts] = useState(() => {
-    const storedProducts = localStorage.getItem('products');
-    return storedProducts ? JSON.parse(storedProducts) : [
-      {
-        id: 1,
-        name: 'Classic Khaddar Shirt',
-        category: "Men's Wear",
-        subCategory: "Shirts", // Added Sub Category
-        price: 2500,
-        stock: 45,
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=60'
-      },
-      {
-        id: 2,
-        name: 'Elegant Khaddar Kurta',
-        category: "Women's Wear",
-        subCategory: "Kurtas", // Added Sub Category
-        price: 3200,
-        stock: 32,
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
-      },
-      {
-        id: 3,
-        name: 'Premium Khaddar Blazer',
-        category: "Men's Wear",
-        subCategory: "Blazers / Jackets", // Added Sub Category
-        price: 4500,
-        stock: 18,
-        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=60'
-      },
-      {
-        id: 4,
-        name: 'Traditional Khaddar Dress',
-        category: "Women's Wear",
-        subCategory: "Dresses", // Added Sub Category
-        price: 3800,
-        stock: 28,
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
-      },
-      {
-        id: 5,
-        name: 'Designer Khaddar Saree',
-        category: "Women's Wear",
-        subCategory: "Sarees", // Added Sub Category
-        price: 5500,
-        stock: 15,
-        image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60'
+  // Function to reload products
+  const reloadProducts = useCallback(async () => {
+    setOverviewLoading(true);
+    try {
+      const params = {
+        page: 1,
+        limit: 100,
+        mainCategory: selectedMainCategory
+      };
+      
+      if (selectedSubCategory) {
+        params.category = selectedSubCategory;
       }
-    ];
-  });
+      
+      const result = await fetchAdminProducts(params);
+      setOverviewProducts(result.products || []);
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setOverviewProducts([]);
+    } finally {
+      setOverviewLoading(false);
+    }
+  }, [selectedMainCategory, selectedSubCategory]);
 
+  // Load overview products when products tab is active or category changes
   useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
-  }, [products]);
+    if (activeTab === 'products') {
+      reloadProducts();
+    }
+  }, [activeTab, reloadProducts]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Updated state to include subCategory
   const [currentProduct, setCurrentProduct] = useState({
     id: null,
     name: '',
     category: '',
-    subCategory: '', // New field
+    subCategory: '',
     price: '',
     stock: '',
-    image: ''
+    image: '',
+    description: ''
   });
   const [imagePreview, setImagePreview] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -187,7 +364,8 @@ const AdminDashboard = () => {
         subCategory: '',
         price: '',
         stock: '',
-        image: ''
+        image: '',
+        description: ''
       });
       setImagePreview('');
       setIsEditing(false);
@@ -210,23 +388,16 @@ const AdminDashboard = () => {
     setIsEditing(false);
   };
 
-  const showNotification = (message, type = 'success') => {
+  const showNotification = useCallback((message, type = 'success') => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
       setNotification({ show: false, message: '', type: 'success' });
     }, 3000);
-  };
-
-  const getNextProductId = () => {
-    if (products.length === 0) return 1;
-    const maxId = Math.max(...products.map(p => p.id));
-    return maxId + 1;
-  };
+  }, []);
 
   const handleProductChange = (event) => {
     const { name, value } = event.target;
     
-    // If changing the main category, reset the subcategory
     if (name === 'category') {
       setCurrentProduct((prev) => ({ 
         ...prev, 
@@ -254,9 +425,8 @@ const AdminDashboard = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveProduct = (event) => {
+  const handleSaveProduct = async (event) => {
     event.preventDefault();
-    // Validation updated to check subCategory
     if (!currentProduct.name || !currentProduct.category || !currentProduct.subCategory || !currentProduct.price || !currentProduct.stock) {
       showNotification('Please fill in all required fields.', 'error');
       return;
@@ -284,60 +454,56 @@ const AdminDashboard = () => {
 
     try {
       if (isEditing) {
-        setProducts((prev) => prev.map((p) => (p.id === productToSave.id ? productToSave : p)));
+        await updateProduct(currentProduct.id, productToSave);
         showNotification('Product updated successfully!', 'success');
       } else {
-        productToSave.id = getNextProductId();
-        setProducts((prev) => [productToSave, ...prev]);
+        await addProduct(productToSave);
         showNotification('Product added successfully!', 'success');
       }
       closeModal();
+      reloadProducts();
     } catch (error) {
-      showNotification('An error occurred. Please try again.', 'error');
+      console.error('Error saving product:', error);
+      showNotification(error.message || 'An error occurred. Please try again.', 'error');
     }
   };
 
-  const handleDeleteProduct = useCallback((productId) => {
+  const handleDeleteProduct = useCallback(async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      setProducts((prev) => prev.filter((p) => p.id !== productId));
-      setNotification({ show: true, message: 'Product deleted successfully!', type: 'success' });
+      try {
+        await deleteProduct(productId);
+        setNotification({ show: true, message: 'Product deleted successfully!', type: 'success' });
+        reloadProducts();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        setNotification({ show: true, message: error.message || 'Failed to delete product.', type: 'error' });
+      }
       setTimeout(() => {
         setNotification({ show: false, message: '', type: 'success' });
       }, 3000);
     }
-  }, []);
+  }, [reloadProducts]);
 
-  // --- Password Change Handlers ---
-  const openPasswordModal = () => {
-    setIsPasswordModalOpen(true);
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmNewPassword('');
-  };
-
-  const closePasswordModal = () => {
-    setIsPasswordModalOpen(false);
-  };
-
-  const handleChangePassword = (event) => {
-    event.preventDefault();
-    if (!currentPassword || !newPassword || !confirmNewPassword) {
-      showNotification('All password fields are required.', 'error');
+  // --- Send Password Reset Link Handler ---
+  const handleSendResetLink = async () => {
+    if (!adminUser?.email) {
+      showNotification('Admin email not found.', 'error');
       return;
     }
-    if (newPassword !== confirmNewPassword) {
-      showNotification('New password and confirm password do not match.', 'error');
-      return;
+
+    setIsResetLinkSending(true);
+    try {
+      await requestPasswordReset(adminUser.email);
+      showNotification('Password reset link sent to your email!', 'success');
+    } catch (error) {
+      showNotification(error.message || 'Failed to send reset link. Please try again.', 'error');
+    } finally {
+      setIsResetLinkSending(false);
     }
-    if (newPassword.length < 6) {
-        showNotification('New password must be at least 6 characters long.', 'error');
-        return;
-    }
-    console.log({ currentPassword, newPassword });
-    showNotification('Password changed successfully!', 'success');
-    closePasswordModal();
   };
 
+  // Get max sales value for graph scaling
+  const maxSales = Math.max(...salesData.map(d => d.sales));
 
   if (!adminUser) {
     return null;
@@ -363,6 +529,10 @@ const AdminDashboard = () => {
           <div className="admin-tab-content">
             {activeTab === 'overview' && (
               <div className="admin-overview">
+                {/* Section 1: Summary Cards */}
+                <div className="dashboard-section-title">
+                  <h2>Dashboard Summary</h2>
+                </div>
                 <div className="stats-grid">
                   <div className="stat-card stat-card-orders">
                     <div className="stat-icon">
@@ -373,8 +543,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="stat-content">
                       <h3 className="stat-label">Total Orders</h3>
-                      <p className="stat-value">{stats.totalOrders.toLocaleString()}</p>
-                      <span className="stat-change positive">+12% from last month</span>
+                      <p className="stat-value">{dashboardStats.totalOrders.toLocaleString()}</p>
                     </div>
                   </div>
 
@@ -384,8 +553,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="stat-content">
                       <h3 className="stat-label">Total Revenue</h3>
-                      <p className="stat-value">₹{stats.totalRevenue.toLocaleString()}</p>
-                      <span className="stat-change positive">+18% from last month</span>
+                      <p className="stat-value">₹{dashboardStats.totalRevenue.toLocaleString()}</p>
                     </div>
                   </div>
 
@@ -399,91 +567,112 @@ const AdminDashboard = () => {
                     </div>
                     <div className="stat-content">
                       <h3 className="stat-label">Total Products</h3>
-                      <p className="stat-value">{stats.totalProducts}</p>
-                      <span className="stat-change positive">+5 new this week</span>
+                      <p className="stat-value">{dashboardStats.totalProducts}</p>
                     </div>
                   </div>
+                </div>
 
-                  <div className="stat-card stat-card-users">
-                    <div className="stat-icon">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                {/* Section 2: Order Overview */}
+                <div className="dashboard-section-title">
+                  <h2>Order Overview</h2>
+                </div>
+                <div className="order-overview-grid">
+                  <div className="order-stat-card total">
+                    <div className="order-stat-icon">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                       </svg>
                     </div>
-                    <div className="stat-content">
-                      <h3 className="stat-label">Total Users</h3>
-                      <p className="stat-value">{stats.totalUsers.toLocaleString()}</p>
-                      <span className="stat-change positive">+24% from last month</span>
+                    <div className="order-stat-info">
+                      <span className="order-stat-label">Total Orders</span>
+                      <span className="order-stat-value">{dashboardStats.totalOrders}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="order-stat-card pending">
+                    <div className="order-stat-icon">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div className="order-stat-info">
+                      <span className="order-stat-label">Pending Orders</span>
+                      <span className="order-stat-value">{dashboardStats.pendingOrders}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="order-stat-card completed">
+                    <div className="order-stat-icon">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                      </svg>
+                    </div>
+                    <div className="order-stat-info">
+                      <span className="order-stat-label">Completed Orders</span>
+                      <span className="order-stat-value">{dashboardStats.completedOrders}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="analysis-section">
-                  <h2 className="section-title">Analysis</h2>
-                  <div className="analysis-grid">
-                    {analysisCards.map((item) => (
-                      <div className="analysis-card" key={item.title}>
-                        <div className="analysis-card-header">
-                          <h3>{item.title}</h3>
-                          <span className="analysis-value">{item.value}</span>
-                        </div>
-                        <p className="analysis-description">{item.description}</p>
-                        <div className="analysis-progress">
-                          <div className="analysis-progress-bar" style={{ width: `${item.progress}%` }}></div>
-                        </div>
-                        <span className="analysis-progress-label">{item.detail}</span>
-                      </div>
-                    ))}
-                  </div>
+                {/* Section 3: Sales Graph */}
+                <div className="dashboard-section-title">
+                  <h2>Sales Analytics</h2>
                 </div>
-
-                <div className="dashboard-sections">
-                  <div className="dashboard-section">
-                    <div className="section-header">
-                      <h2 className="section-title">Recent Orders</h2>
-                      <a className="view-all-btn" href="#orders" onClick={() => handleTabClick('orders')}>View All</a>
+                <div className="sales-graph-section">
+                  <div className="graph-header">
+                    <div className="graph-legend">
+                      <span className="legend-item sales">
+                        <span className="legend-dot"></span>
+                        Revenue (₹)
+                      </span>
+                      <span className="legend-item orders">
+                        <span className="legend-dot"></span>
+                        Orders
+                      </span>
                     </div>
-                    <div className="table-container">
-                      <table className="admin-table">
-                        <thead>
-                          <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Product</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                            <th>Mode of Payment</th>
-                            <th>Payment Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {recentOrders.map((order) => (
-                            <tr key={order.id}>
-                              <td><span className="order-id">#{order.id}</span></td>
-                              <td>{order.customer}</td>
-                              <td>{order.product}</td>
-                              <td className="amount-cell">₹{order.amount.toLocaleString()}</td>
-                              <td>{order.date}</td>
-                              <td>
-                                <span style={{ fontWeight: '500', color: '#555' }}>
-                                  {order.paymentMode}
-                                </span>
-                              </td>
-                              <td>
-                                <span className={`status-badge ${
-                                  order.paymentStatus === 'Paid' ? 'paid' : 
-                                  order.paymentStatus === 'Pending' ? 'cod' : 'low-stock'
-                                }`}>
-                                  {order.paymentStatus}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                  </div>
+                  <div className="graph-container">
+                    <div className="bar-chart">
+                      {salesData.map((data, index) => (
+                        <div key={data.month} className="bar-group">
+                          <div className="bar-wrapper">
+                            <div 
+                              className="bar sales-bar" 
+                              style={{ height: `${(data.sales / maxSales) * 200}px` }}
+                              title={`Revenue: ₹${data.sales.toLocaleString()}`}
+                            >
+                              <span className="bar-value">₹{(data.sales / 1000).toFixed(0)}K</span>
+                            </div>
+                            <div 
+                              className="bar orders-bar" 
+                              style={{ height: `${(data.orders / 120) * 200}px` }}
+                              title={`Orders: ${data.orders}`}
+                            >
+                              <span className="bar-value">{data.orders}</span>
+                            </div>
+                          </div>
+                          <span className="bar-label">{data.month}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="graph-summary">
+                    <div className="summary-card">
+                      <span className="summary-label">Total Annual Revenue</span>
+                      <span className="summary-value">₹{salesData.reduce((sum, d) => sum + d.sales, 0).toLocaleString()}</span>
+                    </div>
+                    <div className="summary-card">
+                      <span className="summary-label">Total Annual Orders</span>
+                      <span className="summary-value">{salesData.reduce((sum, d) => sum + d.orders, 0).toLocaleString()}</span>
+                    </div>
+                    <div className="summary-card">
+                      <span className="summary-label">Avg. Order Value</span>
+                      <span className="summary-value">
+                        ₹{Math.round(salesData.reduce((sum, d) => sum + d.sales, 0) / salesData.reduce((sum, d) => sum + d.orders, 0)).toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -492,8 +681,9 @@ const AdminDashboard = () => {
 
             {activeTab === 'products' && (
               <div className="admin-products">
+                {/* Products Overview Section */}
                 <div className="section-header">
-                  <h2 className="section-title">Products Management</h2>
+                  <h2 className="section-title">Products Overview & Management</h2>
                   <button className="admin-action-btn" onClick={() => openModal()}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -502,15 +692,62 @@ const AdminDashboard = () => {
                     Add New Product
                   </button>
                 </div>
+
+                {/* Category Filters */}
+                <div className="products-filter-section">
+                  <div className="category-filters">
+                    <div className="filter-group">
+                      <label>Product Category</label>
+                      <select 
+                        value={selectedMainCategory} 
+                        onChange={(e) => setSelectedMainCategory(e.target.value)}
+                        className="category-select"
+                      >
+                        <option value="Men's Wear">Men's Wear</option>
+                        <option value="Women's Wear">Women's Wear</option>
+                      </select>
+                    </div>
+                    <div className="filter-group">
+                      <label>Sub Category</label>
+                      <select 
+                        value={selectedSubCategory} 
+                        onChange={(e) => setSelectedSubCategory(e.target.value)}
+                        className="category-select"
+                      >
+                        <option value="">All Sub Categories</option>
+                        {subCategories.map((sub) => (
+                          <option key={sub.id} value={sub.id}>{sub.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="filter-stats">
+                      <span className="stat-item">
+                        <strong>{overviewProducts.length}</strong> products found
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Products Table with Overview + Management */}
                 <div
                   className="table-container"
                   style={{
-                    maxHeight: "calc(100vh - 250px)",
+                    maxHeight: "calc(100vh - 320px)",
                     minHeight: "200px",
                     overflowY: "auto",
                     position: "relative",
                   }}
                 >
+                  {overviewLoading ? (
+                    <div className="loading-state">
+                      <div className="spinner"></div>
+                      <p>Loading products...</p>
+                    </div>
+                  ) : overviewProducts.length === 0 ? (
+                    <div className="empty-state">
+                      <p>No products found in this category. Click "Add New Product" to create one.</p>
+                    </div>
+                  ) : (
                   <table className="admin-table">
                     <thead>
                       <tr>
@@ -518,13 +755,14 @@ const AdminDashboard = () => {
                         <th>Image</th>
                         <th>Product</th>
                         <th>Category</th>
+                        <th>Description</th>
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Actions</th> 
                       </tr>
                     </thead>
                     <tbody>
-                      {products.map((product) => (
+                      {overviewProducts.map((product) => (
                         <tr key={product.id}>
                           <td><span className="product-id">#{product.id}</span></td>
                           <td>
@@ -542,14 +780,23 @@ const AdminDashboard = () => {
                           <td><span className="product-name">{product.name}</span></td>
                           <td>
                             <span className="category-tag">
-                              {product.category} 
-                              {/* Display subcategory if exists */}
-                              {product.subCategory && ` - ${product.subCategory}`}
+                              {product.subCategory || product.category}
                             </span>
                           </td>
-                          <td className="amount-cell">₹{product.price.toLocaleString()}</td>
                           <td>
-                            <span className={`stock-badge ${product.stock > 20 ? 'in-stock' : 'low-stock'}`}>
+                            <span className="description-cell" title={product.description || 'No description'}>
+                              {product.description ? 
+                                (product.description.length > 50 ? 
+                                  product.description.substring(0, 50) + '...' : 
+                                  product.description
+                                ) : 
+                                <em style={{color: '#999'}}>No description</em>
+                              }
+                            </span>
+                          </td>
+                          <td className="amount-cell">₹{product.price?.toLocaleString()}</td>
+                          <td>
+                            <span className={`stock-badge ${product.stock > 10 ? 'in-stock' : product.stock > 0 ? 'low-stock' : 'out-of-stock'}`}>
                               {product.stock} units
                             </span>
                           </td>
@@ -575,6 +822,7 @@ const AdminDashboard = () => {
                       ))}
                     </tbody>
                   </table>
+                  )}
                 </div>
                 
                 {/* --- MODAL FOR ADD/EDIT PRODUCT --- */}
@@ -613,7 +861,24 @@ const AdminDashboard = () => {
                             </div>
                           </div>
 
-                          {/* --- UPDATED CATEGORY SELECTION (DROPDOWNS) --- */}
+                          <div className="form-row">
+                            <div className="form-group full-width">
+                              <label className="form-label" htmlFor="product-description">
+                                Description
+                              </label>
+                              <textarea
+                                className="form-input"
+                                id="product-description"
+                                name="description"
+                                placeholder="Enter product description"
+                                value={currentProduct.description}
+                                onChange={handleProductChange}
+                                rows="3"
+                                style={{ resize: 'vertical', minHeight: '80px' }}
+                              />
+                            </div>
+                          </div>
+
                           <div className="form-row">
                             <div className="form-group">
                               <label className="form-label" htmlFor="product-category">
@@ -644,7 +909,7 @@ const AdminDashboard = () => {
                                 name="subCategory"
                                 value={currentProduct.subCategory}
                                 onChange={handleProductChange}
-                                disabled={!currentProduct.category} // Disable if no main category selected
+                                disabled={!currentProduct.category}
                                 required
                               >
                                 <option value="">Select Sub Category</option>
@@ -656,7 +921,6 @@ const AdminDashboard = () => {
                               </select>
                             </div>
                           </div>
-                          {/* --- END UPDATED CATEGORY SELECTION --- */}
 
                           <div className="form-row">
                             <div className="form-group">
@@ -779,65 +1043,108 @@ const AdminDashboard = () => {
                 <div className="section-header">
                   <h2 className="section-title">Orders Management</h2>
                 </div>
-                <div className="table-container">
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Product</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Mode of Payment</th>
-                        <th>Payment Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {recentOrders.map((order) => (
-                        <tr key={order.id}>
-                          <td><span className="order-id">#{order.id}</span></td>
-                          <td>{order.customer}</td>
-                          <td>{order.product}</td>
-                          <td className="amount-cell">₹{order.amount.toLocaleString()}</td>
-                          <td>{order.date}</td>
-                          <td>
-                            <span style={{ fontWeight: '500', color: '#555' }}>
-                              {order.paymentMode}
-                            </span>
-                          </td>
-                          <td>
-                            <span className={`status-badge ${
-                              order.paymentStatus === 'Paid' ? 'paid' : 
-                              order.paymentStatus === 'Pending' ? 'cod' : 'low-stock'
-                            }`}>
-                              {order.paymentStatus}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
+                <div className="orders-list">
+                  {orders.map((order) => (
+                    <div key={order.id} className="order-card">
+                      <div className="order-card-header">
+                        <div className="order-id-section">
+                          <span className="order-id-label">Order ID</span>
+                          <span className="order-id-value">{order.id}</span>
+                        </div>
+                        <div className="order-date-status">
+                          <span className="order-date">{order.date}</span>
+                          <span className={`status-badge ${order.status}`}>
+                            {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="order-card-body">
+                        {/* Customer & Contact Details */}
+                        <div className="order-section">
+                          <h4 className="order-section-title">Customer Details</h4>
+                          <div className="order-customer-info">
+                            <div className="customer-name">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                              </svg>
+                              <span>{order.customer}</span>
+                            </div>
+                            <div className="customer-contact">
+                              <div className="contact-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                  <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span>{order.email}</span>
+                              </div>
+                              <div className="contact-item">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                <span>{order.phone}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-            {activeTab === 'users' && (
-              <div className="admin-users">
-                <div className="section-header">
-                  <h2 className="section-title">Users Management</h2>
-                </div>
-                <div className="info-box">
-                  <div className="info-icon">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="9" cy="7" r="4"></circle>
-                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                  </div>
-                  <h3>Total Registered Users</h3>
-                  <p className="user-count">{stats.totalUsers.toLocaleString()}</p>
-                  <p className="info-text">User management features coming soon...</p>
+                        {/* Products Ordered */}
+                        <div className="order-section">
+                          <h4 className="order-section-title">Products Ordered</h4>
+                          <div className="order-products-list">
+                            {order.products.map((product, idx) => (
+                              <div key={idx} className="order-product-item">
+                                <div className="product-details">
+                                  <span className="product-name">{product.name}</span>
+                                  <span className="product-size">Size: {product.size}</span>
+                                </div>
+                                <div className="product-qty-price">
+                                  <span className="product-qty">Qty: {product.quantity}</span>
+                                  <span className="product-price">₹{product.price.toLocaleString()}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Addresses */}
+                        <div className="order-section addresses-section">
+                          <div className="address-box">
+                            <h4 className="order-section-title">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                              </svg>
+                              Shipping Address
+                            </h4>
+                            <p className="address-text">{order.shippingAddress}</p>
+                          </div>
+                          <div className="address-box">
+                            <h4 className="order-section-title">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                              </svg>
+                              Billing Address
+                            </h4>
+                            <p className="address-text">{order.billingAddress}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="order-card-footer">
+                        <div className="payment-info">
+                          <span className="payment-label">Payment Mode:</span>
+                          <span className="payment-value">{order.paymentMode}</span>
+                        </div>
+                        <div className="order-total">
+                          <span className="total-label">Total Amount:</span>
+                          <span className="total-value">₹{order.amount.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -849,108 +1156,45 @@ const AdminDashboard = () => {
                 </div>
                 <div className="settings-content">
                   <div className="settings-section">
-                    <h3 className="settings-section-title">General Settings</h3>
-                    <div className="settings-item">
-                      <label className="settings-label">Site Name</label>
-                      <input type="text" className="settings-input" defaultValue="KHADDAR" />
-                    </div>
+                    <h3 className="settings-section-title">Account Settings</h3>
                     <div className="settings-item">
                       <label className="settings-label">Admin Email</label>
-                      <input type="email" className="settings-input" defaultValue="admin@khaddar.com" />
+                      <input 
+                        type="email" 
+                        className="settings-input" 
+                        defaultValue={adminUser?.email || 'admin@khaddar.com'} 
+                        readOnly
+                      />
                     </div>
                   </div>
                   <div className="settings-section">
                     <h3 className="settings-section-title">Security</h3>
                     <div className="settings-item">
-                      <label className="settings-label">Change Password</label>
-                      <button className="admin-action-btn" onClick={openPasswordModal}>
-                        Change Password
+                      <label className="settings-label">Reset Password</label>
+                      <p className="settings-hint">A password reset link will be sent to your registered email address.</p>
+                      <button 
+                        className="admin-action-btn reset-link-btn" 
+                        onClick={handleSendResetLink}
+                        disabled={isResetLinkSending}
+                      >
+                        {isResetLinkSending ? (
+                          <>
+                            <span className="btn-spinner"></span>
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                              <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            Send Reset Link
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
                 </div>
-
-                {/* --- Password Change Modal --- */}
-                {isPasswordModalOpen && (
-                  <div className="modal-overlay" role="dialog" aria-modal="true" onClick={closePasswordModal}>
-                    <div
-                      className="modal-content product-modal-content"
-                      onClick={(e) => e.stopPropagation()}
-                      style={{ maxWidth: '400px', padding: '25px' }}
-                    >
-                      <div className="modal-header">
-                        <h3>Change Password</h3>
-                        <button type="button" className="modal-close" onClick={closePasswordModal} aria-label="Close">
-                          &times;
-                        </button>
-                      </div>
-                      <form onSubmit={handleChangePassword} className="product-form">
-                        <div className="form-body">
-                          <div className="form-row">
-                            <div className="form-group full-width">
-                              <label className="form-label" htmlFor="current-password">
-                                Current Password <span className="required">*</span>
-                              </label>
-                              <input
-                                className="form-input"
-                                id="current-password"
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="form-row">
-                            <div className="form-group full-width">
-                              <label className="form-label" htmlFor="new-password">
-                                New Password <span className="required">*</span>
-                              </label>
-                              <input
-                                className="form-input"
-                                id="new-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="form-row">
-                            <div className="form-group full-width">
-                              <label className="form-label" htmlFor="confirm-new-password">
-                                Confirm New Password <span className="required">*</span>
-                              </label>
-                              <input
-                                className="form-input"
-                                id="confirm-new-password"
-                                type="password"
-                                value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
-                                required
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="form-actions">
-                          <button
-                            type="button"
-                            className="form-btn form-btn-secondary"
-                            onClick={closePasswordModal}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className="form-btn form-btn-primary"
-                          >
-                            Update Password
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>

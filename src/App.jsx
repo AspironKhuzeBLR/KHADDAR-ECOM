@@ -19,6 +19,8 @@ import ResetPassword from './pages/ResetPassword';
 import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import PolicyPage from './pages/PolicyPage';
 import AdminDashboard from './admin/AdminDashboard';
 import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
 import { AuthProvider } from './context/AuthContext';
@@ -49,6 +51,11 @@ function AppContent() {
           <Route path="/product/:productSlug" element={<ProductDetail />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/privacy-policy" element={<PolicyPage />} />
+          <Route path="/refund-policy" element={<PolicyPage />} />
+          <Route path="/cancellation-policy" element={<PolicyPage />} />
+          <Route path="/shipping-policy" element={<PolicyPage />} />
           <Route
             path="/admin/dashboard"
             element={

@@ -16,32 +16,51 @@ const Cart = () => {
       return;
     }
     
-    // TODO: Fetch cart items from API
-    // For now, using empty cart
-    setCartItems([]);
+    // Load cart items from sessionStorage
+    const savedCart = sessionStorage.getItem('cartItems');
+    if (savedCart) {
+      try {
+        const items = JSON.parse(savedCart);
+        setCartItems(items);
+      } catch (error) {
+        console.error('Error parsing cart items:', error);
+        setCartItems([]);
+      }
+    } else {
+      setCartItems([]);
+    }
     setLoading(false);
   }, [isAuthenticated, isBootstrapped, navigate]);
 
-  const updateQuantity = (itemId, newQuantity) => {
+  const updateQuantity = (itemId, size, color, newQuantity) => {
     if (newQuantity < 1) {
-      removeItem(itemId);
+      removeItem(itemId, size, color);
       return;
     }
-    setCartItems(items =>
-      items.map(item =>
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      )
+    const updatedItems = cartItems.map(item =>
+      (item.id === itemId && item.size === size && item.color === color)
+        ? { ...item, quantity: newQuantity }
+        : item
     );
+    setCartItems(updatedItems);
+    sessionStorage.setItem('cartItems', JSON.stringify(updatedItems));
   };
 
-  const removeItem = (itemId) => {
-    setCartItems(items => items.filter(item => item.id !== itemId));
+  const removeItem = (itemId, size, color) => {
+    const updatedItems = cartItems.filter(item => 
+      !(item.id === itemId && item.size === size && item.color === color)
+    );
+    setCartItems(updatedItems);
+    sessionStorage.setItem('cartItems', JSON.stringify(updatedItems));
   };
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = parseFloat(item.price.replace(/[₹,]/g, '')) || 0;
-      return total + price * item.quantity;
+      // Handle both string and number price formats
+      const price = typeof item.price === 'string' 
+        ? parseFloat(item.price.replace(/[₹,]/g, '')) 
+        : (item.priceRaw || item.price || 0);
+      return total + price * (item.quantity || 1);
     }, 0);
   };
 
@@ -133,7 +152,7 @@ const Cart = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '15px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.id, item.size, item.color, (item.quantity || 1) - 1)}
                           style={{
                             width: '32px',
                             height: '32px',
@@ -145,9 +164,9 @@ const Cart = () => {
                         >
                           −
                         </button>
-                        <span style={{ minWidth: '30px', textAlign: 'center' }}>{item.quantity}</span>
+                        <span style={{ minWidth: '30px', textAlign: 'center' }}>{item.quantity || 1}</span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.size, item.color, (item.quantity || 1) + 1)}
                           style={{
                             width: '32px',
                             height: '32px',
@@ -165,10 +184,10 @@ const Cart = () => {
                         fontSize: '1rem', 
                         fontWeight: 400 
                       }}>
-                        {item.price}
+                        {typeof item.price === 'string' ? item.price : `₹${(item.priceRaw || item.price || 0).toLocaleString('en-IN')}`}
                       </span>
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.id, item.size, item.color)}
                         style={{
                           marginLeft: 'auto',
                           background: 'none',
@@ -241,8 +260,9 @@ const Cart = () => {
                 className="auth-button"
                 style={{ width: '100%', marginTop: '30px' }}
                 onClick={() => {
-                  // TODO: Navigate to checkout
-                  alert('Checkout functionality coming soon!');
+                  // Save cart items to sessionStorage for checkout
+                  sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+                  navigate('/checkout');
                 }}
               >
                 Proceed to Checkout

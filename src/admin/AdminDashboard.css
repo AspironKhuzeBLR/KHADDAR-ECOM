@@ -46,7 +46,7 @@
 }
 
 .admin-hero-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -55,7 +55,7 @@
 }
 
 .admin-hero-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 300;
   letter-spacing: 0.08em;
@@ -77,7 +77,7 @@
 
 .admin-logout-btn {
   padding: 12px 28px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -160,7 +160,7 @@
 }
 
 .admin-greeting-sub {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -168,7 +168,7 @@
 }
 
 .admin-greeting-name {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.1rem;
   letter-spacing: 0.05em;
   color: #1a1a1a;
@@ -185,7 +185,7 @@
 
 .admin-tab {
   padding: 18px 28px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -268,7 +268,7 @@
 }
 
 .stat-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -279,7 +279,7 @@
 }
 
 .stat-value {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2.75rem;
   font-weight: 600;
   color: #1a1a1a;
@@ -289,7 +289,7 @@
 }
 
 .stat-change {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8125rem;
   font-weight: 500;
   display: inline-block;
@@ -339,7 +339,7 @@
 }
 
 .analysis-card-header h3 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -349,7 +349,7 @@
 }
 
 .analysis-value {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #1a1a1a;
@@ -357,7 +357,7 @@
 }
 
 .analysis-description {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   color: #6b6b6b;
   margin-bottom: 20px;
@@ -386,7 +386,7 @@
 }
 
 .analysis-progress-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: #6b6b6b;
   letter-spacing: 0.05em;
@@ -409,7 +409,7 @@
 }
 
 .section-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -420,7 +420,7 @@
 
 .view-all-btn {
   padding: 10px 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -455,7 +455,7 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background: #ffffff;
 }
 
@@ -584,7 +584,7 @@
 
 .admin-action-btn {
   padding: 12px 28px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -603,6 +603,44 @@
 .admin-action-btn:hover {
   background-color: #2a2a2a;
   border-color: #2a2a2a;
+}
+
+.admin-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reset-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reset-link-btn svg {
+  flex-shrink: 0;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.settings-hint {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #666;
+  margin: 8px 0 15px 0;
+  line-height: 1.5;
 }
 
 .info-box {
@@ -627,7 +665,7 @@
 }
 
 .info-box h3 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -637,7 +675,7 @@
 }
 
 .user-count {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 3rem;
   font-weight: 300;
   margin: 0 0 20px 0;
@@ -645,7 +683,7 @@
 }
 
 .info-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 300;
   color: #6b6b6b;
@@ -665,7 +703,7 @@
 }
 
 .settings-section-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -680,7 +718,7 @@
 
 .settings-label {
   display: block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -693,7 +731,7 @@
   width: 100%;
   max-width: 500px;
   padding: 12px 15px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 300;
   color: #1a1a1a;
@@ -759,7 +797,7 @@
 }
 
 .modal-header h3 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -782,7 +820,7 @@
 }
 
 .modal-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -795,7 +833,7 @@
 .modal-input {
   padding: 12px 14px;
   border: 1px solid #e0e0e0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
 }
 
@@ -818,7 +856,7 @@
 
 .modal-button {
   padding: 10px 20px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1152,7 +1190,7 @@
 }
 
 .form-label {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -1170,7 +1208,7 @@
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
   font-weight: 400;
   color: #1a1a1a;
@@ -1193,7 +1231,7 @@
 }
 
 .form-hint {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   color: #6b6b6b;
   margin-top: 6px;
@@ -1213,7 +1251,7 @@
 .file-input::-webkit-file-upload-button {
   padding: 8px 16px;
   margin-right: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.05em;
@@ -1290,7 +1328,7 @@
 
 .form-btn {
   padding: 12px 28px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -1431,7 +1469,7 @@
 
 .notification span {
   flex: 1;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   color: #1a1a1a;
   font-weight: 400;
@@ -1544,5 +1582,819 @@
 
   .action-btn {
     width: 100%;
+  }
+}
+
+/* ============================================
+   NEW DASHBOARD SECTIONS STYLES
+   ============================================ */
+
+/* Dashboard Section Titles */
+.dashboard-section-title {
+  margin: 40px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #6F3132;
+}
+
+.dashboard-section-title:first-child {
+  margin-top: 0;
+}
+
+.dashboard-section-title h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #6F3132;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Order Overview Grid */
+.order-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.order-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 25px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.order-stat-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.order-stat-card.total {
+  border-left: 4px solid #6F3132;
+}
+
+.order-stat-card.pending {
+  border-left: 4px solid #F59E0B;
+}
+
+.order-stat-card.completed {
+  border-left: 4px solid #10B981;
+}
+
+.order-stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-stat-card.total .order-stat-icon {
+  background: rgba(111, 49, 50, 0.1);
+  color: #6F3132;
+}
+
+.order-stat-card.pending .order-stat-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+}
+
+.order-stat-card.completed .order-stat-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10B981;
+}
+
+.order-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.order-stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #8C6C5F;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.order-stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Products Overview Section */
+.products-overview-section {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+/* Products Filter Section (for Products tab) */
+.products-filter-section {
+  background: #F7F7F0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px 25px;
+  margin-bottom: 20px;
+}
+
+.products-filter-section .category-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 25px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.filter-stats {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.filter-stats .stat-item {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #6F3132;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+}
+
+.filter-stats .stat-item strong {
+  font-weight: 600;
+  color: #6F3132;
+}
+
+.category-filters {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.filter-group label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6F3132;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.category-select {
+  padding: 12px 15px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  background: #F7F7F0;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: #6F3132;
+}
+
+.products-overview-table {
+  min-height: 200px;
+}
+
+.loading-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #8C6C5F;
+}
+
+.loading-state .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #6F3132;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.compact-table {
+  width: 100%;
+}
+
+.compact-table th,
+.compact-table td {
+  padding: 12px 15px !important;
+  font-size: 0.85rem;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  background: #f5f5f5;
+}
+
+.description-cell {
+  font-size: 0.8rem;
+  color: #6b6b6b;
+  line-height: 1.4;
+}
+
+.price-cell {
+  font-weight: 500;
+  color: #6F3132;
+}
+
+.stock-badge.out-of-stock {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.view-more {
+  text-align: center;
+  padding: 15px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 10px;
+}
+
+.view-all-link {
+  background: none;
+  border: none;
+  color: #6F3132;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #A15F22;
+}
+
+/* Sales Graph Section */
+.sales-graph-section {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.graph-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.graph-legend {
+  display: flex;
+  gap: 25px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+.legend-item .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-item.sales .legend-dot {
+  background: #6F3132;
+}
+
+.legend-item.orders .legend-dot {
+  background: #A15F22;
+}
+
+.graph-container {
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 15px;
+  min-width: 700px;
+  height: 250px;
+  padding: 0 10px;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bar-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 200px;
+}
+
+.bar {
+  width: 20px;
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.bar:hover {
+  opacity: 0.8;
+}
+
+.sales-bar {
+  background: linear-gradient(180deg, #6F3132 0%, #8B4A4B 100%);
+}
+
+.orders-bar {
+  background: linear-gradient(180deg, #A15F22 0%, #C4793B 100%);
+}
+
+.bar-value {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bar:hover .bar-value {
+  opacity: 1;
+}
+
+.bar-label {
+  margin-top: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+  font-weight: 500;
+}
+
+.graph-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px;
+  background: #F7F7F0;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.summary-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #6F3132;
+}
+
+/* Order Status Badges */
+.status-badge.completed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.status-badge.pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.status-badge.cancelled {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* ============================================
+   ORDER MANAGEMENT CARDS STYLES
+   ============================================ */
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #F7F7F0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.order-id-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-id-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  color: #8C6C5F;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.order-id-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6F3132;
+}
+
+.order-date-status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.order-date {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+.order-card-body {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.order-section {
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.order-section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6F3132;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-section-title svg {
+  color: #8C6C5F;
+}
+
+.order-customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.customer-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.customer-name svg {
+  color: #6F3132;
+}
+
+.customer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 26px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+.contact-item svg {
+  color: #8C6C5F;
+}
+
+.order-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-product-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-product-item .product-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.product-size {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #8C6C5F;
+}
+
+.product-qty-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.product-qty {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #6b6b6b;
+}
+
+.product-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6F3132;
+}
+
+.addresses-section {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 0;
+  background: transparent;
+}
+
+.address-box {
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.address-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #4a4a4a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.order-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #F7F7F0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payment-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #8C6C5F;
+}
+
+.payment-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.total-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
+
+.total-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #6F3132;
+}
+
+/* Responsive for Order Cards */
+@media (max-width: 992px) {
+  .order-card-body {
+    grid-template-columns: 1fr;
+  }
+  
+  .addresses-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .order-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .order-date-status {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .order-card-footer {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .order-total {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+@media (max-width: 576px) {
+  .order-product-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .product-qty-price {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Responsive for new sections */
+@media (max-width: 992px) {
+  .order-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .graph-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .order-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-filters {
+    flex-direction: column;
+  }
+  
+  .filter-group {
+    min-width: 100%;
+  }
+  
+  .graph-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .bar-chart {
+    min-width: 500px;
+  }
+  
+  .bar {
+    width: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .order-stat-card {
+    padding: 20px 15px;
+  }
+  
+  .order-stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .products-overview-section,
+  .sales-graph-section {
+    padding: 15px;
   }
 }

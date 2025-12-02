@@ -17,7 +17,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 40px;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
+  border: none;
 }
 
 .footer-section {
@@ -29,6 +30,8 @@
   display: inline-block;
   margin-bottom: 20px;
   height: 80px;
+  text-decoration: none;
+  border: none;
 }
 
 .footer-logo {
@@ -40,7 +43,7 @@
 }
 
 .footer-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   letter-spacing: 0.1em;
@@ -50,7 +53,7 @@
 }
 
 .footer-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   line-height: 1.6;
   /* BODY TEXT: Pale Beige/Cream (#F7F7F0) - was #4a4a4a */
@@ -62,15 +65,25 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  list-style: none;
+  border: none;
 }
 
 .footer-links li a {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   /* LINK COLOR: Pale Beige/Cream (#F7F7F0) - was #4a4a4a */
   color: #F7F7F0;
   font-weight: 300;
   transition: color 0.3s ease;
+  text-decoration: none;
+  border: none;
 }
 
 .footer-links li a:hover {
@@ -85,7 +98,7 @@
 }
 
 .social-link {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   /* SOCIAL LINK COLOR: Pale Beige/Cream (#F7F7F0) - was #4a4a4a */
   color: #F7F7F0;
@@ -100,15 +113,22 @@
 
 .footer-bottom {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  padding-top: 30px;
-  /* DIVIDER: Dark Maroon/Reddish Brown (#6F3132) - was #e8e8e8 */
-  border-top: 1px solid #6F3132;
+  padding: 0;
+  padding-right: 70px; /* Space for scroll-up button */
+  border: none;
+  gap: 20px;
+}
+
+.footer-bottom * {
+  border: none;
 }
 
 .footer-copyright {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   /* COPYRIGHT TEXT: Pale Beige/Cream (#F7F7F0) - was #6b6b6b */
   color: #F7F7F0;
@@ -122,12 +142,14 @@
 }
 
 .footer-legal a {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.75rem;
   /* LEGAL LINK COLOR: Pale Beige/Cream (#F7F7F0) - was #6b6b6b */
   color: #F7F7F0;
   font-weight: 300;
   transition: color 0.3s ease;
+  text-decoration: none;
+  border: none;
 }
 
 .footer-legal a:hover {
@@ -183,7 +205,7 @@
   .footer-content {
     grid-template-columns: 1fr;
     gap: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   
   .footer-logo {
@@ -191,9 +213,11 @@
   }
   
   .footer-bottom {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
     gap: 15px;
-    align-items: flex-start;
+    align-items: center;
+    padding-right: 60px;
   }
 }
 
@@ -208,7 +232,7 @@
   
   .footer-content {
     gap: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
   
   .footer-logo {
@@ -222,5 +246,16 @@
   .footer-links li a,
   .social-link {
     font-size: 0.8125rem;
+  }
+  
+  .footer-bottom {
+    padding-right: 50px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .footer-copyright,
+  .footer-legal a {
+    font-size: 0.7rem;
   }
 }
