@@ -7,6 +7,7 @@
   --cream-bg: #F9F5F0;
   --text-dark: #1a1a1a;
   --accent-rust: #8B3A28;
+  --accent-gold: #D4AF37;
 }
 
 /* Wrapper for the whole home page (except HeroVideo) */
@@ -14,6 +15,77 @@
   background-color: var(--cream-bg);
   width: 100%;
   overflow-x: hidden;
+  position: relative;
+}
+
+/* ================================================
+   ENHANCED TRANSITIONS & ANIMATIONS
+   ================================================ */
+
+/* Smooth transitions for all interactive elements */
+.luxury-wrapper * {
+  transition-property: transform, opacity, color, background-color, box-shadow;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Text reveal animation */
+.luxury-head {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: textSlideUp 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+.luxury-sub {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textSlideUp 0.6s ease forwards;
+}
+
+.luxury-text {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: textSlideUp 0.8s ease forwards;
+  animation-delay: 0.4s;
+}
+
+.luxury-link {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: textSlideUp 0.6s ease forwards;
+  animation-delay: 0.6s;
+}
+
+@keyframes textSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced hover effects for links */
+.luxury-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.luxury-link:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* --- THE MINGLE LAYOUT (Overlapping Text & Image) --- */
@@ -626,5 +698,284 @@
   .collage-container.reverse .collage-text-content {
     padding-right: 0;
     text-align: center;
+  }
+}
+
+/* ================================================
+   ENHANCED SCROLL-TRIGGERED ANIMATIONS
+   ================================================ */
+
+/* Collage section entrance animation */
+.collage-section {
+  opacity: 0;
+  animation: sectionFadeIn 1s ease forwards;
+}
+
+.collage-section:nth-child(1) { animation-delay: 0s; }
+.collage-section:nth-child(2) { animation-delay: 0.1s; }
+.collage-section:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes sectionFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Photo card enhanced animations */
+.photo-card-wrapper {
+  opacity: 0;
+  transform: translateX(-50px) rotate(-3deg);
+  animation: cardSlideIn 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+.collage-container.reverse .photo-card-wrapper {
+  transform: translateX(50px) rotate(3deg);
+}
+
+@keyframes cardSlideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(-3deg);
+  }
+}
+
+.collage-container.reverse .photo-card-wrapper {
+  animation-name: cardSlideInReverse;
+}
+
+@keyframes cardSlideInReverse {
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(3deg);
+  }
+}
+
+/* Glow effect on photo cards */
+.photo-card-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.photo-card-wrapper:hover::after {
+  opacity: 1;
+}
+
+/* Text content staggered animations */
+.collage-text-content {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: contentSlideUp 0.8s ease forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes contentSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Background parallax effect */
+.collage-bg {
+  transition: transform 0.3s ease-out;
+}
+
+/* Decorative line animations */
+.collage-text-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--accent-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: lineGrow 0.8s ease forwards;
+  animation-delay: 0.8s;
+}
+
+.collage-container.reverse .collage-text-content::before {
+  left: auto;
+  right: 0;
+  transform-origin: right;
+}
+
+@keyframes lineGrow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ================================================
+   INTERACTIVE HOVER STATES
+   ================================================ */
+
+/* Photo card hover enhancement */
+.photo-card-wrapper {
+  cursor: pointer;
+}
+
+.photo-card-img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), 
+              filter 0.6s ease;
+}
+
+.photo-card-wrapper:hover .photo-card-img {
+  filter: brightness(1.05) contrast(1.02);
+}
+
+/* Section hover - subtle movement */
+.collage-section:hover .collage-bg {
+  transform: scale(1.08);
+  filter: brightness(0.35) blur(4px);
+}
+
+/* ================================================
+   AMBIENT ANIMATIONS
+   ================================================ */
+
+/* Subtle breathing effect for backgrounds */
+@keyframes breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.collage-text-content {
+  animation: breathe 4s ease-in-out infinite, contentSlideUp 0.8s ease forwards;
+  animation-delay: 0.5s, 0.5s;
+}
+
+/* Gradient overlay animation */
+.gradient-left,
+.gradient-right {
+  animation: gradientPulse 8s ease-in-out infinite;
+}
+
+@keyframes gradientPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+/* ================================================
+   PAGE LOAD ANIMATION
+   ================================================ */
+
+.home-page-container {
+  opacity: 0;
+}
+
+.home-page-container.page-loaded {
+  animation: pageLoad 0.8s ease forwards;
+}
+
+@keyframes pageLoad {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ================================================
+   SCROLL-TRIGGERED SECTION ANIMATIONS
+   ================================================ */
+
+.scroll-section {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.scroll-section.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Alternate sections slide from different directions */
+.scroll-section[data-section="vision"] {
+  transform: translateX(-80px) translateY(40px);
+}
+
+.scroll-section[data-section="about"] {
+  transform: translateX(80px) translateY(40px);
+}
+
+.scroll-section[data-section="mission"] {
+  transform: translateX(-80px) translateY(40px);
+}
+
+.scroll-section[data-section="brand"] {
+  transform: translateX(80px) translateY(40px);
+}
+
+.scroll-section[data-section="featured"] {
+  transform: scale(0.95) translateY(40px);
+}
+
+.scroll-section.section-visible[data-section="vision"],
+.scroll-section.section-visible[data-section="about"],
+.scroll-section.section-visible[data-section="mission"],
+.scroll-section.section-visible[data-section="brand"] {
+  transform: translateX(0) translateY(0);
+}
+
+.scroll-section.section-visible[data-section="featured"] {
+  transform: scale(1) translateY(0);
+}
+
+/* Staggered children animations */
+.animate-child {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-child.child-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================
+   REDUCED MOTION SUPPORT
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .luxury-wrapper *,
+  .photo-card-wrapper,
+  .collage-section,
+  .collage-text-content,
+  .luxury-head,
+  .luxury-sub,
+  .luxury-text,
+  .luxury-link,
+  .collage-bg,
+  .photo-card-img,
+  .cinematic-bg,
+  .home-page-container {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .photo-card-wrapper {
+    transform: rotate(-3deg) !important;
+  }
+  
+  .collage-container.reverse .photo-card-wrapper {
+    transform: rotate(3deg) !important;
   }
 }

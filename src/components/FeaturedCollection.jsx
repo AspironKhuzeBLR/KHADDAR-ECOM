@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomeLuxury.css'; 
+import './FeaturedCollection.css';
 
 // Using a specific image from your folder
 import collectionBg from '../images/Summer Salt KHADDAR3495.png';
@@ -13,14 +14,15 @@ const FeaturedCollection = () => {
       <img 
         src={collectionBg} 
         alt="Kolours of Kutch Background" 
-        className="featured-bg-img"
+        className="featured-bg-img parallax-bg"
+        data-speed="0.2"
       />
 
       {/* The Blended Content Box */}
       <div className="glass-overlay-content">
-        <h2 className="featured-title">KOLOURS OF KUTCH</h2>
+        <h2 className="featured-title animate-child">KOLOURS OF KUTCH</h2>
         
-        <p className="featured-desc">
+        <p className="featured-desc animate-child">
           Introducing exceptional fabric creations which showcase the rich 
           heritage and artistic prowess of Kutch. Experience the blend of 
           vibrant culture and woven mastery.
@@ -28,26 +30,7 @@ const FeaturedCollection = () => {
         
         <Link 
           to="/collections" 
-          style={{
-            display: 'inline-block',
-            padding: '12px 40px',
-            border: '1px solid #ffffff',
-            color: '#ffffff',
-            fontFamily: 'Montserrat',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-            fontSize: '0.85rem',
-            textDecoration: 'none',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.background = '#ffffff'; 
-            e.target.style.color = '#000000';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = 'transparent'; 
-            e.target.style.color = '#ffffff';
-          }}
+          className="featured-cta animate-child"
         >
           Explore Collection
         </Link>

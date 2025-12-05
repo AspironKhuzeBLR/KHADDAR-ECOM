@@ -12,30 +12,30 @@ const BrandStory = () => {
     <section className="collage-section">
       
       {/* 1. BACKGROUND LAYER (Blurred & Dark) */}
-      <img src={bgImage} alt="Brand Texture" className="collage-bg" />
+      <img src={bgImage} alt="Brand Texture" className="collage-bg parallax-bg" data-speed="0.3" />
 
       {/* 2. CONTENT LAYER */}
       <div className="collage-container">
         
         {/* LEFT SIDE: The Floating Photo Card */}
-        <div className="photo-card-wrapper">
+        <div className="photo-card-wrapper animate-child">
           <img src={topImage} alt="Artisan weaving" className="photo-card-img" />
         </div>
 
         {/* RIGHT SIDE: The Text */}
         <div className="collage-text-content">
-          <span className="luxury-sub" style={{color: '#D4AF37'}}>The Origin</span>
-          <h2 className="luxury-head">The Soul of<br/>Clothing</h2>
-          <p className="luxury-text" style={{color: '#f0f0f0'}}>
+          <span className="luxury-sub animate-child" style={{color: '#D4AF37'}}>The Origin</span>
+          <h2 className="luxury-head animate-child">The Soul of<br/>Clothing</h2>
+          <p className="luxury-text animate-child" style={{color: '#f0f0f0'}}>
             Khaddar began with a simple thought — to return to the soul of clothing. 
             Inspired by the spirit of India's indigenous fabrics and the artisans who carry 
             forward centuries-old traditions.
           </p>
-          <p className="luxury-text" style={{color: '#f0f0f0', marginTop: '-1rem'}}>
+          <p className="luxury-text animate-child" style={{color: '#f0f0f0', marginTop: '-1rem'}}>
             Every piece is a journey from the skilled hands of local weavers to your wardrobe, 
             crafted with respect for the land and its people.
           </p>
-          <div style={{marginTop: '2rem'}}>
+          <div className="animate-child" style={{marginTop: '2rem'}}>
              <span className="luxury-link">Explore Our Heritage</span>
           </div>
         </div>

@@ -5,12 +5,36 @@
   border-top: none; 
   padding: 60px 0 30px;
   /* margin-top: 80px; */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle pattern overlay */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(255, 255, 255, 0.02) 30px,
+      rgba(255, 255, 255, 0.02) 31px
+    );
+  pointer-events: none;
+  z-index: 0;
 }
 
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-content {
@@ -81,14 +105,32 @@
   /* LINK COLOR: Pale Beige/Cream (#F7F7F0) - was #4a4a4a */
   color: #F7F7F0;
   font-weight: 300;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   text-decoration: none;
   border: none;
+  display: inline-block;
+  position: relative;
+}
+
+.footer-links li a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: #A15F22;
+  transition: width 0.3s ease;
 }
 
 .footer-links li a:hover {
   /* LINK HOVER: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
   color: #A15F22;
+  transform: translateX(5px);
+}
+
+.footer-links li a:hover::after {
+  width: 100%;
 }
 
 .social-links {
@@ -103,12 +145,14 @@
   /* SOCIAL LINK COLOR: Pale Beige/Cream (#F7F7F0) - was #4a4a4a */
   color: #F7F7F0;
   font-weight: 300;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
 }
 
 .social-link:hover {
   /* SOCIAL LINK HOVER: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
   color: #A15F22;
+  transform: translateX(5px);
 }
 
 .footer-bottom {

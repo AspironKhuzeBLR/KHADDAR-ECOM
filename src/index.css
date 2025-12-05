@@ -1,3 +1,7 @@
+/* Import Animation & Pattern Styles */
+@import './styles/animations.css';
+@import './styles/patterns.css';
+
 * {
   margin: 0;
   padding: 0;

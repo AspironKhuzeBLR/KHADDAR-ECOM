@@ -1,0 +1,420 @@
+/* ================================================
+   KHADDAR - Animated Patterns & Backgrounds
+   ================================================ */
+
+/* ---- Pattern Variables ---- */
+:root {
+  --pattern-color-primary: rgba(140, 108, 95, 0.08);
+  --pattern-color-secondary: rgba(111, 49, 50, 0.05);
+  --pattern-color-accent: rgba(161, 95, 34, 0.06);
+}
+
+/* ================================================
+   ANIMATED GEOMETRIC PATTERN
+   ================================================ */
+
+.pattern-geometric {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-geometric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: 
+    linear-gradient(30deg, var(--pattern-color-primary) 12%, transparent 12.5%, transparent 87%, var(--pattern-color-primary) 87.5%, var(--pattern-color-primary)),
+    linear-gradient(150deg, var(--pattern-color-primary) 12%, transparent 12.5%, transparent 87%, var(--pattern-color-primary) 87.5%, var(--pattern-color-primary)),
+    linear-gradient(30deg, var(--pattern-color-primary) 12%, transparent 12.5%, transparent 87%, var(--pattern-color-primary) 87.5%, var(--pattern-color-primary)),
+    linear-gradient(150deg, var(--pattern-color-primary) 12%, transparent 12.5%, transparent 87%, var(--pattern-color-primary) 87.5%, var(--pattern-color-primary)),
+    linear-gradient(60deg, var(--pattern-color-secondary) 25%, transparent 25.5%, transparent 75%, var(--pattern-color-secondary) 75%, var(--pattern-color-secondary)),
+    linear-gradient(60deg, var(--pattern-color-secondary) 25%, transparent 25.5%, transparent 75%, var(--pattern-color-secondary) 75%, var(--pattern-color-secondary));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  animation: patternDrift 25s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes patternDrift {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(80px) translateY(140px); }
+}
+
+/* ================================================
+   FLOATING DOTS PATTERN
+   ================================================ */
+
+.pattern-dots {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-dots::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(circle, var(--pattern-color-primary) 2px, transparent 2px);
+  background-size: 50px 50px;
+  animation: dotsFloat 30s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes dotsFloat {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(50px, 50px) rotate(5deg); }
+}
+
+/* ================================================
+   WAVE PATTERN
+   ================================================ */
+
+.pattern-waves {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-waves::before,
+.pattern-waves::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pattern-waves::before {
+  top: -50%;
+  left: -50%;
+  background: 
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      var(--pattern-color-primary) 40px,
+      var(--pattern-color-primary) 80px
+    );
+  animation: wavesMove1 20s linear infinite;
+  opacity: 0.5;
+}
+
+.pattern-waves::after {
+  top: -50%;
+  right: -50%;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 60px,
+      var(--pattern-color-secondary) 60px,
+      var(--pattern-color-secondary) 120px
+    );
+  animation: wavesMove2 25s linear infinite reverse;
+  opacity: 0.4;
+}
+
+@keyframes wavesMove1 {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(80px) translateY(80px); }
+}
+
+@keyframes wavesMove2 {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(-120px) translateY(120px); }
+}
+
+/* ================================================
+   KHADI TEXTURE PATTERN (Indian Inspired)
+   ================================================ */
+
+.pattern-khadi {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-khadi::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    /* Horizontal threads */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 20px,
+      rgba(139, 90, 43, 0.03) 20px,
+      rgba(139, 90, 43, 0.03) 21px
+    ),
+    /* Vertical threads */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 20px,
+      rgba(139, 90, 43, 0.03) 20px,
+      rgba(139, 90, 43, 0.03) 21px
+    ),
+    /* Diagonal accent */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 50px,
+      rgba(161, 95, 34, 0.02) 50px,
+      rgba(161, 95, 34, 0.02) 52px
+    );
+  animation: khadiWeave 15s ease-in-out infinite alternate;
+}
+
+@keyframes khadiWeave {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0.9; transform: scale(1.02); }
+}
+
+/* ================================================
+   FLOATING SHAPES
+   ================================================ */
+
+.floating-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-shape {
+  position: absolute;
+  opacity: 0.08;
+  animation: floatShape 20s ease-in-out infinite;
+}
+
+.floating-shape:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(140, 108, 95, 0.3) 0%, transparent 70%);
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+
+.floating-shape:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(111, 49, 50, 0.25) 0%, transparent 70%);
+  top: 60%;
+  right: 15%;
+  animation-delay: -5s;
+  animation-duration: 22s;
+}
+
+.floating-shape:nth-child(3) {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(161, 95, 34, 0.2) 0%, transparent 70%);
+  bottom: 5%;
+  left: 30%;
+  animation-delay: -10s;
+  animation-duration: 25s;
+}
+
+.floating-shape:nth-child(4) {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(140, 108, 95, 0.35) 0%, transparent 70%);
+  top: 30%;
+  right: 30%;
+  animation-delay: -3s;
+  animation-duration: 16s;
+}
+
+@keyframes floatShape {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(30px, -30px) rotate(90deg) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 20px) rotate(180deg) scale(0.95);
+  }
+  75% {
+    transform: translate(40px, 10px) rotate(270deg) scale(1.05);
+  }
+}
+
+/* ================================================
+   GRADIENT ORB BACKGROUND
+   ================================================ */
+
+.gradient-orbs {
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-orbs::before,
+.gradient-orbs::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gradient-orbs::before {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(140, 108, 95, 0.2) 0%, transparent 70%);
+  top: -10%;
+  right: -10%;
+  animation: orbMove1 15s ease-in-out infinite;
+}
+
+.gradient-orbs::after {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(161, 95, 34, 0.15) 0%, transparent 70%);
+  bottom: -10%;
+  left: -10%;
+  animation: orbMove2 18s ease-in-out infinite;
+}
+
+@keyframes orbMove1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-50px, 50px); }
+}
+
+@keyframes orbMove2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(50px, -50px); }
+}
+
+/* ================================================
+   PARALLAX LINES
+   ================================================ */
+
+.pattern-lines {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 100px,
+    rgba(140, 108, 95, 0.03) 100px,
+    rgba(140, 108, 95, 0.03) 101px
+  );
+  animation: linesScroll 10s linear infinite;
+}
+
+@keyframes linesScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(101px); }
+}
+
+/* ================================================
+   SPARKLE EFFECT
+   ================================================ */
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.sparkle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+.sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+.sparkle:nth-child(2) { top: 40%; left: 80%; animation-delay: 0.5s; }
+.sparkle:nth-child(3) { top: 70%; left: 25%; animation-delay: 1s; }
+.sparkle:nth-child(4) { top: 30%; left: 60%; animation-delay: 1.5s; }
+.sparkle:nth-child(5) { top: 85%; left: 45%; animation-delay: 2s; }
+.sparkle:nth-child(6) { top: 15%; left: 90%; animation-delay: 2.5s; }
+
+/* ================================================
+   RESPONSIVE - Reduce patterns on mobile
+   ================================================ */
+
+@media (max-width: 768px) {
+  .pattern-geometric::before,
+  .pattern-dots::before,
+  .pattern-waves::before,
+  .pattern-waves::after,
+  .pattern-khadi::before {
+    opacity: 0.4;
+  }
+  
+  .floating-shape {
+    opacity: 0.05;
+  }
+  
+  .gradient-orbs::before,
+  .gradient-orbs::after {
+    filter: blur(60px);
+  }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pattern-geometric::before,
+  .pattern-dots::before,
+  .pattern-waves::before,
+  .pattern-waves::after,
+  .pattern-khadi::before,
+  .floating-shape,
+  .gradient-orbs::before,
+  .gradient-orbs::after,
+  .pattern-lines::before,
+  .sparkle {
+    animation: none !important;
+  }
+}
+

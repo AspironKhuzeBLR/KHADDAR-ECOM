@@ -1,6 +1,8 @@
 .featured-collection-section {
   width: 100%;
   padding: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .featured-collection-wrapper {
@@ -19,6 +21,17 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 8s ease-out;
+}
+
+/* Continuous subtle zoom animation */
+.featured-collection-image img {
+  animation: slowZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
 }
 
 .featured-overlay {
@@ -106,6 +119,119 @@
   color: #1a1a1a;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced overlay with gradient animation */
+.featured-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  background-size: 200% 200%;
+  animation: overlayGradient 10s ease infinite;
+}
+
+@keyframes overlayGradient {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* Decorative corner accents */
+.featured-content::before,
+.featured-content::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.featured-content::before {
+  top: -20px;
+  left: -20px;
+  border-right: none;
+  border-bottom: none;
+  animation: cornerFadeIn 1s ease 0.8s forwards;
+  opacity: 0;
+}
+
+.featured-content::after {
+  bottom: -20px;
+  right: -20px;
+  border-left: none;
+  border-top: none;
+  animation: cornerFadeIn 1s ease 1s forwards;
+  opacity: 0;
+}
+
+@keyframes cornerFadeIn {
+  to { opacity: 1; }
+}
+
+/* Shine effect on section */
+.featured-collection-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  z-index: 3;
+  animation: sectionShine 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sectionShine {
+  0%, 100% { left: -100%; }
+  50% { left: 150%; }
+}
+
+/* Featured CTA Button */
+.featured-cta {
+  display: inline-block;
+  padding: 12px 40px;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.featured-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  transition: left 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  z-index: -1;
+}
+
+.featured-cta:hover {
+  color: #000000;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.featured-cta:hover::before {
+  left: 0;
 }
 
 @media (max-width: 1200px) {
