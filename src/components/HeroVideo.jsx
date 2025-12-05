@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './HeroVideo.css';
 
-const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors tradition', fullHeight }) => {
+// 1. Added className='' to props
+const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainability.</>, fullHeight, className = '' }) => {  
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
@@ -13,18 +14,15 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      // Set video properties for mobile autoplay
       video.setAttribute('muted', 'true');
       video.setAttribute('playsinline', 'true');
       video.setAttribute('webkit-playsinline', 'true');
       
-      // Ensure video plays on mobile
       const attemptPlay = async () => {
         try {
           await video.play();
         } catch (error) {
           console.log('Autoplay prevented:', error);
-          // If autoplay is prevented, try to play when user interacts
           const handleInteraction = () => {
             video.play().catch(e => console.log('Play failed:', e));
             document.removeEventListener('touchstart', handleInteraction);
@@ -35,7 +33,6 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
         }
       };
       
-      // Try to play when video is loaded
       if (video.readyState >= 2) {
         attemptPlay();
       } else {
@@ -52,7 +49,8 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
   }, [isMuted]);
 
   return (
-    <section className="hero-video">
+    // 2. FIXED: Keeps 'hero-video' for size, adds ${className} for your custom font
+    <section className={`hero-video ${className}`}>
       <div className={`video-wrapper ${fullHeight ? 'full-height' : ''}`}>
         <video
           ref={videoRef}
@@ -73,13 +71,6 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
             <Link
               to="/collections"
               className="hero-cta hero-cta-fullwidth"
-              style={{
-                display: 'block',
-                width: '95vw',
-                transform: 'translateX(-50%)',
-                position: 'relative',
-                boxSizing: 'border-box'
-              }}
             >
               EXPLORE COLLECTIONS
             </Link>
@@ -105,4 +96,3 @@ const HeroVideo = ({title = 'KHADDAR' , subtitle = 'Crafting fashion that honors
 };
 
 export default HeroVideo;
-

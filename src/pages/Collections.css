@@ -272,3 +272,70 @@
     padding: 0 15px;
   }
 }
+/* Add this to Collections.css */
+
+.collections-shop-action {
+  padding: 80px 0;
+  /* Pale Beige/Cream */
+  background-color: #F7F7F0; 
+  text-align: center;
+}
+
+.shop-action-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.shop-action-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  /* Dark Maroon/Reddish Brown */
+  color: #6F3132;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.collections-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 16px 50px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  
+  /* Matches your requested style */
+  /* Border: Dark Maroon */
+  border: 1px solid #6F3132;
+  /* Background: Warm Sand/Tan */
+  background: #B38A6A;
+  /* Text: Deep Coffee Brown */
+  color: #6F3132;
+}
+
+.collections-btn:hover {
+  /* Hover Background: Dark Maroon */
+  background: #6F3132;
+  /* Hover Text: Pale Beige */
+  color: #F7F7F0;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(111, 49, 50, 0.2);
+}
+
+@media (max-width: 768px) {
+  .collections-shop-action {
+    padding: 60px 0;
+  }
+  .shop-action-title {
+    font-size: 1.8rem;
+  }
+  .collections-btn {
+    padding: 14px 40px;
+    font-size: 0.875rem;
+  }
+}

@@ -10,247 +10,168 @@
   min-height: 100vh;
 }
 
-/* Ensure content sections start after hero */
+/* --- Section Background --- */
 .contact-content {
   position: relative;
   z-index: 2;
-  /* Updated Background: Pale Beige/Cream (#F7F7F0) - was #ffffff */
   background: #F7F7F0;
-  padding-top: 100px;
+  padding: 120px 0;
 }
 
-.contact-hero {
-  padding: 80px 0;
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.contact-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* --- Header --- */
+.contact-header {
   text-align: center;
-  /* Updated Background: Pale Beige/Cream (#F7F7F0) - was #fafafa */
-  background-color: #F7F7F0;
-}
-
-.hero-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 40px;
-}
-
-.contact-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 4.5rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  margin-bottom: 20px;
-  /* Updated Heading Color: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
-  color: #6F3132;
-}
-
-.contact-subtitle {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 300;
-  letter-spacing: 0.03em;
-  /* Updated Subtitle Text Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
-  color: #6F3132;
-}
-
-.contact-content {
-  padding: 100px 0;
-  /* Updated Background: Pale Beige/Cream (#F7F7F0) - was #ffffff */
-  background-color: #F7F7F0;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 100px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-  animation: fadeInLeft 0.8s ease-out;
-}
-
-.contact-form-wrapper {
-  animation: fadeInRight 0.8s ease-out;
-}
-
-.info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  max-width: 700px;
+  margin-bottom: 90px;
+  animation: fadeUp 0.8s ease-out;
 }
 
 .info-heading {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 400;
-  letter-spacing: 0.05em;
-  /* Updated Heading Color: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
+  letter-spacing: 0.1em;
   color: #6F3132;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.heading-underline {
+  width: 60px;
+  height: 2px;
+  background-color: #A15F22;
+  margin: 0 auto 30px auto;
 }
 
 .info-text {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
+  font-size: 1.125rem;
   line-height: 1.8;
-  /* Updated Body Text Color: Deep Coffee Brown (#6F3132) - was #2a2a2a */
   color: #6F3132;
   font-weight: 300;
+}
+
+/* --- Horizontal Layout --- */
+.contact-horizontal-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1100px;
+  animation: fadeUp 1s ease-out;
+}
+
+.contact-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+  transition: transform 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+}
+
+/* --- Large Icons (Top of card) --- */
+.icon-circle-large {
+  font-size: 1.5rem;
+  color: #A15F22;
+  margin-bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(161, 95, 34, 0.1); /* Very subtle background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover .icon-circle-large {
+  background-color: #A15F22;
+  color: #F7F7F0;
 }
 
 .info-subheading {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  /* Updated Subheading Color: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
-  color: #6F3132;
-  margin-bottom: 5px;
-}
-
-.info-link {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  /* Updated Link Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
-  color: #6F3132;
-  font-weight: 300;
-  transition: color 0.3s ease;
-  text-decoration: none;
-}
-
-.info-link:hover {
-  /* Updated Link Hover Color: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  color: #A15F22;
-}
-
-.info-address {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  line-height: 1.8;
-  /* Updated Address Text Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
-  color: #6F3132;
-  font-weight: 300;
-}
-
-.social-links-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.social-link-contact {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9375rem;
-  /* Updated Social Link Color: Deep Coffee Brown (#6F3132) - was #4a4a4a */
-  color: #6F3132;
-  font-weight: 300;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.social-link-contact:hover {
-  /* Updated Social Link Hover Color: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  color: #A15F22;
-}
-
-.contact-form-wrapper {
-  /* Updated Form Wrapper Background: Muted Clay/Taupe (#8C6C5F) - was #fafafa */
-  background-color: #F7F7F0;
-  padding: 50px;
-}
-
-.form-heading {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  margin-bottom: 40px;
-  /* Updated Form Heading Color: Pale Beige/Cream (#F7F7F0) - was #1a1a1a */
-  color: #F7F7F0;
-}
-
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.form-label {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  /* Updated Form Label Color: Pale Beige/Cream (#F7F7F0) - was #1a1a1a */
-  color: #F7F7F0;
-}
-
-.form-input,
-.form-textarea {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  padding: 15px;
-  /* Updated Input Border: Dark Maroon/Reddish Brown (#6F3132) - was #e8e8e8 */
-  border: 1px solid #6F3132;
-  /* Updated Input Background: Pale Beige/Cream (#F7F7F0) - was #ffffff */
-  background-color: #F7F7F0;
-  /* Updated Input Text Color: Deep Coffee Brown (#6F3132) - was #1a1a1a */
-  color: #6F3132;
-  transition: border-color 0.3s ease;
-  font-weight: 300;
-}
-
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  /* Updated Input Focus Border: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  border-color: #A15F22;
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 150px;
-}
-
-.form-button {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 400;
+  font-size: 0.8rem;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 15px 40px;
-  /* Updated Button Border: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
-  border: 1px solid #6F3132;
-  /* Updated Button Background: Warm Sand/Tan (#B38A6A) - was transparent */
-  background: #B38A6A;
-  /* Updated Button Text: Deep Coffee Brown (#6F3132) - was #1a1a1a */
+  color: #A15F22;
+  margin-bottom: 15px;
+}
+
+.info-link-large {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
   color: #6F3132;
-  cursor: pointer;
+  font-weight: 400;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.info-link-large:hover {
+  color: #A15F22;
+}
+
+/* --- Dividers --- */
+.vertical-divider {
+  width: 1px;
+  height: 140px;
+  background-color: rgba(111, 49, 50, 0.2);
+  align-self: center;
+}
+
+/* --- Social Icon Buttons --- */
+.social-row {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.social-icon-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #6F3132;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6F3132;
+  font-size: 1.2rem;
   transition: all 0.3s ease;
-  align-self: flex-start;
-  margin-top: 10px;
+  text-decoration: none;
 }
 
-.form-button:hover {
-  /* Updated Button Hover Background: Dark Maroon/Reddish Brown (#6F3132) - was #1a1a1a */
-  background: #6F3132;
-  /* Updated Button Hover Text: Pale Beige/Cream (#F7F7F0) - was #ffffff */
-  color: #F7F7F0;
+.social-icon-btn:hover {
+  background-color: #6F3132;
+  color: #F7F7F0; /* White/Cream text on hover */
+  transform: scale(1.1);
+  border-color: #6F3132;
 }
 
+/* --- Image Section --- */
 .contact-image-section {
   width: 100%;
-  height: 60vh;
+  height: 50vh;
   overflow: hidden;
 }
 
@@ -265,156 +186,49 @@
   object-fit: cover;
 }
 
-@media (max-width: 1200px) {
-  .contact-hero {
-    padding: 70px 0;
+/* --- Animations --- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  .contact-content {
-    padding: 80px 0;
-  }
-  
-  .contact-grid {
-    gap: 80px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 1024px) {
-  .contact-grid {
-    gap: 60px;
-  }
-  
-  .contact-form-wrapper {
-    padding: 40px;
-  }
-}
-
+/* --- Responsive --- */
 @media (max-width: 992px) {
-  .contact-grid {
-    gap: 50px;
+  .info-heading {
+    font-size: 2.5rem;
   }
-  
-  .contact-form-wrapper {
-    padding: 35px;
+  .info-link-large {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 768px) {
-  .contact-hero {
-    padding: 60px 0;
-  }
-  
-  .hero-wrapper {
-    padding: 0 20px;
-  }
-  
-  .contact-title {
-    font-size: 2.5rem;
-  }
-  
-  .contact-subtitle {
-    font-size: 1rem;
-  }
-  
   .contact-content {
-    padding: 60px 0;
+    padding: 80px 0;
   }
-  
-  .contact-grid {
-    grid-template-columns: 1fr;
+
+  .contact-horizontal-row {
+    flex-direction: column;
     gap: 50px;
   }
-  
-  .contact-info {
-    gap: 40px;
-  }
-  
-  .info-heading {
-    font-size: 2rem;
-  }
-  
-  .contact-form-wrapper {
-    padding: 30px 20px;
-  }
-  
-  .form-heading {
-    font-size: 1.75rem;
-  }
-  
-  .contact-image-section {
-    height: 40vh;
-  }
-}
 
-@media (max-width: 576px) {
-  .contact-hero {
-    padding: 50px 0;
+  .vertical-divider {
+    width: 100px;
+    height: 1px;
+    margin: 10px 0;
   }
-  
-  .contact-title {
-    font-size: 2rem;
+
+  .contact-header {
+    margin-bottom: 50px;
   }
-  
-  .contact-subtitle {
-    font-size: 0.9375rem;
-  }
-  
-  .contact-content {
-    padding: 50px 0;
-  }
-  
-  .contact-grid {
-    gap: 40px;
-  }
-  
-  .contact-info {
-    gap: 30px;
-  }
-  
+
   .info-heading {
-    font-size: 1.75rem;
-  }
-  
-  .info-subheading {
-    font-size: 0.8125rem;
-  }
-  
-  .info-text,
-  .info-link,
-  .info-address,
-  .social-link-contact {
-    font-size: 0.9375rem;
-  }
-  
-  .contact-form-wrapper {
-    padding: 25px 20px;
-  }
-  
-  .form-heading {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-  }
-  
-  .contact-form {
-    gap: 25px;
-  }
-  
-  .form-label {
-    font-size: 0.7rem;
-  }
-  
-  .form-input,
-  .form-textarea {
-    font-size: 0.9375rem;
-    padding: 12px;
-  }
-  
-  .form-button {
-    padding: 12px 30px;
-    font-size: 0.75rem;
-  }
-  
-  .contact-image-section {
-    height: 35vh;
+    font-size: 2rem;
   }
 }

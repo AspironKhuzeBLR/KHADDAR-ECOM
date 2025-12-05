@@ -1,0 +1,630 @@
+/* src/components/HomeLuxury.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
+
+:root {
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --cream-bg: #F9F5F0;
+  --text-dark: #1a1a1a;
+  --accent-rust: #8B3A28;
+}
+
+/* Wrapper for the whole home page (except HeroVideo) */
+.luxury-wrapper {
+  background-color: var(--cream-bg);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* --- THE MINGLE LAYOUT (Overlapping Text & Image) --- */
+.mingle-container {
+  display: flex;
+  align-items: center;
+  padding: 6rem 5%;
+  position: relative;
+  min-height: 80vh;
+}
+
+.mingle-img-wrapper {
+  width: 65%;
+  height: 80vh;
+  position: relative;
+}
+
+.mingle-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The Box that overlaps the image */
+.mingle-content-card {
+  width: 45%;
+  background-color: var(--cream-bg);
+  padding: 4rem;
+  z-index: 10;
+  margin-left: -10%; /* Creates the Overlap */
+  box-shadow: -20px 20px 40px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Reverse Layout (Image Right, Text Left) */
+.mingle-container.reverse {
+  flex-direction: row-reverse;
+}
+
+.mingle-container.reverse .mingle-content-card {
+  margin-left: 0;
+  margin-right: -10%;
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.05);
+}
+
+/* --- FULL WIDTH PARALLAX LAYOUT --- */
+.parallax-container {
+  min-height: 80vh;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Text on right */
+  padding-right: 10%;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4rem;
+  max-width: 600px;
+  border-left: 5px solid var(--accent-rust);
+}
+
+/* --- TYPOGRAPHY --- */
+.luxury-head {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+}
+
+.luxury-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent-rust);
+  margin-bottom: 1rem;
+  display: block;
+  font-weight: 500;
+}
+
+.luxury-text {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.luxury-btn {
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 5px;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: max-content;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.luxury-btn:hover {
+  color: var(--accent-rust);
+  border-color: var(--accent-rust);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .mingle-container, .mingle-container.reverse {
+    flex-direction: column;
+    padding: 3rem 1rem;
+  }
+  .mingle-img-wrapper { width: 100%; height: 50vh; }
+  .mingle-content-card { 
+    width: 90%; 
+    margin: -50px auto 0; 
+    padding: 2rem; 
+    text-align: center; 
+    align-items: center;
+  }
+  .parallax-container {
+    background-attachment: scroll;
+    justify-content: center;
+    padding: 3rem 1rem;
+  }
+  .glass-card { width: 100%; }
+}
+/* --- FEATURED COLLECTION (The Integrated Look) --- */
+.featured-section {
+  position: relative;
+  width: 100%;
+  height: 90vh; /* Full screen height for impact */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform 3s ease; /* Slow zoom on hover */
+}
+
+.featured-section:hover .featured-bg-img {
+  transform: scale(1.05);
+}
+
+/* The Glass Overlay - Makes text feel inside the image */
+.glass-overlay-content {
+  position: relative;
+  z-index: 2;
+  /* This creates the "Frosted Glass" effect */
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4rem 5rem;
+  max-width: 800px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.featured-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.featured-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  color: #f0f0f0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .featured-section { height: 70vh; }
+  .glass-overlay-content {
+    width: 90%;
+    padding: 2rem;
+  }
+  .featured-title { font-size: 2.5rem; }
+}
+/* src/components/HomeLuxury.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
+
+:root {
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --accent-rust: #8B3A28;
+  --text-dark: #1a1a1a;
+}
+
+/* --- THE CINEMATIC SECTION --- */
+.cinematic-section {
+  position: relative;
+  width: 100%;
+  height: 90vh; /* Full Luxury Height */
+  overflow: hidden; /* Important for the zoom animation */
+  display: flex;
+  align-items: center; /* Vertically centers the text box */
+}
+
+/* THE MOVING BACKGROUND IMAGE */
+.cinematic-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  /* This makes the image move slowly */
+  animation: slowPan 20s infinite alternate linear;
+}
+
+/* THE TEXT CARD (Floating on top) */
+.floating-content-card {
+  position: relative;
+  z-index: 2; /* Sits on top of image */
+  width: 450px; /* Fixed elegant width */
+  background: rgba(249, 245, 240, 0.9); /* Almost solid cream, slightly see-through */
+  backdrop-filter: blur(5px); /* Blurs the image behind the text */
+  padding: 3.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  border-left: 4px solid var(--accent-rust); /* Luxury accent line */
+}
+
+/* --- ALIGNMENT CLASSES --- */
+/* Use this to put text on the LEFT */
+.cinematic-section.left-align {
+  justify-content: flex-start;
+  padding-left: 8%;
+}
+
+/* Use this to put text on the RIGHT */
+.cinematic-section.right-align {
+  justify-content: flex-end;
+  padding-right: 8%;
+}
+
+/* --- ANIMATION KEYFRAMES --- */
+@keyframes slowPan {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.15); /* Zooms in 15% */
+  }
+}
+
+/* --- TYPOGRAPHY --- */
+.luxury-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-rust);
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.luxury-head {
+  font-family: var(--font-serif);
+  font-size: 3.2rem;
+  line-height: 1.1;
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+}
+
+.luxury-text {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.luxury-link {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--text-dark);
+  padding-bottom: 5px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.luxury-link:hover {
+  color: var(--accent-rust);
+  border-color: var(--accent-rust);
+}
+
+/* --- MOBILE --- */
+@media (max-width: 768px) {
+  .cinematic-section {
+    height: auto;
+    flex-direction: column;
+  }
+  .cinematic-bg {
+    position: relative;
+    height: 50vh;
+    animation: none; /* Stop animation on mobile to save battery */
+  }
+  .floating-content-card {
+    width: 90%;
+    margin-top: -50px; /* Overlap upwards */
+    margin-bottom: 50px;
+    padding: 2rem;
+  }
+  .cinematic-section.left-align, 
+  .cinematic-section.right-align {
+    padding: 0;
+    justify-content: center;
+  }
+}
+/* src/components/HomeLuxury.css */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
+
+:root {
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --accent-gold: #D4AF37; /* Gold accent looks better on dark images */
+}
+
+/* --- THE CINEMATIC CONTAINER --- */
+.cinematic-section {
+  position: relative;
+  width: 100%;
+  height: 95vh; /* Almost full screen */
+  overflow: hidden;
+  display: flex;
+  align-items: center; /* Center text vertically */
+}
+
+/* THE IMAGE (Moving Background) */
+.cinematic-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  animation: slowPan 25s infinite alternate linear;
+}
+
+@keyframes slowPan {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+/* --- THE GRADIENT OVERLAYS (The "Mixing" Magic) --- */
+/* These gradients ensure text is readable without a solid box */
+
+/* Gradient for Left-Aligned Text */
+.gradient-left {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 60%; /* Covers half the screen */
+  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+  z-index: 1;
+}
+
+/* Gradient for Right-Aligned Text */
+.gradient-right {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 60%;
+  background: linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+  z-index: 1;
+}
+
+/* --- THE TEXT CONTENT (No Box) --- */
+.blended-content {
+  position: relative;
+  z-index: 2; /* On top of gradient */
+  width: 45%;
+  padding: 0 6rem;
+  color: #fff; /* White text looks best blended on photos */
+}
+
+/* Layout Alignments */
+.cinematic-section.left-align {
+  justify-content: flex-start; /* Text on Left */
+}
+
+.cinematic-section.right-align {
+  justify-content: flex-end; /* Text on Right */
+  text-align: right; /* Align text to right for style */
+}
+
+/* --- TYPOGRAPHY --- */
+.luxury-sub {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 1.5rem;
+  display: block;
+  font-weight: 500;
+}
+
+.luxury-head {
+  font-family: var(--font-serif);
+  font-size: 4.5rem; /* Larger for impact */
+  line-height: 1;
+  margin-bottom: 2rem;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.luxury-text {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+}
+
+/* Right align specific fix for the paragraph */
+.right-align .luxury-text {
+  margin-left: auto; /* Pushes text to the right */
+}
+
+.luxury-link {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  padding-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.luxury-link:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .cinematic-section { height: 80vh; justify-content: flex-end; align-items: flex-end;}
+  
+  /* On mobile, darken the whole bottom */
+  .gradient-left, .gradient-right {
+    width: 100%;
+    height: 60%;
+    top: auto; bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  }
+  
+  .blended-content {
+    width: 100%;
+    padding: 2rem;
+    padding-bottom: 4rem;
+    text-align: left; /* Keep left align on mobile for readability */
+  }
+  
+  .luxury-head { font-size: 3rem; }
+  
+  .right-align .luxury-text { margin-left: 0; }
+  .cinematic-section.right-align { text-align: left; }
+}
+/* --- THE COLLAGE / LAYERED SECTION --- */
+.collage-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh; /* Full Height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 1. The Background Image (Blurred & Darkened) */
+.collage-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  /* Blur it slightly so the top image pops */
+  filter: brightness(0.4) blur(3px); 
+  transform: scale(1.05); /* Zoom slightly to avoid white edges from blur */
+}
+
+/* 2. The Layout Grid (Left Image | Right Text) */
+.collage-container {
+  position: relative;
+  z-index: 5; /* Sit on top of background */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 85%;
+  max-width: 1400px;
+}
+
+/* 3. The "Top" Image (Floating Photo Card) */
+.photo-card-wrapper {
+  flex: 1;
+  position: relative;
+  padding: 15px; /* Creates space for the border */
+  /* This creates a glass border around the photo */
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  /* Rotate it slightly for that "Magazine" look */
+  transform: rotate(-3deg); 
+  transition: transform 0.5s ease;
+  animation: floatCard 6s ease-in-out infinite;
+  max-width: 450px;
+}
+
+/* Make it straighten up when you hover */
+.photo-card-wrapper:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+.photo-card-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Deep shadow for depth */
+}
+
+/* 4. The Text Content (Right Side) */
+.collage-text-content {
+  flex: 1;
+  padding-left: 6rem; /* Space between image and text */
+  color: #fff;
+}
+
+/* Floating Animation */
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-15px) rotate(-3deg); }
+}
+
+/* Responsive Mobile */
+@media (max-width: 900px) {
+  .collage-container {
+    flex-direction: column;
+    width: 90%;
+    padding: 4rem 0;
+  }
+  
+  .photo-card-wrapper {
+    max-width: 80%;
+    margin-bottom: 3rem;
+    transform: rotate(0deg); /* No rotation on mobile */
+    animation: none;
+  }
+  
+  .collage-text-content {
+    padding-left: 0;
+    text-align: center;
+  }
+}
+/* --- COLLAGE REVERSE LAYOUT (Text Left | Image Right) --- */
+.collage-container.reverse {
+  flex-direction: row-reverse;
+}
+
+.collage-container.reverse .collage-text-content {
+  padding-left: 0;
+  padding-right: 6rem; /* Add space on the right instead */
+  text-align: right; /* Align text to right for luxury feel */
+}
+
+/* Specific fix for the floating card in reverse mode */
+.collage-container.reverse .photo-card-wrapper {
+  transform: rotate(3deg); /* Tilt it the other way */
+}
+
+.collage-container.reverse .photo-card-wrapper:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Mobile Fix for Reverse */
+@media (max-width: 900px) {
+  .collage-container.reverse {
+    flex-direction: column;
+  }
+  .collage-container.reverse .collage-text-content {
+    padding-right: 0;
+    text-align: center;
+  }
+}

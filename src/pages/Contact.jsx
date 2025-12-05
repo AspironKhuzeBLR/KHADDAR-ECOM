@@ -1,160 +1,89 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Contact.css';
 import HeroVideo from '../components/HeroVideo';
+// Importing icons from react-icons library
+import { FaInstagram, FaFacebookF, FaYoutube, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message. We will get back to you soon!');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
-  };
-
   return (
     <div className="contact-page page-with-transparent-header">
       <HeroVideo 
         title='Contact Us'  
-        subtitle="We'd love to hear from you. Get in touch with us."
+        subtitle="We'd love to hear from you."
         fullHeight={true}
       />
       
-
       <section className="contact-content">
         <div className="container">
-          <div className="contact-grid">
-            <div className="contact-info">
-              <div className="info-section">
-                <h2 className="info-heading">GET IN TOUCH</h2>
-                <p className="info-text">
-                  Whether you're interested in our collections, want to collaborate, or have questions about sustainability practices, we're here to help.
-                </p>
-              </div>
-
-              <div className="info-section">
-                <h3 className="info-subheading">EMAIL</h3>
-                <a href="mailto:info@khaddar.com" className="info-link">info@khaddar.com</a>
-              </div>
-
-              <div className="info-section">
-                <h3 className="info-subheading">PHONE</h3>
-                <a href="tel:+919876543210" className="info-link">+91 98765 43210</a>
-              </div>
-
-              <div className="info-section">
-                <h3 className="info-subheading">ADDRESS</h3>
-                <p className="info-address">
-                  Khaddar Fashion House<br />
-                  123 Fashion Street<br />
-                  Mumbai, Maharashtra 400001<br />
-                  India
-                </p>
-              </div>
-
-              <div className="info-section">
-                <h3 className="info-subheading">FOLLOW US</h3>
-                <div className="social-links-contact">
-                  <a href="https://instagram.com" className="social-link-contact" target="_blank" rel="noopener noreferrer">Instagram</a>
-                  <a href="https://facebook.com" className="social-link-contact" target="_blank" rel="noopener noreferrer">Facebook</a>
-                  <a href="https://youtube.com" className="social-link-contact" target="_blank" rel="noopener noreferrer">YouTube</a>
-                </div>
-              </div>
+          
+          <div className="contact-wrapper">
+            
+            {/* Header Text */}
+            <div className="contact-header">
+              <h2 className="info-heading">GET IN TOUCH</h2>
+              <div className="heading-underline"></div>
+              <p className="info-text">
+                Whether you're interested in our collections, want to collaborate, or have questions about sustainability practices, we are here to assist you.
+              </p>
             </div>
 
-            <div className="contact-form-wrapper">
-              <h2 className="form-heading">SEND US A MESSAGE</h2>
-              <form className="contact-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="name" className="form-label">Name *</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="form-input"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
+            {/* Horizontal Row */}
+            <div className="contact-horizontal-row">
+              
+              {/* Email Section */}
+              <div className="contact-card">
+                <div className="icon-circle-large">
+                  <FaEnvelope />
                 </div>
+                <h3 className="info-subheading">EMAIL</h3>
+                <a href="mailto:info@khaddar.com" className="info-link-large">
+                  info@khaddar.com
+                </a>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="form-input"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
+              {/* Vertical Divider */}
+              <div className="vertical-divider"></div>
+
+              {/* Phone Section */}
+              <div className="contact-card">
+                <div className="icon-circle-large">
+                  <FaPhoneAlt />
                 </div>
+                <h3 className="info-subheading">PHONE</h3>
+                <a href="tel:+919876543210" className="info-link-large">
+                  +91 98765 43210
+                </a>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="phone" className="form-label">Phone</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="form-input"
-                    value={formData.phone}
-                    onChange={handleChange}
-                  />
+              {/* Vertical Divider */}
+              <div className="vertical-divider"></div>
+
+              {/* Social Section */}
+              <div className="contact-card">
+                <div className="icon-circle-large">
+                   {/* Heart icon or Share icon could go here, or we remove the top icon for this specific card since icons are below. 
+                       Let's keep a 'Connect' icon for consistency. */}
+                   <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>@</span> 
                 </div>
-
-                <div className="form-group">
-                  <label htmlFor="subject" className="form-label">Subject *</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    className="form-input"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                  />
+                <h3 className="info-subheading">FOLLOW US</h3>
+                
+                {/* Social Icons Row */}
+                <div className="social-row">
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Instagram">
+                    <FaInstagram />
+                  </a>
+                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Facebook">
+                    <FaFacebookF />
+                  </a>
+                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="YouTube">
+                    <FaYoutube />
+                  </a>
                 </div>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="message" className="form-label">Message *</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    className="form-textarea"
-                    rows="6"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="form-button">
-                  SEND MESSAGE
-                </button>
-              </form>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -172,4 +101,3 @@ const Contact = () => {
 };
 
 export default Contact;
-

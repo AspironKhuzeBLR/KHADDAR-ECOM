@@ -247,6 +247,7 @@ const Header = () => {
                         <div className="dropdown-submenu">
                           <Link to="/shop/womens-wear?category=blouses" className="dropdown-subitem" onClick={closeMenu}>Blouses</Link>
                           <Link to="/shop/womens-wear?category=skirts-trousers" className="dropdown-subitem" onClick={closeMenu}>Skirts/ Trousers</Link>
+                          <Link to="/shop/womens-wear?category=corsets" className="dropdown-subitem" onClick={closeMenu}>Corsets</Link>
                           <Link to="/shop/womens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
                           <Link to="/shop/womens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers/ Jackets</Link>
                           <Link to="/shop/womens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>

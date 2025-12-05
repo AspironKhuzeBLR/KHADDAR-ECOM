@@ -1,31 +1,44 @@
 import React from 'react';
-import './AboutSection.css';
+import './HomeLuxury.css';
+
+// 1. Background Image
+import bgImg from '../images/Summer Salt KHADDAR2362.png'; 
+// 2. Foreground Image
+import topImg from '../images/Summer Salt KHADDAR1990.png'; 
 
 const AboutSection = () => {
   return (
-    <section className="about-section">
-      <div className="container">
-        <div className="about-content">
-          <div className="about-text-wrapper">
-            <h2 className="section-heading">ABOUT US</h2>
-            <div className="about-text">
-              <p className="body-text">
-                At Khaddar, we believe that true fashion honors its roots while inspiring the future. We are a conscious fashion brand born from a love for Indian craftsmanship, authentic storytelling, and sustainable living. Our collections showcase the artistry of local artisans through timeless, minimalist designs, woven carefully with nature and culture at heart.
-              </p>
-            </div>
+    <section className="collage-section">
+      
+      {/* Background Layer */}
+      <img src={bgImg} alt="About Background" className="collage-bg" />
+
+      {/* Content Layer (Standard: Image Left, Text Right) */}
+      <div className="collage-container">
+        
+        {/* LEFT SIDE: The Floating Photo Card */}
+        <div className="photo-card-wrapper">
+          <img src={topImg} alt="Craftsmanship Detail" className="photo-card-img" />
+        </div>
+
+        {/* RIGHT SIDE: The Text */}
+        <div className="collage-text-content">
+          <span className="luxury-sub" style={{color: '#D4AF37'}}>Who We Are</span>
+          <h2 className="luxury-head">Honoring Roots,<br/>Inspiring Future</h2>
+          <p className="luxury-text" style={{color: '#f0f0f0'}}>
+            Born from a love for Indian craftsmanship, authentic storytelling, 
+            and sustainable living. Our collections showcase the artistry of 
+            local artisans through timeless, minimalist designs woven carefully 
+            with nature and culture at heart.
+          </p>
+          <div style={{marginTop: '2rem'}}>
+             <span className="luxury-link">Our Philosophy</span>
           </div>
         </div>
+
       </div>
-      <div className="about-image-wrapper">
-            <img 
-              src="https://plus.unsplash.com/premium_photo-1726704085688-81adb9f4e10e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjAwfHxzdXN0YWluYWJlbGUlMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=80&w=1200" 
-              alt="Artisan craftsmanship"
-              className="about-image"
-            />
-          </div>
     </section>
   );
 };
 
 export default AboutSection;
-

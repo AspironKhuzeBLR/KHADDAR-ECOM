@@ -1,30 +1,42 @@
 import React from 'react';
-import './MissionSection.css';
+import './HomeLuxury.css';
+
+// 1. Background Image
+import bgImg from '../images/Summer Salt KHADDAR3495.png'; 
+// 2. Foreground Image
+import topImg from '../images/Summer Salt KHADDAR8836.png'; 
 
 const MissionSection = () => {
   return (
-    <section className="mission-section">
-      <div className="container">
-        <div className="mission-heading-box">
-          <h2 className="section-heading mission-heading">MISSION</h2>
+    <section className="collage-section">
+      
+      {/* Background Layer */}
+      <img src={bgImg} alt="Mission Background" className="collage-bg" />
+
+      {/* Content Layer (Reverse: Text Left, Image Right) */}
+      <div className="collage-container reverse">
+        
+        {/* RIGHT SIDE: The Floating Photo Card */}
+        <div className="photo-card-wrapper">
+          <img src={topImg} alt="Sustainable Fabric" className="photo-card-img" />
         </div>
-        <div className="mission-row">
-          <div className="mission-content-box">
-            {/* Replaced ul/li with a single paragraph */}
-            <p className="mission-paragraph">
-              Our mission is multifaceted: to Honor the mastery of Indian artisans, ensuring their timeless craftsmanship earns global recognition; to Protect the planet by exclusively choosing organic fabrics, natural dyes, and earth-friendly, sustainable practices; to Stand against the tide of fast fashion, which erases traditions and disconnects us from mindful consumption; and ultimately, to Embrace and elevate the best of who we are — weaving India's rich stories, skills, and soul into fashion that is meant to be treasured, not consumed.
-            </p>
+
+        {/* LEFT SIDE: The Text */}
+        <div className="collage-text-content">
+          <span className="luxury-sub" style={{color: '#D4AF37'}}>Our Mission</span>
+          <h2 className="luxury-head">To Protect &<br/>Preserve</h2>
+          <p className="luxury-text" style={{color: '#f0f0f0'}}>
+            Our mission is to protect the planet by exclusively choosing organic 
+            fabrics and natural dyes. We stand against the tide of fast fashion, 
+            weaving India's rich stories into fashion that is meant to be 
+            treasured, not consumed.
+          </p>
+          <div style={{marginTop: '2rem'}}>
+             <span className="luxury-link">See Our Impact</span>
           </div>
-         
         </div>
+
       </div>
-       <div className="mission-image-box">
-            <img 
-              src="/mision.jpg" 
-              alt="Mission"
-              className="mission-image"
-            />
-          </div>
     </section>
   );
 };

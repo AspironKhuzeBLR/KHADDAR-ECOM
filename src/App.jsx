@@ -26,6 +26,7 @@ import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import './context/Toast.css';
+import ShopCollections from './pages/ShopCollections';
 
 function AppContent() {
   const location = useLocation();
@@ -56,6 +57,9 @@ function AppContent() {
           <Route path="/refund-policy" element={<PolicyPage />} />
           <Route path="/cancellation-policy" element={<PolicyPage />} />
           <Route path="/shipping-policy" element={<PolicyPage />} />
+          <Route path="/shop-collections" element={<ShopCollections />} />
+
+          
           <Route
             path="/admin/dashboard"
             element={

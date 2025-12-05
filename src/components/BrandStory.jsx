@@ -1,32 +1,48 @@
 import React from 'react';
-import './BrandStory.css';
+import './HomeLuxury.css';
+
+// Image 1: Background (Something textural or wide)
+import bgImage from '../images/Summer Salt KHADDAR1990.png';
+
+// Image 2: Foreground (The "Top" Image - maybe a close up of weaving or hands)
+import topImage from '../images/Summer Salt KHADDAR4678.png'; // Make sure this is a nice clear image
 
 const BrandStory = () => {
   return (
-    <section className="brand-story-section">
-      <div className="container">
-        <div className="brand-story-content">
-          <div className="brand-story-text-wrapper">
-            <h2 className="section-heading">BRAND STORY</h2>
-            <div className="brand-story-text">
-              <p className="body-text">
-                Khaddar began with a simple thought — to return to the soul of clothing. Inspired by the spirit of India's indigenous fabrics and the artisans who carry forward centuries-old traditions, Khaddar is a tribute to authenticity, sustainability, and elegance. Every piece is a journey — from the skilled hands of local weavers to your wardrobe, crafted with respect for the land and its people.
-              </p>
-            </div>
-          </div>
-          
+    <section className="collage-section">
+      
+      {/* 1. BACKGROUND LAYER (Blurred & Dark) */}
+      <img src={bgImage} alt="Brand Texture" className="collage-bg" />
+
+      {/* 2. CONTENT LAYER */}
+      <div className="collage-container">
+        
+        {/* LEFT SIDE: The Floating Photo Card */}
+        <div className="photo-card-wrapper">
+          <img src={topImage} alt="Artisan weaving" className="photo-card-img" />
         </div>
-      </div>
-      <div className="brand-story-image-wrapper">
-            <img 
-              src="https://images.unsplash.com/photo-1695694477689-bef8ba8fc5c6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHN1c3RhaW5hYmVsZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww&auto=format&fit=crop&q=80&w=1200" 
-              alt="Traditional weaving"
-              className="brand-story-image"
-            />
+
+        {/* RIGHT SIDE: The Text */}
+        <div className="collage-text-content">
+          <span className="luxury-sub" style={{color: '#D4AF37'}}>The Origin</span>
+          <h2 className="luxury-head">The Soul of<br/>Clothing</h2>
+          <p className="luxury-text" style={{color: '#f0f0f0'}}>
+            Khaddar began with a simple thought — to return to the soul of clothing. 
+            Inspired by the spirit of India's indigenous fabrics and the artisans who carry 
+            forward centuries-old traditions.
+          </p>
+          <p className="luxury-text" style={{color: '#f0f0f0', marginTop: '-1rem'}}>
+            Every piece is a journey from the skilled hands of local weavers to your wardrobe, 
+            crafted with respect for the land and its people.
+          </p>
+          <div style={{marginTop: '2rem'}}>
+             <span className="luxury-link">Explore Our Heritage</span>
           </div>
+        </div>
+
+      </div>
     </section>
   );
 };
 
 export default BrandStory;
-
