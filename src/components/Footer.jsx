@@ -46,10 +46,13 @@ const Footer = () => {
           <div className="footer-section">
             <h4 className="footer-heading">POLICIES</h4>
             <ul className="footer-links">
-              <li><Link to="/privacy-policy" onClick={(e) => handleLinkClick(e, '/privacy-policy')}>Privacy Policy</Link></li>
+              <li><Link to="/exchange-policy" onClick={(e) => handleLinkClick(e, '/exchange-policy')}>Exchange Policy</Link></li>
               <li><Link to="/refund-policy" onClick={(e) => handleLinkClick(e, '/refund-policy')}>Refund Policy</Link></li>
               <li><Link to="/cancellation-policy" onClick={(e) => handleLinkClick(e, '/cancellation-policy')}>Cancellation Policy</Link></li>
               <li><Link to="/shipping-policy" onClick={(e) => handleLinkClick(e, '/shipping-policy')}>Shipping Policy</Link></li>
+              <li><Link to="/privacy-policy" onClick={(e) => handleLinkClick(e, '/privacy-policy')}>Privacy Policy</Link></li>
+              <li><Link to="/copyright-policy" onClick={(e) => handleLinkClick(e, '/copyright-policy')}>Copyright Policy</Link></li>
+              <li><Link to="/resale-policy" onClick={(e) => handleLinkClick(e, '/resale-policy')}>Resale Policy</Link></li>
             </ul>
           </div>
 

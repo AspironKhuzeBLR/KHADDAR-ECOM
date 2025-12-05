@@ -53,10 +53,13 @@ function AppContent() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/privacy-policy" element={<PolicyPage />} />
+          <Route path="/exchange-policy" element={<PolicyPage />} />
           <Route path="/refund-policy" element={<PolicyPage />} />
           <Route path="/cancellation-policy" element={<PolicyPage />} />
           <Route path="/shipping-policy" element={<PolicyPage />} />
+          <Route path="/privacy-policy" element={<PolicyPage />} />
+          <Route path="/copyright-policy" element={<PolicyPage />} />
+          <Route path="/resale-policy" element={<PolicyPage />} />
           <Route path="/shop-collections" element={<ShopCollections />} />
 
           

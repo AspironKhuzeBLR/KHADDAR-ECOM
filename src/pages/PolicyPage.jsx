@@ -3,37 +3,33 @@ import { useLocation, Link } from 'react-router-dom';
 import './PolicyPage.css';
 
 const policies = {
-  'privacy-policy': {
-    title: 'Privacy Policy',
+  'exchange-policy': {
+    title: 'Exchange Policy',
     lastUpdated: 'December 2024',
     content: [
       {
-        heading: 'Information We Collect',
-        text: `We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support. This information may include your name, email address, postal address, phone number, and payment information.`
+        heading: 'Exchange Window',
+        text: `At Khaddar, we accept exchanges on eligible products within 48 hours of delivery.`
       },
       {
-        heading: 'How We Use Your Information',
-        text: `We use the information we collect to process transactions, send you order confirmations and updates, respond to your comments and questions, send you marketing communications (with your consent), and improve our services.`
+        heading: 'Eligibility Conditions',
+        text: `Items must be unused, unwashed, unaltered, and returned with all original tags and packaging.`
       },
       {
-        heading: 'Information Sharing',
-        text: `We do not sell, trade, or otherwise transfer your personal information to outside parties except to trusted third parties who assist us in operating our website, conducting our business, or servicing you, so long as those parties agree to keep this information confidential.`
+        heading: 'Accepted Reasons for Exchange',
+        text: `Exchanges are accepted only for size issues, manufacturing defects, or if you wish to exchange for another product.`
       },
       {
-        heading: 'Data Security',
-        text: `We implement a variety of security measures to maintain the safety of your personal information. Your personal information is contained behind secured networks and is only accessible by a limited number of persons who have special access rights to such systems.`
+        heading: 'Price Difference',
+        text: `If you choose to exchange for a different product, any price difference must be paid if the new item is priced higher. Exchanges for products of lower value will not be accepted.`
       },
       {
-        heading: 'Cookies',
-        text: `We use cookies to understand and save your preferences for future visits and compile aggregate data about site traffic and site interaction so that we can offer better site experiences and tools in the future.`
+        heading: 'Handcrafted Variations',
+        text: `As our pieces are handcrafted, slight variations in colour, weave, or print are natural and not considered defects.`
       },
       {
-        heading: 'Your Rights',
-        text: `You have the right to access, correct, or delete your personal information. You may also opt out of receiving marketing communications from us at any time by clicking the unsubscribe link in our emails or contacting us directly.`
-      },
-      {
-        heading: 'Contact Us',
-        text: `If you have any questions about this Privacy Policy, please contact us at privacy@khaddar.com.`
+        heading: 'Processing',
+        text: `Once the returned item passes quality check, the exchange will be processed.`
       }
     ]
   },
@@ -42,28 +38,20 @@ const policies = {
     lastUpdated: 'December 2024',
     content: [
       {
-        heading: 'Eligibility for Refunds',
-        text: `We want you to be completely satisfied with your purchase. If you are not satisfied, you may request a refund within 7 days of receiving your order. Items must be unused, unworn, and in their original packaging with all tags attached.`
+        heading: 'Limited Quantity Collections',
+        text: `Khaddar currently does not offer refunds, as our collections are produced in limited quantities using artisanal techniques.`
       },
       {
-        heading: 'Non-Refundable Items',
-        text: `The following items are not eligible for refunds: customized or personalized items, items marked as final sale, intimate apparel, and items that have been worn, washed, or altered.`
+        heading: 'Exceptions',
+        text: `Refunds are only applicable if the product delivered is damaged or incorrect.`
       },
       {
-        heading: 'Refund Process',
-        text: `To initiate a refund, please contact our customer service team at returns@khaddar.com with your order number and reason for the return. Once approved, you will receive instructions for returning the item.`
+        heading: 'Reporting Issues',
+        text: `Such concerns must be reported within 48 hours of delivery along with clear unboxing images/videos.`
       },
       {
-        heading: 'Refund Timeline',
-        text: `Once we receive and inspect your return, we will process your refund within 5-7 business days. The refund will be credited to your original payment method. Please note that it may take an additional 3-5 business days for the refund to appear in your account.`
-      },
-      {
-        heading: 'Return Shipping',
-        text: `For eligible returns, return shipping costs are the responsibility of the customer unless the item was defective or incorrect. We recommend using a trackable shipping method.`
-      },
-      {
-        heading: 'Defective or Damaged Items',
-        text: `If you receive a defective or damaged item, please contact us within 48 hours of delivery with photos of the damage. We will arrange for a replacement or full refund including shipping costs.`
+        heading: 'Refund Processing',
+        text: `Approved refunds will be processed to the original payment method within 7–10 working days.`
       }
     ]
   },
@@ -72,28 +60,90 @@ const policies = {
     lastUpdated: 'December 2024',
     content: [
       {
-        heading: 'Order Cancellation',
-        text: `You may cancel your order within 24 hours of placing it, provided the order has not yet been shipped. To cancel, please contact us immediately at orders@khaddar.com with your order number.`
+        heading: 'Cancellation Window',
+        text: `Orders can be cancelled within 24 hours of placing the order, provided the item has not been shipped.`
       },
       {
-        heading: 'Cancellation After 24 Hours',
-        text: `If more than 24 hours have passed since your order was placed, or if the order has already been dispatched, cancellation may not be possible. In such cases, you may refuse delivery or return the item as per our Refund Policy.`
+        heading: 'Post-Dispatch Policy',
+        text: `Once dispatched, cancellations cannot be accepted.`
       },
       {
-        heading: 'Refund for Cancelled Orders',
-        text: `If your cancellation request is approved, a full refund will be processed to your original payment method within 5-7 business days.`
+        heading: 'Refund for Cancellations',
+        text: `Prepaid cancellation refunds will be processed to the original payment method within 5–7 working days.`
+      }
+    ]
+  },
+  'privacy-policy': {
+    title: 'Privacy Policy',
+    lastUpdated: 'December 2024',
+    content: [
+      {
+        heading: 'Our Commitment',
+        text: `At Khaddar, your privacy is our priority.`
       },
       {
-        heading: 'Partial Cancellation',
-        text: `If you wish to cancel only some items from your order, please contact us as soon as possible. Partial cancellations are subject to the same 24-hour window and shipping status conditions.`
+        heading: 'Information We Collect',
+        text: `We collect personal information (name, contact, address, payment details) solely for order processing, delivery, and customer support.`
       },
       {
-        heading: 'Customized Orders',
-        text: `Please note that customized or personalized orders cannot be cancelled once production has begun. These orders are final and non-refundable.`
+        heading: 'Data Protection',
+        text: `We do not sell or rent your data to any third party. Information is shared only with trusted service providers involved in completing your order.`
       },
       {
-        heading: 'Contact for Cancellation',
-        text: `For all cancellation requests, please email orders@khaddar.com or call our customer service line. Include your order number and the items you wish to cancel.`
+        heading: 'Payment Security',
+        text: `All payments are processed through secure and encrypted gateways to protect your data.`
+      },
+      {
+        heading: 'Terms Agreement',
+        text: `By using our website, you agree to the terms outlined in this policy.`
+      }
+    ]
+  },
+  'copyright-policy': {
+    title: 'Copyright Policy',
+    lastUpdated: 'December 2024',
+    content: [
+      {
+        heading: 'Protected Content',
+        text: `All creative content under Khaddar—including product designs, patterns, embroidery work, fabric combinations, photographs, videos, written descriptions, brand logo, graphics, and website content—is protected under applicable copyright and intellectual property laws.`
+      },
+      {
+        heading: 'Unauthorized Use',
+        text: `No individual, brand, or entity may copy, reproduce, modify, distribute, or use any of Khaddar's content, designs, or visual materials without prior written permission from the brand.`
+      },
+      {
+        heading: 'Legal Consequences',
+        text: `Any unauthorized use of our creative assets, in full or in part, will be considered a violation of intellectual property rights and may lead to legal action.`
+      },
+      {
+        heading: 'Permission Requests',
+        text: `For media usage, collaborative projects, or permissions, please contact the Khaddar team directly.`
+      }
+    ]
+  },
+  'resale-policy': {
+    title: 'Resale & Commercial Use Policy',
+    lastUpdated: 'December 2024',
+    content: [
+      {
+        heading: 'Personal Use Only',
+        text: `Products purchased from Khaddar are intended strictly for personal use.`
+      },
+      {
+        heading: 'Resale Restrictions',
+        text: `Customers are not permitted to resell Khaddar products in boutiques, retail stores, online marketplaces, pop-up shops, or through third-party vendors without an official written agreement or legal contract with the brand.`
+      },
+      {
+        heading: 'Prohibited Activities',
+        text: `Unauthorized resale, commercial distribution, repackaging, bulk purchasing for resale, or use of Khaddar products for profit is strictly prohibited.`
+      },
+      {
+        heading: 'Legal Consequences',
+        text: `Any individual or business found engaging in such activities may face legal consequences in accordance with commercial and intellectual property laws.`
+      },
+      {
+        heading: 'Partnership Inquiries',
+        text: `For wholesale partnerships, retail collaborations, or resale permissions, please reach out to the Khaddar team for an official agreement.`
       }
     ]
   },
@@ -152,6 +202,11 @@ const PolicyPage = () => {
 
   return (
     <div className="policy-page">
+      {/* Logo Watermark */}
+      <div className="policy-watermark">
+        <img src="/logo_file_page-0001.png" alt="" className="watermark-logo" />
+      </div>
+
       <div className="policy-container">
         <div className="policy-header">
           <h1 className="policy-title">{policy.title}</h1>
@@ -167,12 +222,31 @@ const PolicyPage = () => {
           ))}
         </div>
 
-        <div className="policy-footer">
+        <div className="policy-footer-note">
           <p>If you have any questions about this policy, please <Link to="/contact">contact us</Link>.</p>
         </div>
 
         <div className="policy-navigation">
-          <Link to="/" className="back-link">← Back to Home</Link>
+          <Link to="/" className="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to Home
+          </Link>
+        </div>
+
+        {/* Quick Links to Other Policies */}
+        <div className="policy-quick-links">
+          <h3>Other Policies</h3>
+          <div className="quick-links-grid">
+            {Object.entries(policies).map(([key, value]) => (
+              key !== policyType && (
+                <Link key={key} to={`/${key}`} className="quick-link-item">
+                  {value.title}
+                </Link>
+              )
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -180,4 +254,3 @@ const PolicyPage = () => {
 };
 
 export default PolicyPage;
-
