@@ -23,7 +23,7 @@ const Contact = () => {
               <h2 className="info-heading">GET IN TOUCH</h2>
               <div className="heading-underline"></div>
               <p className="info-text">
-                Whether you're interested in our collections, want to collaborate, or have questions about sustainability practices, we are here to assist you.
+                If you're interested in our collections, want to collaborate, or have questions about sustainability practices, we are here to assist you.
               </p>
             </div>
 
