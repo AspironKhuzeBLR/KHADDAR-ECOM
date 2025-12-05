@@ -2,6 +2,25 @@
   min-height: 100vh;
   padding: 120px 20px 60px;
   background-color: #faf8f5;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Logo Watermark */
+.policy-watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.04;
+}
+
+.watermark-logo {
+  width: 600px;
+  height: auto;
+  max-width: 80vw;
 }
 
 .policy-container {
@@ -10,20 +29,23 @@
   background-color: #ffffff;
   padding: 50px;
   border: 1px solid #e8e4de;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .policy-header {
   text-align: center;
   margin-bottom: 40px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #e8e4de;
+  border-bottom: 2px solid #8C6C5F;
 }
 
 .policy-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 2.5rem;
-  font-weight: 400;
-  color: #1a1a1a;
+  font-weight: 500;
+  color: #6F3132;
   margin-bottom: 10px;
   letter-spacing: 0.02em;
 }
@@ -31,8 +53,9 @@
 .policy-updated {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
-  color: #666;
+  color: #8C6C5F;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .policy-content {
@@ -41,57 +64,84 @@
 
 .policy-section {
   margin-bottom: 35px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #f0ede8;
 }
 
 .policy-section:last-child {
   margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .policy-section-heading {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: #1a1a1a;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   letter-spacing: 0.01em;
+  position: relative;
+  padding-left: 15px;
+}
+
+.policy-section-heading::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 100%;
+  background-color: #8C6C5F;
+  border-radius: 2px;
 }
 
 .policy-section-text {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.95rem;
-  line-height: 1.8;
+  line-height: 1.9;
   color: #444;
 }
 
-.policy-footer {
+/* Footer Note */
+.policy-footer-note {
   padding: 25px;
   background-color: #faf8f5;
   text-align: center;
   margin-bottom: 30px;
+  border-radius: 4px;
 }
 
-.policy-footer p {
+.policy-footer-note p {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   color: #666;
+  margin: 0;
 }
 
-.policy-footer a {
-  color: #8b6914;
+.policy-footer-note a {
+  color: #6F3132;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-.policy-footer a:hover {
+.policy-footer-note a:hover {
+  color: #8C6C5F;
   text-decoration: underline;
 }
 
+/* Navigation */
 .policy-navigation {
   text-align: center;
+  margin-bottom: 40px;
 }
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
@@ -99,7 +149,7 @@
   text-decoration: none;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 12px 25px;
+  padding: 14px 28px;
   border: 1px solid #1a1a1a;
   transition: all 0.3s ease;
 }
@@ -107,6 +157,55 @@
 .back-link:hover {
   background-color: #1a1a1a;
   color: #ffffff;
+}
+
+.back-link svg {
+  transition: transform 0.3s ease;
+}
+
+.back-link:hover svg {
+  transform: translateX(-5px);
+}
+
+/* Quick Links to Other Policies */
+.policy-quick-links {
+  padding-top: 30px;
+  border-top: 1px solid #e8e4de;
+}
+
+.policy-quick-links h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.quick-link-item {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  text-decoration: none;
+  padding: 12px 16px;
+  background-color: #faf8f5;
+  border: 1px solid transparent;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.quick-link-item:hover {
+  color: #6F3132;
+  border-color: #8C6C5F;
+  background-color: #fff;
 }
 
 /* Responsive Styles */
@@ -124,11 +223,19 @@
   }
 
   .policy-section-heading {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .policy-section-text {
     font-size: 0.9rem;
+  }
+
+  .watermark-logo {
+    width: 400px;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -145,5 +252,17 @@
     margin-bottom: 30px;
     padding-bottom: 20px;
   }
-}
 
+  .watermark-logo {
+    width: 300px;
+  }
+
+  .quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .back-link {
+    padding: 12px 20px;
+    font-size: 0.8rem;
+  }
+}
