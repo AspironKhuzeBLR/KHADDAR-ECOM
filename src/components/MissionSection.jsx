@@ -2,7 +2,7 @@ import React from 'react';
 import './HomeLuxury.css';
 
 // 1. Background Image
-import bgImg from '../images/Summer Salt KHADDAR3495.png'; 
+import bgImg from '../images/Summer Salt KHADDAR8863.png'; 
 // 2. Foreground Image
 import topImg from '../images/Summer Salt KHADDAR8836.png'; 
 

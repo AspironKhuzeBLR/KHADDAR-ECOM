@@ -4,7 +4,7 @@ import './HomeLuxury.css';
 // 1. Background Image (Abstract/Texture)
 import bgImg from '../images/Summer Salt KHADDAR8836.png'; 
 // 2. Foreground Image (The Focus)
-import topImg from '../images/Summer Salt KHADDAR4678.png'; 
+import topImg from '../images/Summer Salt KHADDAR2431.png'; 
 
 const VisionSection = () => {
   return (
