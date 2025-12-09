@@ -1,4 +1,4 @@
-/* src/components/HomeLuxury.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap');
 
 :root {
@@ -154,7 +154,7 @@
 
 /* --- TYPOGRAPHY --- */
 .luxury-head {
-  font-family: var(--font-serif);
+  font-family: 'Montserrat', sans-serif;
   font-size: 3.5rem;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -162,7 +162,7 @@
 }
 
 .luxury-sub {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -173,7 +173,7 @@
 }
 
 .luxury-text {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.9;
   color: #555;
@@ -183,7 +183,7 @@
 .luxury-btn {
   border-bottom: 1px solid var(--text-dark);
   padding-bottom: 5px;
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   letter-spacing: 1px;
   width: max-content;
@@ -260,7 +260,7 @@
 }
 
 .featured-title {
-  font-family: 'Cormorant Garamond', serif;
+      font-family: 'Montserrat', sans-serif;
   font-size: 4rem;
   margin-bottom: 1rem;
   line-height: 1;
@@ -356,7 +356,7 @@
 
 /* --- TYPOGRAPHY --- */
 .luxury-sub {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 0.8rem;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -367,7 +367,7 @@
 }
 
 .luxury-head {
-  font-family: var(--font-serif);
+     font-family: 'Montserrat', sans-serif;
   font-size: 3.2rem;
   line-height: 1.1;
   color: var(--text-dark);
@@ -375,7 +375,7 @@
 }
 
 .luxury-text {
-  font-family: var(--font-sans);
+     font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
   line-height: 1.8;
   color: #444;
@@ -383,7 +383,7 @@
 }
 
 .luxury-link {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -500,7 +500,7 @@
 
 /* --- TYPOGRAPHY --- */
 .luxury-sub {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 0.9rem;
   letter-spacing: 5px;
   text-transform: uppercase;
@@ -511,7 +511,7 @@
 }
 
 .luxury-head {
-  font-family: var(--font-serif);
+      font-family: 'Montserrat', sans-serif;
   font-size: 4.5rem; /* Larger for impact */
   line-height: 1;
   margin-bottom: 2rem;
@@ -521,7 +521,7 @@
 }
 
 .luxury-text {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 1.1rem;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
@@ -535,7 +535,7 @@
 }
 
 .luxury-link {
-  font-family: var(--font-sans);
+      font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 3px;
@@ -610,6 +610,7 @@
 }
 
 /* 3. The "Top" Image (Floating Photo Card) */
+/* --- UPDATED: STRAIGHT PORTRAIT STYLE (No Slant) --- */
 .photo-card-wrapper {
   flex: 1;
   position: relative;
@@ -618,16 +619,18 @@
   border: 1px solid rgba(255, 255, 255, 0.3); 
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(5px);
-  /* Rotate it slightly for that "Magazine" look */
-  transform: rotate(-3deg); 
+  
+  /* CHANGED: ROTATION REMOVED (0deg) FOR STRAIGHT PORTRAIT LOOK */
+  transform: rotate(0deg); 
+  
   transition: transform 0.5s ease;
   animation: floatCard 6s ease-in-out infinite;
   max-width: 450px;
 }
 
-/* Make it straighten up when you hover */
+/* Make it scale slightly when you hover (No rotation needed as it's already straight) */
 .photo-card-wrapper:hover {
-  transform: rotate(0deg) scale(1.02);
+  transform: scale(1.02);
 }
 
 .photo-card-img {
@@ -644,10 +647,10 @@
   color: #fff;
 }
 
-/* Floating Animation */
+/* --- UPDATED ANIMATION: STRAIGHT FLOATING --- */
 @keyframes floatCard {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-15px) rotate(-3deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(0deg); }
 }
 
 /* Responsive Mobile */
@@ -681,13 +684,13 @@
   text-align: right; /* Align text to right for luxury feel */
 }
 
-/* Specific fix for the floating card in reverse mode */
+/* --- UPDATED: REVERSE CARD ALSO STRAIGHT --- */
 .collage-container.reverse .photo-card-wrapper {
-  transform: rotate(3deg); /* Tilt it the other way */
+  transform: rotate(0deg); 
 }
 
 .collage-container.reverse .photo-card-wrapper:hover {
-  transform: rotate(0deg) scale(1.02);
+  transform: scale(1.02);
 }
 
 /* Mobile Fix for Reverse */
@@ -721,22 +724,22 @@
   }
 }
 
-/* Photo card enhanced animations */
+/* --- UPDATED: SLIDE IN WITHOUT ROTATION --- */
 .photo-card-wrapper {
   opacity: 0;
-  transform: translateX(-50px) rotate(-3deg);
+  transform: translateX(-50px) rotate(0deg);
   animation: cardSlideIn 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
   animation-delay: 0.3s;
 }
 
 .collage-container.reverse .photo-card-wrapper {
-  transform: translateX(50px) rotate(3deg);
+  transform: translateX(50px) rotate(0deg);
 }
 
 @keyframes cardSlideIn {
   to {
     opacity: 1;
-    transform: translateX(0) rotate(-3deg);
+    transform: translateX(0) rotate(0deg);
   }
 }
 
@@ -747,7 +750,7 @@
 @keyframes cardSlideInReverse {
   to {
     opacity: 1;
-    transform: translateX(0) rotate(3deg);
+    transform: translateX(0) rotate(0deg);
   }
 }
 
@@ -972,10 +975,11 @@
   }
   
   .photo-card-wrapper {
-    transform: rotate(-3deg) !important;
+    /* CHANGED: NO ROTATION ON REDUCED MOTION EITHER */
+    transform: rotate(0deg) !important;
   }
   
   .collage-container.reverse .photo-card-wrapper {
-    transform: rotate(3deg) !important;
+    transform: rotate(0deg) !important;
   }
 }
