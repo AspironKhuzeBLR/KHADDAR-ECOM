@@ -20,6 +20,7 @@ import ProductDetail from './pages/ProductDetail';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import OrderDetails from './pages/OrderDetails';
 import PolicyPage from './pages/PolicyPage';
 import AdminDashboard from './admin/AdminDashboard';
 import ProtectedAdminRoute from './admin/ProtectedAdminRoute';
@@ -31,11 +32,11 @@ import ShopCollections from './pages/ShopCollections';
 function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
-  
+
   return (
     <div className="App">
       <ScrollToTop />
-      <Header />
+      {!isAdminRoute && <Header />}
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -53,6 +54,7 @@ function AppContent() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
           <Route path="/exchange-policy" element={<PolicyPage />} />
           <Route path="/refund-policy" element={<PolicyPage />} />
           <Route path="/cancellation-policy" element={<PolicyPage />} />
@@ -62,7 +64,7 @@ function AppContent() {
           <Route path="/resale-policy" element={<PolicyPage />} />
           <Route path="/shop-collections" element={<ShopCollections />} />
 
-          
+
           <Route
             path="/admin/dashboard"
             element={

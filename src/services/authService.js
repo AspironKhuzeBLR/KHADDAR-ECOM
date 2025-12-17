@@ -28,12 +28,12 @@ const withTimeout = (promise, timeout = REQUEST_TIMEOUT) => {
 
 const buildUrl = (path) => {
   const baseUrl = API_CONFIG.API_BASE_URL;
-  
+
   // Handle empty base URL (development with proxy)
   if (!baseUrl) {
     return path.startsWith('/') ? path : `/${path}`;
   }
-  
+
   // Handle full URL
   const base = baseUrl.replace(/\/$/, '');
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -219,11 +219,15 @@ export const clearStoredAuth = () => {
   window.sessionStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   window.sessionStorage.removeItem(EMAIL_STORAGE_KEY);
   window.sessionStorage.removeItem(USER_STORAGE_KEY);
+  window.sessionStorage.removeItem('adminToken');
+  window.sessionStorage.removeItem('adminUser');
   // Also clear localStorage as a safety measure (in case old data exists)
   window.localStorage.removeItem(TOKEN_STORAGE_KEY);
   window.localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY);
   window.localStorage.removeItem(EMAIL_STORAGE_KEY);
   window.localStorage.removeItem(USER_STORAGE_KEY);
+  window.localStorage.removeItem('adminToken');
+  window.localStorage.removeItem('adminUser');
 };
 
 export const RESEND_COOLDOWN_SECONDS = 30;

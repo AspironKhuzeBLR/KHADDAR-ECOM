@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { getUserProfile, getUserOrders } from '../services/authService';
+import { getUserProfile } from '../services/authService';
+import { getMyOrders } from '../services/orderService';
 
 const Profile = () => {
   const { isAuthenticated, user, token, isBootstrapped, logout } = useAuth();
@@ -20,14 +21,14 @@ const Profile = () => {
       navigate('/login');
       return;
     }
-    
+
     // Fetch profile data
     const fetchProfile = async () => {
       if (!token) {
         setLoading(false);
         return;
       }
-      
+
       try {
         const profile = await getUserProfile(token);
         setProfileData(profile?.user || profile?.data || profile || user);
@@ -43,33 +44,33 @@ const Profile = () => {
         setLoading(false);
       }
     };
-    
+
     // Fetch orders
     const fetchOrders = async () => {
-      if (!token) {
+      // Wait for user profile data to be available or user object from auth
+      const currentUser = profileData || user;
+
+      if (!currentUser?.email) {
         setOrdersLoading(false);
         return;
       }
-      
+
       try {
-        const ordersData = await getUserOrders(token);
+        const response = await getMyOrders(currentUser.email);
         // Handle different response formats
-        const ordersList = ordersData?.orders || ordersData?.data || ordersData || [];
+        const ordersList = response?.orders || response?.data || response || [];
         setOrders(Array.isArray(ordersList) ? ordersList : []);
       } catch (err) {
-        // Orders endpoint doesn't exist yet (404) - show empty orders
-        // Only log if it's not a 404
-        if (!err.message?.includes('Route not found') && !err.message?.includes('404')) {
-          console.warn('Could not fetch orders:', err);
-        }
+        console.warn('Could not fetch orders:', err);
         setOrders([]);
       } finally {
         setOrdersLoading(false);
       }
     };
-    
-    fetchProfile();
-    fetchOrders();
+
+    // Chain the calls or handle dependencies
+    fetchProfile().then(() => fetchOrders());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isBootstrapped, navigate, token, user]);
 
   if (!isBootstrapped || loading) {
@@ -115,12 +116,12 @@ const Profile = () => {
       <div className="container">
         <div className="auth-container" style={{ maxWidth: '900px' }}>
           <h1 className="auth-title">My Profile</h1>
-          
-          
+
+
           <div className="profile-info">
-            <h2 style={{ 
-              fontFamily: 'Inter, sans-serif', 
-              fontSize: '1.25rem', 
+            <h2 style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '1.25rem',
               fontWeight: 400,
               marginBottom: '20px',
               textTransform: 'uppercase',
@@ -128,17 +129,17 @@ const Profile = () => {
             }}>
               Personal Details
             </h2>
-            
+
             <div className="form-group">
               <label className="form-label">Name</label>
               <div className="profile-value">{displayData?.name || 'Not set'}</div>
             </div>
-            
+
             <div className="form-group">
               <label className="form-label">Email</label>
               <div className="profile-value">{displayData?.email || 'Not set'}</div>
             </div>
-            
+
             {displayData?.address && (
               <div className="form-group">
                 <label className="form-label">Address</label>
@@ -146,11 +147,11 @@ const Profile = () => {
               </div>
             )}
           </div>
-          
+
           <div style={{ marginTop: '40px', marginBottom: '30px' }}>
-            <h2 style={{ 
-              fontFamily: 'Inter, sans-serif', 
-              fontSize: '1.25rem', 
+            <h2 style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '1.25rem',
               fontWeight: 400,
               marginBottom: '20px',
               textTransform: 'uppercase',
@@ -158,18 +159,18 @@ const Profile = () => {
             }}>
               Orders Placed
             </h2>
-            
+
             {ordersLoading ? (
               <p style={{ color: '#6b6b6b', fontFamily: 'Inter, sans-serif' }}>Loading orders...</p>
             ) : orders.length === 0 ? (
-              <div style={{ 
-                padding: '40px 20px', 
+              <div style={{
+                padding: '40px 20px',
                 textAlign: 'center',
                 backgroundColor: '#f5f5f5',
                 border: '1px solid #e0e0e0'
               }}>
-                <p style={{ 
-                  color: '#6b6b6b', 
+                <p style={{
+                  color: '#6b6b6b',
                   fontFamily: 'Inter, sans-serif',
                   marginBottom: '10px'
                 }}>
@@ -195,8 +196,8 @@ const Profile = () => {
                       backgroundColor: '#fff'
                     }}
                   >
-                    <div style={{ 
-                      display: 'flex', 
+                    <div style={{
+                      display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'flex-start',
                       marginBottom: '15px',
@@ -204,24 +205,24 @@ const Profile = () => {
                       gap: '10px'
                     }}>
                       <div>
-                        <h3 style={{ 
-                          fontFamily: 'Inter, sans-serif', 
-                          fontSize: '1rem', 
+                        <h3 style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '1rem',
                           fontWeight: 400,
                           marginBottom: '5px'
                         }}>
                           Order #{order.id || order.orderId || 'N/A'}
                         </h3>
-                        <p style={{ 
-                          fontSize: '0.875rem', 
+                        <p style={{
+                          fontSize: '0.875rem',
                           color: '#6b6b6b',
                           marginBottom: '5px'
                         }}>
                           Placed on: {formatDate(order.createdAt || order.date || order.orderDate)}
                         </p>
                         {order.status && (
-                          <p style={{ 
-                            fontSize: '0.875rem', 
+                          <p style={{
+                            fontSize: '0.875rem',
                             color: '#6b6b6b'
                           }}>
                             Status: <span style={{ textTransform: 'capitalize' }}>{order.status}</span>
@@ -229,24 +230,24 @@ const Profile = () => {
                         )}
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <p style={{ 
-                          fontFamily: 'Inter, sans-serif', 
-                          fontSize: '1rem', 
+                        <p style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '1rem',
                           fontWeight: 400
                         }}>
                           {formatPrice(order.total || order.totalAmount || order.amount)}
                         </p>
                       </div>
                     </div>
-                    
+
                     {order.items && Array.isArray(order.items) && order.items.length > 0 && (
-                      <div style={{ 
+                      <div style={{
                         marginTop: '15px',
                         paddingTop: '15px',
                         borderTop: '1px solid #f0f0f0'
                       }}>
-                        <p style={{ 
-                          fontSize: '0.875rem', 
+                        <p style={{
+                          fontSize: '0.875rem',
                           color: '#6b6b6b',
                           marginBottom: '10px'
                         }}>
@@ -254,8 +255,8 @@ const Profile = () => {
                         </p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {order.items.map((item, idx) => (
-                            <div key={idx} style={{ 
-                              display: 'flex', 
+                            <div key={idx} style={{
+                              display: 'flex',
                               justifyContent: 'space-between',
                               fontSize: '0.875rem'
                             }}>
@@ -271,7 +272,7 @@ const Profile = () => {
               </div>
             )}
           </div>
-          
+
           <div className="form-actions">
             <button
               type="button"

@@ -5,8 +5,10 @@ const ProtectedAdminRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const adminToken = sessionStorage.getItem('adminToken');
-    setIsAuthenticated(!!adminToken);
+    const token = sessionStorage.getItem('adminToken') ||
+      sessionStorage.getItem('khaddar.auth.token') ||
+      sessionStorage.getItem('token');
+    setIsAuthenticated(!!token);
   }, []);
 
   if (isAuthenticated === null) {
