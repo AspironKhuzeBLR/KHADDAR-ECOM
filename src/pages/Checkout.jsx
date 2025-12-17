@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { createOrder, submitPayment } from '../services/orderService';
 import './Checkout.css';
 
 const Checkout = () => {
   const { isAuthenticated, isBootstrapped, user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
-  
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-  
+
+  // Order state
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
+
   // Payment method - only online payment options (NO COD as per client request)
   const [paymentMethod, setPaymentMethod] = useState('upi');
-  
+
   // Shipping details
   const [shippingDetails, setShippingDetails] = useState({
     fullName: '',
@@ -30,27 +36,27 @@ const Checkout = () => {
 
   // Payment methods available (NO COD)
   const paymentMethods = [
-    { 
-      id: 'upi', 
-      name: 'UPI Payment', 
+    {
+      id: 'upi',
+      name: 'UPI Payment',
       description: 'Pay using UPI (GPay, PhonePe, Paytm)',
       icon: '📱'
     },
-    { 
-      id: 'card', 
-      name: 'Credit/Debit Card', 
+    {
+      id: 'card',
+      name: 'Credit/Debit Card',
       description: 'Pay securely with Visa, Mastercard, RuPay',
       icon: '💳'
     },
-    { 
-      id: 'netbanking', 
-      name: 'Net Banking', 
+    {
+      id: 'netbanking',
+      name: 'Net Banking',
       description: 'Pay through your bank account',
       icon: '🏦'
     },
-    { 
-      id: 'wallet', 
-      name: 'Digital Wallet', 
+    {
+      id: 'wallet',
+      name: 'Digital Wallet',
       description: 'Pay using Paytm, Amazon Pay, etc.',
       icon: '👛'
     }
@@ -62,13 +68,13 @@ const Checkout = () => {
       navigate('/login');
       return;
     }
-    
+
     // Get cart items from sessionStorage or API
     const savedCart = sessionStorage.getItem('cartItems');
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
     }
-    
+
     // Pre-fill user details if available
     if (user) {
       setShippingDetails(prev => ({
@@ -78,7 +84,7 @@ const Checkout = () => {
         phone: user.phone || ''
       }));
     }
-    
+
     setLoading(false);
   }, [isAuthenticated, isBootstrapped, navigate, user]);
 
@@ -92,21 +98,15 @@ const Checkout = () => {
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = typeof item.price === 'string' 
-        ? parseFloat(item.price.replace(/[₹,]/g, '')) 
+      const price = typeof item.price === 'string'
+        ? parseFloat(item.price.replace(/[₹,]/g, ''))
         : item.price;
       return total + (price * (item.quantity || 1));
     }, 0);
   };
 
-  const calculateShipping = () => {
-    const subtotal = calculateSubtotal();
-    // Free shipping above ₹5000
-    return subtotal >= 5000 ? 0 : 199;
-  };
-
   const calculateTotal = () => {
-    return calculateSubtotal() + calculateShipping();
+    return calculateSubtotal();
   };
 
   const validateForm = () => {
@@ -117,70 +117,113 @@ const Checkout = () => {
         return false;
       }
     }
-    
+
     // Validate phone
     if (!/^[6-9]\d{9}$/.test(shippingDetails.phone)) {
       toast.error('Please enter a valid 10-digit phone number');
       return false;
     }
-    
+
     // Validate email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingDetails.email)) {
       toast.error('Please enter a valid email address');
       return false;
     }
-    
+
     // Validate pincode
     if (!/^\d{6}$/.test(shippingDetails.pincode)) {
       toast.error('Please enter a valid 6-digit pincode');
       return false;
     }
-    
+
     return true;
   };
 
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
-    
+
     if (cartItems.length === 0) {
       toast.error('Your cart is empty');
       return;
     }
-    
+
     setProcessing(true);
-    
+
     try {
-      // Simulate payment processing
-      // In production, this would integrate with a payment gateway like Razorpay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      // Map cart items to API format
+      const orderItems = cartItems.map(item => ({
+        product_id: item.id || item.productId,
+        name: item.name,
+        size: item.size || 'M', // Fallback
+        color: item.color || 'Default', // Fallback
+        quantity: item.quantity || 1,
+        price: typeof item.price === 'string'
+          ? parseFloat(item.price.replace(/[₹,]/g, ''))
+          : item.price
+      }));
+
       const orderData = {
-        items: cartItems,
-        shipping: shippingDetails,
-        paymentMethod: paymentMethod,
+        customer_name: shippingDetails.fullName,
+        customer_email: shippingDetails.email,
+        customer_phone: shippingDetails.phone,
+        shipping_address: shippingDetails.address,
+        city: shippingDetails.city,
+        state: shippingDetails.state,
+        pincode: shippingDetails.pincode,
+        items: orderItems,
         subtotal: calculateSubtotal(),
-        shippingCost: calculateShipping(),
-        total: calculateTotal(),
-        orderDate: new Date().toISOString()
+        total_amount: calculateTotal(),
+        payment_method: paymentMethod
       };
-      
-      console.log('Order placed:', orderData);
-      
-      // Clear cart
-      sessionStorage.removeItem('cartItems');
-      
-      // Show success and redirect
-      toast.success('Order placed successfully! Redirecting to payment...');
-      
-      // In production, redirect to payment gateway
-      setTimeout(() => {
-        toast.success('Payment successful! Thank you for your order.');
-        navigate('/profile');
-      }, 2000);
-      
+
+      console.log('Sending Order Data (JSON):', JSON.stringify(orderData, null, 2));
+      const response = await createOrder(orderData);
+
+      if (response && (response.success || response.data)) {
+        const orderInfo = response.data || response;
+        setCurrentOrder(orderInfo);
+
+        // Clear cart
+        sessionStorage.removeItem('cartItems');
+
+        // Show payment modal
+        setShowPaymentModal(true);
+        toast.success('Order created! Please complete payment.');
+      }
     } catch (error) {
       console.error('Order error:', error);
-      toast.error('Failed to place order. Please try again.');
+      toast.error(error.message || 'Failed to place order. Please try again.');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    if (!transactionId.trim()) {
+      toast.error('Please enter transaction ID');
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      const orderId = currentOrder.order_id || currentOrder.id;
+      if (!orderId) throw new Error('Invalid order ID');
+
+      const response = await submitPayment(orderId, {
+        payment_method: paymentMethod,
+        transaction_id: transactionId
+      });
+
+      if (response.success || response.status === 'success') {
+        toast.success('Payment successful! Order confirmed.');
+        navigate('/profile'); // Redirect to profile to see order
+      } else {
+        throw new Error('Payment verification failed');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast.error(error.message || 'Payment failed. Please try again.');
     } finally {
       setProcessing(false);
     }
@@ -222,7 +265,7 @@ const Checkout = () => {
           <h1>Checkout</h1>
           <Link to="/cart" className="back-to-cart">← Back to Cart</Link>
         </div>
-        
+
         <div className="checkout-content">
           {/* Left Column - Forms */}
           <div className="checkout-forms">
@@ -242,7 +285,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="email">Email Address *</label>
                   <input
@@ -255,7 +298,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="phone">Phone Number *</label>
                   <input
@@ -269,7 +312,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group full-width">
                   <label htmlFor="address">Street Address *</label>
                   <textarea
@@ -282,7 +325,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="city">City *</label>
                   <input
@@ -295,7 +338,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="state">State *</label>
                   <input
@@ -308,7 +351,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="pincode">Pincode *</label>
                   <input
@@ -322,7 +365,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="country">Country</label>
                   <input
@@ -342,7 +385,7 @@ const Checkout = () => {
               <p className="payment-note">
                 Select your preferred payment method. All transactions are secure and encrypted.
               </p>
-              
+
               <div className="payment-methods">
                 {paymentMethods.map((method) => (
                   <label
@@ -365,7 +408,7 @@ const Checkout = () => {
                   </label>
                 ))}
               </div>
-              
+
               <div className="secure-payment-badge">
                 <span className="lock-icon">🔒</span>
                 <span>Your payment information is secure and encrypted</span>
@@ -377,7 +420,7 @@ const Checkout = () => {
           <div className="checkout-summary">
             <div className="summary-card">
               <h2>Order Summary</h2>
-              
+
               <div className="summary-items">
                 {cartItems.map((item, index) => (
                   <div key={index} className="summary-item">
@@ -394,42 +437,31 @@ const Checkout = () => {
                       {item.size && <span className="item-variant">Size: {item.size}</span>}
                     </div>
                     <span className="item-price">
-                      ₹{(typeof item.price === 'string' 
-                        ? parseFloat(item.price.replace(/[₹,]/g, '')) 
+                      ₹{(typeof item.price === 'string'
+                        ? parseFloat(item.price.replace(/[₹,]/g, ''))
                         : item.price
                       ).toLocaleString('en-IN')}
                     </span>
                   </div>
                 ))}
               </div>
-              
+
               <div className="summary-divider"></div>
-              
+
               <div className="summary-row">
                 <span>Subtotal</span>
                 <span>₹{calculateSubtotal().toLocaleString('en-IN')}</span>
               </div>
-              
-              <div className="summary-row">
-                <span>Shipping</span>
-                <span className={calculateShipping() === 0 ? 'free-shipping' : ''}>
-                  {calculateShipping() === 0 ? 'FREE' : `₹${calculateShipping()}`}
-                </span>
-              </div>
-              
-              {calculateShipping() > 0 && (
-                <div className="shipping-note">
-                  Free shipping on orders above ₹5,000
-                </div>
-              )}
-              
+
+
+
               <div className="summary-divider"></div>
-              
+
               <div className="summary-row total">
                 <span>Total</span>
                 <span>₹{calculateTotal().toLocaleString('en-IN')}</span>
               </div>
-              
+
               <button
                 className="place-order-btn"
                 onClick={handlePlaceOrder}
@@ -444,7 +476,7 @@ const Checkout = () => {
                   `Pay ₹${calculateTotal().toLocaleString('en-IN')}`
                 )}
               </button>
-              
+
               <p className="terms-note">
                 By placing this order, you agree to our{' '}
                 <Link to="/terms">Terms & Conditions</Link> and{' '}
@@ -454,6 +486,57 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="modal-overlay">
+          <div className="payment-modal">
+            <div className="modal-header">
+              <h2>Complete Payment</h2>
+              {/* Prevent closing for now, or allow verify later */}
+            </div>
+            <div className="modal-body">
+              <p className="order-summary-text">
+                Order ID: <strong>{currentOrder?.order_number || currentOrder?.order_id}</strong><br />
+                Amount: <strong>₹{calculateTotal().toLocaleString('en-IN')}</strong>
+              </p>
+
+              <div className="payment-instructions">
+                <p>Please make a payment of <strong>₹{calculateTotal().toLocaleString('en-IN')}</strong> using {paymentMethod.toUpperCase()}.</p>
+                {paymentMethod === 'upi' && (
+                  <div className="qr-placeholder">
+                    <p>Scan QR Code (Simulated)</p>
+                    <div style={{ width: '150px', height: '150px', background: '#f0f0f0', margin: '10px auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      QR CODE
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={handlePaymentSubmit}>
+                <div className="form-group">
+                  <label htmlFor="transactionId">Enter Transaction ID / Reference No.</label>
+                  <input
+                    type="text"
+                    id="transactionId"
+                    value={transactionId}
+                    onChange={(e) => setTransactionId(e.target.value)}
+                    placeholder="e.g. UPI1234567890"
+                    required
+                    className="transaction-input"
+                  />
+                  <small>Use "TXN12345679900049988" for testing</small>
+                </div>
+
+                <div className="modal-actions">
+                  <button type="submit" className="confirm-payment-btn" disabled={processing}>
+                    {processing ? 'Verifying...' : 'Confirm Payment'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
