@@ -70,6 +70,7 @@ const Profile = () => {
 
     // Chain the calls or handle dependencies
     fetchProfile().then(() => fetchOrders());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isBootstrapped, navigate, token, user]);
 
   if (!isBootstrapped || loading) {

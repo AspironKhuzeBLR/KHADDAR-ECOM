@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   getDashboardSummary,
@@ -9,15 +8,14 @@ import {
   getRevenueAnalytics
 } from '../services/adminService';
 import { addProduct, updateProduct, deleteProduct, fetchAdminProducts } from '../services/productService';
-import { Chart as ChartJS } from 'chart.js/auto';
+import 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import './AdminDashboard.css';
 
 const logo = '/logo_file_page-0001.png';
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +32,6 @@ const AdminDashboard = () => {
   // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
-  const [totalProducts, setTotalProducts] = useState(0);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null); // For Details View
   const [currentProduct, setCurrentProduct] = useState({
@@ -50,18 +47,6 @@ const AdminDashboard = () => {
   // Orders State
   const [allOrders, setAllOrders] = useState([]);
   const [ordersPage, setOrdersPage] = useState(1);
-  const [totalOrders, setTotalOrders] = useState(0);
-
-  // Initial Data Fetch
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  // Fetch Data on Tab Change
-  useEffect(() => {
-    if (activeTab === 'products') loadProducts();
-    if (activeTab === 'orders') loadAllOrders();
-  }, [activeTab, productsPage, ordersPage]);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -89,25 +74,34 @@ const AdminDashboard = () => {
     }
   };
 
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async () => {
     try {
       const data = await fetchAdminProducts({ page: productsPage, limit: 10 });
       setProducts(data.products || []);
-      setTotalProducts(data.pagination?.total || 0);
     } catch (error) {
       console.error('Load products failed', error);
     }
-  };
+  }, [productsPage]);
 
-  const loadAllOrders = async () => {
+  const loadAllOrders = useCallback(async () => {
     try {
       const data = await getAllOrders(ordersPage, 10);
       setAllOrders(data.orders || data.data || []);
-      setTotalOrders(data.pagination?.total || 0);
     } catch (error) {
       console.error('Load orders failed', error);
     }
-  };
+  }, [ordersPage]);
+
+  // Initial Data Fetch
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  // Fetch Data on Tab Change
+  useEffect(() => {
+    if (activeTab === 'products') loadProducts();
+    if (activeTab === 'orders') loadAllOrders();
+  }, [activeTab, loadProducts, loadAllOrders]);
 
   // --- Product Handlers ---
   const handleProductSubmit = async (e) => {
