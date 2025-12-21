@@ -40,6 +40,50 @@
   transform: translateY(-3px);
 }
 
+/* Decorative icon */
+.mission-icon {
+  font-size: 1.8rem;
+  color: #8C6C5F;
+  margin-bottom: 15px;
+  animation: missionIconSpin 8s linear infinite;
+}
+
+@keyframes missionIconSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Bottom accent dots */
+.mission-accent {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.mission-accent span {
+  width: 6px;
+  height: 6px;
+  background-color: #8C6C5F;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: accentPulse 2s ease-in-out infinite;
+}
+
+.mission-accent span:nth-child(2) {
+  animation-delay: 0.3s;
+  opacity: 0.8;
+}
+
+.mission-accent span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes accentPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
 .mission-label {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 0.8rem;

@@ -10,6 +10,7 @@ const BrandStory = () => {
       <div className="brand-container">
         {/* Content Side (Left) */}
         <div className="brand-content">
+          <div className="content-accent">◇</div>
           <span className="brand-label">The Origin</span>
           <h2 className="brand-heading">The Soul of Clothing</h2>
           <p className="brand-text">
@@ -21,10 +22,13 @@ const BrandStory = () => {
             Every piece is a journey from the skilled hands of local weavers to your wardrobe, 
             crafted with respect for the land and its people.
           </p>
+          <div className="brand-signature">— Kutch Heritage</div>
         </div>
         
         {/* Image Side (Right) */}
         <div className="brand-image-wrapper">
+          <div className="image-corner image-corner-tl"></div>
+          <div className="image-corner image-corner-br"></div>
           <img 
             src={brandImg} 
             alt="The Soul of Khaddar" 

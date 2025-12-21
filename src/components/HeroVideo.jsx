@@ -26,9 +26,14 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
         {/* 3. GOLDEN LIGHT SWEEP (Simulates moving sunlight) */}
         <div className="effect-layer light-sweep"></div>
 
-        {/* 4. CONTENT OVERLAY */}
+        {/* 4. Heritage decorative corners */}
+        <div className="heritage-corner heritage-corner-tl"></div>
+        <div className="heritage-corner heritage-corner-br"></div>
+
+        {/* 5. CONTENT OVERLAY */}
         <div className="video-overlay">
           <div className="hero-content">
+            <span className="hero-tagline">Heritage • Sustainability • Craftsmanship</span>
             <h1 className="hero-title">{title}</h1>
             <p className="hero-subtitle">{subtitle}</p>
             <Link

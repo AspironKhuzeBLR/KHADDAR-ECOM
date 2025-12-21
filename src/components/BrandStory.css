@@ -88,6 +88,34 @@
   margin-bottom: 0;
 }
 
+/* Content accent */
+.brand-content .content-accent {
+  font-size: 1.5rem;
+  color: #B38A6A;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 1;
+  animation: accentFloat 4s ease-in-out infinite;
+}
+
+@keyframes accentFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(180deg); }
+}
+
+/* Brand signature */
+.brand-signature {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #B38A6A;
+  margin-top: 30px;
+  letter-spacing: 0.1em;
+  position: relative;
+  z-index: 1;
+  opacity: 0.8;
+}
+
 /* Image Side (Right) */
 .brand-image-wrapper {
   flex: 1;
@@ -106,6 +134,35 @@
 .brand-image-wrapper:hover .brand-image {
   transform: scale(1.05);
   filter: brightness(1.05);
+}
+
+/* Image decorative corners */
+.brand-image-wrapper .image-corner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.brand-image-wrapper:hover .image-corner {
+  opacity: 0.7;
+}
+
+.brand-image-wrapper .image-corner-tl {
+  top: 20px;
+  left: 20px;
+  border-top: 2px solid #F7F7F0;
+  border-left: 2px solid #F7F7F0;
+}
+
+.brand-image-wrapper .image-corner-br {
+  bottom: 20px;
+  right: 20px;
+  border-bottom: 2px solid #F7F7F0;
+  border-right: 2px solid #F7F7F0;
 }
 
 @media (max-width: 992px) {
