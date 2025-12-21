@@ -10,15 +10,19 @@ const AboutSection = () => {
       <div className="about-container">
         {/* Image Side */}
         <div className="about-image-wrapper">
+          <div className="image-frame"></div>
           <img 
             src={aboutImg} 
             alt="Khaddar Craftsmanship" 
             className="about-image"
           />
+          <div className="image-corner image-corner-tl"></div>
+          <div className="image-corner image-corner-br"></div>
         </div>
         
         {/* Content Side */}
         <div className="about-content">
+          <div className="content-accent">◆</div>
           <span className="about-label">Who We Are</span>
           <h2 className="about-heading">Honoring Roots, Inspiring Future</h2>
           <p className="about-text">

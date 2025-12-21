@@ -16,6 +16,7 @@ const FeaturedCollection = () => {
           />
           <div className="featured-overlay">
             <div className="featured-content">
+              <span className="featured-tagline">— Discover The Collection —</span>
               <h2 className="featured-title">KOLOURS OF KUTCH</h2>
               <p className="featured-description">
                 Introducing exceptional fabric creations which showcase the rich 
@@ -23,7 +24,8 @@ const FeaturedCollection = () => {
                 vibrant culture and woven mastery.
               </p>
               <Link to="/collections" className="featured-link">
-                Explore Collection
+                <span>Explore Collection</span>
+                <span className="link-arrow">→</span>
               </Link>
             </div>
           </div>

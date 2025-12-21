@@ -113,8 +113,13 @@
   animation-delay: 0.45s;
 }
 
+.product-card {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
 .product-card:hover {
-  opacity: 0.9;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(111, 49, 50, 0.08);
 }
 
 .product-image-wrapper {
@@ -126,6 +131,24 @@
   /* Updated Placeholder/Wrapper BG: Pale Beige/Cream (#F7F7F0) - was #f8f8f8 */
   background-color: #F7F7F0;
   cursor: pointer;
+}
+
+/* Subtle overlay on hover */
+.product-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(111, 49, 50, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.product-card:hover .product-image-wrapper::after {
+  opacity: 1;
 }
 
 .product-image {

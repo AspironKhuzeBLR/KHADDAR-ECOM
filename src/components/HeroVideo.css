@@ -79,12 +79,61 @@
   100% { transform: translate(-10%, 10%); }
 }
 
-/* --- 4. OVERLAY & CONTENT --- */
+/* --- 4. HERITAGE DECORATIVE CORNERS --- */
+.heritage-corner {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  z-index: 4;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.heritage-corner-tl {
+  top: 40px;
+  left: 40px;
+  border-top: 2px solid #B38A6A;
+  border-left: 2px solid #B38A6A;
+  animation: cornerFadeIn 1.5s ease forwards 0.5s;
+  opacity: 0;
+}
+
+.heritage-corner-br {
+  bottom: 40px;
+  right: 40px;
+  border-bottom: 2px solid #B38A6A;
+  border-right: 2px solid #B38A6A;
+  animation: cornerFadeIn 1.5s ease forwards 0.7s;
+  opacity: 0;
+}
+
+.heritage-corner::before {
+  content: '◆';
+  position: absolute;
+  font-size: 10px;
+  color: #B38A6A;
+}
+
+.heritage-corner-tl::before {
+  top: -6px;
+  left: -6px;
+}
+
+.heritage-corner-br::before {
+  bottom: -6px;
+  right: -6px;
+}
+
+@keyframes cornerFadeIn {
+  to { opacity: 0.5; }
+}
+
+/* --- 5. OVERLAY & CONTENT --- */
 .video-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   /* Darken slightly for readability */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.5));
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.5));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,6 +144,24 @@
   text-align: center;
   color: #ffffff;
   z-index: 4;
+}
+
+/* Heritage tagline */
+.hero-tagline {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #B38A6A;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 0.2s;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
 /* Staggered entrance animations for hero content */

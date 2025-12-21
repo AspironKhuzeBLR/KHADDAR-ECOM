@@ -7,6 +7,15 @@ import BrandStory from '../components/BrandStory';
 import FeaturedCollection from '../components/FeaturedCollection';
 import './Home.css';
 
+// Elegant heritage divider component
+const HeritageDivider = ({ variant = 'default' }) => (
+  <div className={`heritage-divider heritage-divider-${variant}`}>
+    <span className="divider-line"></span>
+    <span className="divider-motif">◆</span>
+    <span className="divider-line"></span>
+  </div>
+);
+
 const Home = () => {
   useEffect(() => {
     const sectionObserver = new IntersectionObserver(
@@ -33,24 +42,36 @@ const Home = () => {
       {/* Hero with Image */}
       <HeroVideo />
       
-      {/* Plain sections with patterns - no spacing */}
+      {/* Heritage quote banner */}
+      <div className="heritage-quote-banner">
+        <p>"Where tradition meets tomorrow, every thread tells a story"</p>
+      </div>
+      
+      {/* Vision Section */}
       <div className="scroll-section">
         <VisionSection />
       </div>
       
+      <HeritageDivider variant="light" />
+      
+      {/* About Section - with image */}
       <div className="scroll-section">
         <AboutSection />
       </div>
       
+      {/* Mission Section */}
       <div className="scroll-section">
         <MissionSection />
       </div>
       
+      <HeritageDivider variant="light" />
+      
+      {/* Brand Story - with image */}
       <div className="scroll-section">
         <BrandStory />
       </div>
       
-      {/* Featured with Image */}
+      {/* Featured Collection */}
       <div className="scroll-section">
         <FeaturedCollection />
       </div>

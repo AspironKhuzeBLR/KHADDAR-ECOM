@@ -32,6 +32,50 @@
   filter: brightness(1.05);
 }
 
+/* Image decorative corners */
+.image-corner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.about-image-wrapper:hover .image-corner {
+  opacity: 0.7;
+}
+
+.image-corner-tl {
+  top: 20px;
+  left: 20px;
+  border-top: 2px solid #F7F7F0;
+  border-left: 2px solid #F7F7F0;
+}
+
+.image-corner-br {
+  bottom: 20px;
+  right: 20px;
+  border-bottom: 2px solid #F7F7F0;
+  border-right: 2px solid #F7F7F0;
+}
+
+/* Content accent */
+.content-accent {
+  font-size: 1.5rem;
+  color: #B38A6A;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 1;
+  animation: accentRotate 6s ease-in-out infinite;
+}
+
+@keyframes accentRotate {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+}
+
 /* Content Side - Rich earthy tone */
 .about-content {
   flex: 1;

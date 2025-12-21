@@ -4,6 +4,110 @@
   width: 100%;
 }
 
+/* Heritage Quote Banner */
+.heritage-quote-banner {
+  background-color: #6F3132;
+  padding: 25px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.heritage-quote-banner::before,
+.heritage-quote-banner::after {
+  content: '◆';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #B38A6A;
+  opacity: 0.6;
+}
+
+.heritage-quote-banner::before {
+  left: 30px;
+}
+
+.heritage-quote-banner::after {
+  right: 30px;
+}
+
+.heritage-quote-banner p {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #F7F7F0;
+  letter-spacing: 0.05em;
+  margin: 0;
+  animation: quoteReveal 1s ease forwards;
+}
+
+@keyframes quoteReveal {
+  from {
+    opacity: 0;
+    letter-spacing: 0.15em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Heritage Divider */
+.heritage-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: #F7F7F0;
+}
+
+.heritage-divider-light {
+  background-color: #F7F7F0;
+}
+
+.divider-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #B38A6A, transparent);
+}
+
+.divider-motif {
+  font-size: 14px;
+  color: #B38A6A;
+  margin: 0 20px;
+  animation: motifPulse 3s ease-in-out infinite;
+}
+
+@keyframes motifPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@media (max-width: 768px) {
+  .heritage-quote-banner {
+    padding: 20px 20px;
+  }
+  
+  .heritage-quote-banner p {
+    font-size: 0.95rem;
+  }
+  
+  .heritage-quote-banner::before,
+  .heritage-quote-banner::after {
+    display: none;
+  }
+  
+  .heritage-divider {
+    padding: 30px 20px;
+  }
+  
+  .divider-line {
+    width: 50px;
+  }
+}
+
 /* Elegant scroll reveal animations */
 .scroll-section {
   opacity: 0;
