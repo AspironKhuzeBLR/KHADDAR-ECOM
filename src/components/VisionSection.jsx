@@ -9,16 +9,17 @@ const VisionSection = () => {
         <span className="vision-label">Our Vision</span>
         <h2 className="vision-heading">Reshaping the Fashion Landscape</h2>
         <p className="vision-text">
-          To reshape the fashion landscape by showcasing India's unparalleled 
-          craftsmanship. We are empowering artisans and creating a lasting impact 
+          To reshape the fashion landscape by showcasing India's unparalleled
+          craftsmanship. We are empowering artisans and creating a lasting impact
           that prioritizes people, planet, and artistry over trends.
         </p>
-        <div className="vision-accent">
+        {/* <div className="vision-accent">
           <span></span><span></span><span></span>
-        </div>
+        </div> */}
       </div>
     </section>
   );
 };
+
 
 export default VisionSection;

@@ -1,7 +1,7 @@
 /* MISSION SECTION - Plain background with subtle floral pattern */
 
 .mission-section {
-  padding: 100px 20px;
+  padding: 100px 20px 60px;
   background-color: #F7F7F0;
   position: relative;
 }
@@ -116,9 +116,42 @@
   color: #6F3132;
 }
 
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .mission-container {
+    max-width: 900px;
+  }
+  
+  .mission-heading {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .mission-section {
+    padding: 80px 40px 50px;
+  }
+  
+  .mission-container {
+    max-width: 750px;
+  }
+  
+  .mission-heading {
+    font-size: 2.2rem;
+  }
+  
+  .mission-text {
+    font-size: 1.05rem;
+  }
+}
+
 @media (max-width: 768px) {
   .mission-section {
-    padding: 70px 20px;
+    padding: 70px 20px 45px;
+  }
+  
+  .mission-container {
+    max-width: 100%;
   }
   
   .mission-heading {
@@ -127,5 +160,31 @@
   
   .mission-text {
     font-size: 1rem;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 576px) {
+  .mission-section {
+    padding: 60px 15px 40px;
+  }
+  
+  .mission-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+  
+  .mission-heading {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+  }
+  
+  .mission-text {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+  
+  .content-accent {
+    font-size: 1.2rem;
   }
 }

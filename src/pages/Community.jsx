@@ -35,6 +35,9 @@ const Community = () => {
       <section className="community-intro">
         <div className="container">
           <div className="intro-content">
+            <div className="section-icon">✧</div>
+            <span className="section-label">Join Our Community</span>
+            <h2 className="section-heading">Building Together</h2>
             <p className="body-text intro-text">
               At Khaddar, we believe that fashion is a collaborative art. Our community initiatives and collaborations bring together artisans, designers, and cultural enthusiasts to create something meaningful. Through these partnerships, we aim to preserve traditional crafts, support local communities, and inspire new generations to appreciate the beauty of handcrafted excellence.
             </p>

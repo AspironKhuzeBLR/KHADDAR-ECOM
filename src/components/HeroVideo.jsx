@@ -5,7 +5,7 @@ import './HeroVideo.css';
 // Your specific image
 import heroImg from '../images/Summer Salt KHADDAR1990.png'; 
 
-const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainability.</>, fullHeight, className = '' }) => {  
+const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainability</>, buttonText = 'EXPLORE COLLECTIONS', fullHeight, className = '' }) => {  
   
   return (
     <section className={`hero-video ${className}`}>
@@ -26,11 +26,7 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
         {/* 3. GOLDEN LIGHT SWEEP (Simulates moving sunlight) */}
         <div className="effect-layer light-sweep"></div>
 
-        {/* 4. Heritage decorative corners */}
-        <div className="heritage-corner heritage-corner-tl"></div>
-        <div className="heritage-corner heritage-corner-br"></div>
-
-        {/* 5. CONTENT OVERLAY */}
+        {/* 4. CONTENT OVERLAY */}
         <div className="video-overlay">
           <div className="hero-content">
             <span className="hero-tagline">Heritage • Sustainability • Craftsmanship</span>
@@ -40,7 +36,7 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
               to="/collections"
               className="hero-cta hero-cta-fullwidth"
             >
-              EXPLORE COLLECTIONS
+              {buttonText}
             </Link>
           </div>
         </div>

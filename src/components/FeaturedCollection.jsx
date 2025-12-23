@@ -16,8 +16,9 @@ const FeaturedCollection = () => {
           />
           <div className="featured-overlay">
             <div className="featured-content">
-              <span className="featured-tagline">— Discover The Collection —</span>
-              <h2 className="featured-title">KOLOURS OF KUTCH</h2>
+              <div className="featured-icon">✦</div>
+              <span className="featured-label">Discover The Collection</span>
+              <h2 className="featured-title">Kolours of Kutch</h2>
               <p className="featured-description">
                 Introducing exceptional fabric creations which showcase the rich 
                 heritage and artistic prowess of Kutch. Experience the blend of 

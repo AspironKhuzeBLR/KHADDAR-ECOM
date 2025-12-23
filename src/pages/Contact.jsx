@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Contact.css';
 import HeroVideo from '../components/HeroVideo';
 // Importing icons from react-icons library
 import { FaInstagram, FaFacebookF, FaYoutube, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
 const Contact = () => {
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Integrate with backend API
+    console.log('Email submitted:', email);
+    alert('Thank you for joining our community! We\'ll be in touch soon.');
+    setEmail('');
+  };
+
   return (
     <div className="contact-page page-with-transparent-header">
       <HeroVideo 
@@ -84,6 +94,28 @@ const Contact = () => {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* Newsletter Signup Section */}
+      <section className="newsletter-section">
+        <div className="newsletter-container">
+          <div className="newsletter-icon">✦</div>
+          <h2 className="newsletter-heading">Join our community</h2>
+          <p className="newsletter-text">
+            Be part of our mission to preserve traditional craftsmanship and support sustainable fashion.
+          </p>
+          <form className="newsletter-form" onSubmit={handleSubmit}>
+            <input 
+              type="email" 
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="newsletter-input"
+            />
+            <button type="submit" className="newsletter-button">JOIN</button>
+          </form>
         </div>
       </section>
 

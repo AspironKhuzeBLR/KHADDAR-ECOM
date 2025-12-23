@@ -119,29 +119,6 @@
   z-index: 0;
 }
 
-/* === CORNER MOTIF (For cards/containers) === */
-.corner-motif {
-  position: relative;
-}
-
-.corner-motif::before,
-.corner-motif::after {
-  content: '❋';
-  position: absolute;
-  font-size: 16px;
-  color: #A15F22;
-  opacity: 0.25;
-}
-
-.corner-motif::before {
-  top: 15px;
-  left: 15px;
-}
-
-.corner-motif::after {
-  bottom: 15px;
-  right: 15px;
-}
 
 /* === RESPONSIVE === */
 @media (max-width: 768px) {

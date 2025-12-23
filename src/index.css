@@ -52,3 +52,151 @@ img {
   display: block;
 }
 
+/* Global Responsive Utilities */
+
+/* Prevent horizontal scroll on all elements */
+* {
+  max-width: 100%;
+}
+
+/* Container responsive padding */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Responsive text scaling */
+html {
+  font-size: 16px;
+}
+
+@media (max-width: 1400px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 1140px;
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  html {
+    font-size: 14.5px;
+  }
+  
+  .container {
+    max-width: 960px;
+    padding: 0 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .container {
+    max-width: 720px;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 13.5px;
+  }
+  
+  .container {
+    max-width: 540px;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+  
+  .container {
+    padding: 0 12px;
+  }
+}
+
+/* Responsive video/iframe containers */
+.video-responsive {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-responsive iframe,
+.video-responsive video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive image containers */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Mobile-friendly touch targets */
+@media (max-width: 768px) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px; /* iOS/Android minimum touch target */
+  }
+}
+
+/* Improve readability on mobile */
+@media (max-width: 576px) {
+  body {
+    line-height: 1.7;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Prevent text overflow */
+h1, h2, h3, h4, h5, h6, p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Responsive utility classes */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .show-mobile {
+    display: none !important;
+  }
+}
+
+/* Smooth scrolling for all browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
