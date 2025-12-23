@@ -78,13 +78,46 @@
 .intro-text-wrapper {
   max-width: 900px;
   margin: 0 auto;
+  text-align: center;
+}
+
+/* Section decorative elements */
+.section-icon {
+  font-size: 2rem;
+  color: #B38A6A;
+  margin-bottom: 15px;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.section-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8C6C5F;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.section-heading {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: #6F3132;
+  margin-bottom: 30px;
+  line-height: 1.2;
 }
 
 .intro-paragraph {
   font-family: 'Lato', sans-serif;
   font-size: 1.25rem;
   line-height: 1.9;
-  /* Updated Body Text Color: Deep Coffee Brown (#6F3132) - was #2a2a2a */
   color: #6F3132;
   font-weight: 300;
   text-align: center;

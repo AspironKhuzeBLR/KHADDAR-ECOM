@@ -16,8 +16,6 @@ const AboutSection = () => {
             alt="Khaddar Craftsmanship" 
             className="about-image"
           />
-          <div className="image-corner image-corner-tl"></div>
-          <div className="image-corner image-corner-br"></div>
         </div>
         
         {/* Content Side */}

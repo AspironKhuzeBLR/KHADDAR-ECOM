@@ -27,8 +27,6 @@ const BrandStory = () => {
         
         {/* Image Side (Right) */}
         <div className="brand-image-wrapper">
-          <div className="image-corner image-corner-tl"></div>
-          <div className="image-corner image-corner-br"></div>
           <img 
             src={brandImg} 
             alt="The Soul of Khaddar" 

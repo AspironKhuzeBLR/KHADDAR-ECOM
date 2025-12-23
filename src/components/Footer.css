@@ -1,6 +1,6 @@
 .footer {
   /* BACKGROUND: Muted Clay/Taupe (#8C6C5F) */
-  background-color: #8C6C5F;
+  background-color: #6F3132;
   /* BORDER/DIVIDER: Dark Maroon/Reddish Brown (#6F3132) - Use for border-top if desired, but removed border for clean look */
   border-top: none; 
   padding: 60px 0 30px;
@@ -68,7 +68,7 @@
 .footer-logo-link {
   display: inline-block;
   margin-bottom: 20px;
-  height: 80px;
+  height: 110px;
   text-decoration: none;
   border: none;
 }
@@ -76,7 +76,7 @@
 .footer-logo {
   height: 100%;
   width: auto;
-  max-width: 280px;
+  max-width: 400px;
   object-fit: contain;
   /* Optional: Adjust logo color/filter if it's a monochrome image, otherwise leave it */
 }
@@ -134,13 +134,13 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: #A15F22;
+  background-color: #FFFFFF;
   transition: width 0.3s ease;
 }
 
 .footer-links li a:hover {
-  /* LINK HOVER: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  color: #A15F22;
+  /* LINK HOVER: White */
+  color: #FFFFFF;
   transform: translateX(5px);
 }
 
@@ -165,8 +165,8 @@
 }
 
 .social-link:hover {
-  /* SOCIAL LINK HOVER: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  color: #A15F22;
+  /* SOCIAL LINK HOVER: White */
+  color: #FFFFFF;
   transform: translateX(5px);
 }
 
@@ -212,8 +212,8 @@
 }
 
 .footer-legal a:hover {
-  /* LEGAL LINK HOVER: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
-  color: #A15F22;
+  /* LEGAL LINK HOVER: White */
+  color: #FFFFFF;
 }
 
 .footer-legal span {
@@ -268,7 +268,7 @@
   }
   
   .footer-logo {
-    height: 50px;
+    height: 70px;
   }
   
   .footer-bottom {
@@ -295,7 +295,7 @@
   }
   
   .footer-logo {
-    height: 45px;
+    height: 60px;
   }
   
   .footer-text {

@@ -52,6 +52,9 @@ const Sustainability = () => {
       <section className="sustainability-intro">
         <div className="container">
           <div className="intro-text-wrapper">
+            <div className="section-icon">☘</div>
+            <span className="section-label">Our Commitment</span>
+            <h2 className="section-heading">Crafting with Care</h2>
             <p className="body-text intro-paragraph">
               Through every choice, Khaddar is committed to crafting fashion that honors both tradition and the earth. Our commitment to sustainability runs deep, from the materials we choose to the communities we support.
             </p>

@@ -1,7 +1,7 @@
 /* VISION SECTION - Plain background with subtle pattern */
 
 .vision-section {
-  padding: 100px 20px;
+  padding: 100px 20px 60px;
   background-color: #F7F7F0;
   position: relative;
 }
@@ -116,9 +116,42 @@
   color: #6F3132;
 }
 
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .vision-container {
+    max-width: 900px;
+  }
+  
+  .vision-heading {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .vision-section {
+    padding: 80px 40px 50px;
+  }
+  
+  .vision-container {
+    max-width: 750px;
+  }
+  
+  .vision-heading {
+    font-size: 2.2rem;
+  }
+  
+  .vision-text {
+    font-size: 1.05rem;
+  }
+}
+
 @media (max-width: 768px) {
   .vision-section {
-    padding: 70px 20px;
+    padding: 70px 20px 45px;
+  }
+  
+  .vision-container {
+    max-width: 100%;
   }
   
   .vision-heading {
@@ -127,5 +160,31 @@
   
   .vision-text {
     font-size: 1rem;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 576px) {
+  .vision-section {
+    padding: 60px 15px 40px;
+  }
+  
+  .vision-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+  
+  .vision-heading {
+    font-size: 1.75rem;
+    margin-bottom: 20px;
+  }
+  
+  .vision-text {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+  
+  .content-accent {
+    font-size: 1.2rem;
   }
 }

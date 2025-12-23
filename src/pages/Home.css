@@ -85,6 +85,33 @@
   50% { opacity: 1; transform: scale(1.1); }
 }
 
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .heritage-quote-banner p {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .heritage-quote-banner {
+    padding: 22px 30px;
+  }
+  
+  .heritage-quote-banner p {
+    font-size: 1rem;
+  }
+  
+  .heritage-quote-banner::before,
+  .heritage-quote-banner::after {
+    font-size: 10px;
+    left: 20px;
+  }
+  
+  .heritage-quote-banner::after {
+    right: 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .heritage-quote-banner {
     padding: 20px 20px;
@@ -92,6 +119,7 @@
   
   .heritage-quote-banner p {
     font-size: 0.95rem;
+    letter-spacing: 0.03em;
   }
   
   .heritage-quote-banner::before,
@@ -105,6 +133,53 @@
   
   .divider-line {
     width: 50px;
+  }
+  
+  .divider-motif {
+    font-size: 12px;
+    margin: 0 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .heritage-quote-banner {
+    padding: 18px 15px;
+  }
+  
+  .heritage-quote-banner p {
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+  }
+  
+  .heritage-divider {
+    padding: 25px 15px;
+  }
+  
+  .divider-line {
+    width: 40px;
+  }
+  
+  .divider-motif {
+    font-size: 10px;
+    margin: 0 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heritage-quote-banner {
+    padding: 15px 10px;
+  }
+  
+  .heritage-quote-banner p {
+    font-size: 0.8rem;
+  }
+  
+  .heritage-divider {
+    padding: 20px 10px;
+  }
+  
+  .divider-line {
+    width: 30px;
   }
 }
 

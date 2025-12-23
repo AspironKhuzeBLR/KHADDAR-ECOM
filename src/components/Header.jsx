@@ -200,12 +200,12 @@ const Header = () => {
                   className="nav-link-wrapper"
                   onMouseEnter={() => handleMenuHover('shop')}
                   onMouseLeave={(e) => {
-                    if (!e.currentTarget.contains(e.relatedTarget)) {
+                    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget)) {
                       handleMenuLeave();
                     }
                   }}
                 >
-                  <span className="nav-link">SHOP BY CATEGORY</span>
+                  <Link to="/shop/mens-wear" className="nav-link" onClick={closeMenu}>SHOP BY CATEGORY</Link>
                   {hoveredMenu === 'shop' && (
                     <div
                       className="dropdown-menu"

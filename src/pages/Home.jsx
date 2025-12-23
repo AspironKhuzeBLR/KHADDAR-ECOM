@@ -42,10 +42,7 @@ const Home = () => {
       {/* Hero with Image */}
       <HeroVideo />
       
-      {/* Heritage quote banner */}
-      <div className="heritage-quote-banner">
-        <p>"Where tradition meets tomorrow, every thread tells a story"</p>
-      </div>
+      
       
       {/* Vision Section */}
       <div className="scroll-section">
@@ -53,6 +50,8 @@ const Home = () => {
       </div>
       
       <HeritageDivider variant="light" />
+      
+      
       
       {/* About Section - with image */}
       <div className="scroll-section">
