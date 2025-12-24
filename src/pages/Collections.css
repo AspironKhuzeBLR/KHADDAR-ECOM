@@ -1,3 +1,4 @@
+/* --- PAGE LAYOUT --- */
 .collections-page {
   margin-top: 0;
   padding-top: 0;
@@ -6,7 +7,6 @@
   overflow-x: hidden;
 }
 
-/* Global Background Pattern */
 .collections-page::before {
   content: '';
   position: absolute;
@@ -18,7 +18,6 @@
   z-index: 0;
 }
 
-/* Hero Content */
 .collections-hero {
   padding: 80px 0 40px;
   text-align: center;
@@ -41,9 +40,9 @@
   font-size: 0.8rem;
 }
 
-/* --- THE MODIFIED CAROUSEL (FULL WIDTH & PROPER IMAGE DISPLAY) --- */
+/* --- CAROUSEL SECTION --- */
 .collections-carousel-section {
-  width: 100vw; /* Full Screen Width */
+  width: 100vw;
   position: relative;
   left: 50%;
   right: 50%;
@@ -84,7 +83,7 @@
   object-position: center 20%; 
 }
 
-/* Content Overlay on Images */
+/* --- OVERLAY CONTENT --- */
 .carousel-overlay-content {
   position: absolute;
   bottom: 0;
@@ -110,7 +109,7 @@
   opacity: 0.9;
 }
 
-/* Navigation Arrows */
+/* --- NAVIGATION ARROWS --- */
 .nav-arrow {
   position: absolute;
   top: 50%;
@@ -138,34 +137,51 @@
 .nav-arrow.prev { left: 30px; }
 .nav-arrow.next { right: 30px; }
 
-/* Dot Indicators */
+/* --- THE DOTS (FIXED FOR ROUNDNESS) --- */
 .carousel-dots-container {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;  /* Stops dots from stretching vertically */
+  justify-content: center !important;
   gap: 12px;
   z-index: 10;
+  width: auto;
 }
 
 .dot-indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid white;
-  background: transparent;
+  /* Forced square dimensions for perfect circles */
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  
+  border-radius: 50% !important; /* Rounding */
+  background: transparent !important;
+  border: 1.5px solid white !important;
+  
+  padding: 0 !important; /* Removes browser button padding */
+  margin: 0 !important;
   cursor: pointer;
-  padding: 0;
+  flex-shrink: 0 !important; /* Prevents squashing into ovals */
   transition: all 0.3s ease;
+  
+  /* Reset browser specific button behaviors */
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  outline: none !important;
+  line-height: 0 !important;
 }
 
 .dot-indicator.active {
-  background: white;
+  background: white !important;
   transform: scale(1.2);
 }
 
-/* Shop Button Section */
+/* --- SHOP BUTTON --- */
 .collections-shop-action {
   padding: 60px 0 100px;
   text-align: center;
@@ -185,21 +201,32 @@
   transition: 0.3s;
 }
 
-.collections-btn:hover {
-  background: #B38A6A;
-}
+.collections-btn:hover { background: #B38A6A; }
 
-/* Responsive Fixes */
+/* --- RESPONSIVE FIXES --- */
 @media (max-width: 1024px) {
-  .full-screen-wrapper { height: 50vh; }
+  .full-screen-wrapper { height: 60vh; }
   .collections-title { font-size: 3.5rem; }
 }
 
 @media (max-width: 768px) {
-  .full-screen-wrapper { height: 45vh; }
+  .full-screen-wrapper { height: 50vh; }
   .collections-title { font-size: 2.5rem; }
   .carousel-item-title { font-size: 1.8rem; }
+  
   .nav-arrow { width: 40px; height: 40px; }
   .nav-arrow.prev { left: 10px; }
   .nav-arrow.next { right: 10px; }
+  
+  .carousel-dots-container {
+    bottom: 20px;
+    gap: 10px;
+  }
+  
+  .dot-indicator {
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 10px !important;
+    min-height: 10px !important;
+  }
 }

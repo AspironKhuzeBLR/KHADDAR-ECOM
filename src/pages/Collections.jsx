@@ -107,7 +107,7 @@ const Collections = () => {
       <div className="collections-hero">
         <div className="hero-content-wrapper">
           <div className="collections-icon">✧</div>
-          <span className="collections-label">Summer Salt Collection</span>
+           <span className="collections-label">Our Collection</span>
           <h1 className="collections-title">Kolours of Kutch</h1>
           <div className="section-divider">
             <span className="divider-line-full"></span>
