@@ -542,3 +542,14 @@
 .cancel-btn:hover {
   border-color: #666;
 }
+
+/* Status select dropdown styling */
+.status-select {
+  padding: 4px 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  border: 1px solid #8C6C5F;
+  background: white;
+  color: #6F3132;
+  outline: none;
+}

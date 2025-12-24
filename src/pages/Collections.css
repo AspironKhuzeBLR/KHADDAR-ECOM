@@ -2,349 +2,146 @@
   margin-top: 0;
   padding-top: 0;
   position: relative;
-  background-color: #F7F7F0; /* Base color */
+  background-color: #F7F7F0;
+  overflow-x: hidden;
 }
 
-/* GLOBAL BACKGROUND PATTERN 
-   Applied to the whole page container for consistency.
-*/
+/* Global Background Pattern */
 .collections-page::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  
-  /* Micro-Diamond Pattern */
-  /* CHANGED: fill-opacity reduced to 0.1 in the SVG for a lighter weight */
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0L20 10L10 20L0 10z' fill='%238C6C5F' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-  
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0L20 10L10 20L0 10z' fill='%238C6C5F' fill-opacity='0.1'/%3E%3C/svg%3E");
   background-size: 20px 20px;
-  background-position: center top;
-  background-repeat: repeat;
-  
-  /* CHANGED: Opacity lowered to 0.2 (Very Light/Subtle) */
-  opacity: 0.2; 
-  
+  opacity: 0.2;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Ensure content sits above the background pattern */
-.collections-hero, 
-.collections-carousel, 
-.collections-shop-action {
-  position: relative;
-  z-index: 1;
-  background-color: transparent; /* Transparent so pattern shows through */
-}
-
-/* Hero section spacing */
+/* Hero Content */
 .collections-hero {
-  padding: 100px 0 80px;
-  overflow: hidden;
-}
-
-/* REMOVED specific hero pattern */
-.collections-hero::before {
-  display: none;
-}
-
-.hero-content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 40px;
+  padding: 80px 0 40px;
+  text-align: center;
   position: relative;
   z-index: 1;
-  text-align: center;
-}
-
-/* Decorative icon */
-.collections-icon {
-  font-size: 2rem;
-  color: #B38A6A;
-  margin-bottom: 15px;
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-/* Collection label */
-.collections-label {
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #8C6C5F;
-  display: block;
-  margin-bottom: 20px;
 }
 
 .collections-title {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 5rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  color: #6F3132;
   margin-bottom: 20px;
-  text-align: center;
-  color: #6F3132;
-  position: relative;
-  display: inline-block;
-  animation: titleFadeIn 1.2s ease forwards;
-  cursor: pointer;
 }
 
-/* Hover underline effect */
-.collections-title::before {
-  content: '';
-  position: absolute;
-  bottom: -10px;
+.collections-label {
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8C6C5F;
+  font-size: 0.8rem;
+}
+
+/* --- THE MODIFIED CAROUSEL (FULL WIDTH & PROPER IMAGE DISPLAY) --- */
+.collections-carousel-section {
+  width: 100vw; /* Full Screen Width */
+  position: relative;
   left: 50%;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #B38A6A, transparent);
-  transition: all 0.4s ease;
-  transform: translateX(-50%);
-}
-
-.collections-title:hover::before {
-  width: 80%;
-}
-
-@keyframes titleFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-    letter-spacing: 0.15em;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    letter-spacing: 0.05em;
-  }
-}
-
-/* Elegant entrance animations */
-.collections-hero .collections-title {
-  animation: fadeSlideDown 1s ease forwards;
-}
-
-.collections-hero .intro-text {
-  animation: fadeSlideUp 1s ease forwards;
-  animation-delay: 0.3s;
-  opacity: 0;
-}
-
-@keyframes fadeSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.collections-intro {
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.intro-text {
-  font-family: 'Lato', sans-serif;
-  font-size: 1.125rem;
-  line-height: 1.8;
-  color: #4C2E2E;
-  font-weight: 300;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.intro-text.intro-bold {
-  font-weight: 400;
-  font-size: 1.15rem;
-  text-align: center;
-}
-
-.intro-text.intro-bold strong {
-  font-weight: 600;
-  color: #6F3132;
-}
-
-/* Section divider (simple line) */
-.section-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 15px;
-  margin-bottom: 40px;
-  padding: 0;
-}
-
-.divider-line-full {
-  width: 200px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #B38A6A, transparent);
-  opacity: 0.6;
-}
-
-/* CAROUSEL SECTION */
-.collections-carousel {
-  padding: 80px 0 100px 0;
-  overflow: hidden;
-}
-
-/* REMOVED specific carousel pattern */
-.collections-carousel::before {
-  display: none;
-}
-
-.carousel-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.carousel-wrapper {
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.carousel-slide {
-  min-width: 100%;
-  position: relative;
-}
-
-.carousel-image-wrapper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 60%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   overflow: hidden;
   background: #000;
 }
 
-.carousel-image {
-  position: absolute;
-  top: 0;
-  left: 0;
+.full-screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 110vh; 
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-slide-item {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.image-container {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s ease;
+  position: relative;
 }
 
-.carousel-slide:hover .carousel-image {
-  transform: scale(1.05);
+.optimized-carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  object-position: center 20%; 
 }
 
-/* Carousel Overlay */
-.carousel-overlay {
+/* Content Overlay on Images */
+.carousel-overlay-content {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
-  padding: 60px 40px 40px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-}
-
-.carousel-slide:hover .carousel-overlay {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.carousel-content {
-  max-width: 600px;
-}
-
-.carousel-title {
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  padding: 80px 50px 50px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
   color: #F7F7F0;
-  margin-bottom: 12px;
-  text-transform: uppercase;
+  text-align: left;
 }
 
-.carousel-description {
+.carousel-item-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.carousel-item-desc {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: #E8E4D8;
-  letter-spacing: 0.02em;
+  max-width: 600px;
+  opacity: 0.9;
 }
 
 /* Navigation Arrows */
-.carousel-arrow {
+.nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
   border: none;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: white;
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.carousel-arrow:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #6F3132;
 }
 
-.carousel-arrow svg {
-  color: #462111;
-}
-
-.carousel-arrow-prev {
-  left: 20px;
-}
-
-.carousel-arrow-next {
-  right: 20px;
-}
+.nav-arrow.prev { left: 30px; }
+.nav-arrow.next { right: 30px; }
 
 /* Dot Indicators */
-.carousel-indicators {
+.carousel-dots-container {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -352,291 +149,57 @@
   z-index: 10;
 }
 
-.carousel-dot {
-  width: 12px;
-  height: 12px;
+.dot-indicator {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 2px solid #F7F7F0;
+  border: 1px solid white;
   background: transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
   padding: 0;
+  transition: all 0.3s ease;
 }
 
-.carousel-dot:hover {
-  background: rgba(247, 247, 240, 0.5);
+.dot-indicator.active {
+  background: white;
   transform: scale(1.2);
 }
 
-.carousel-dot.active {
-  background: #F7F7F0;
-  transform: scale(1.3);
-}
-
-/* Shop Action Section */
+/* Shop Button Section */
 .collections-shop-action {
-  padding: 60px 0 80px;
+  padding: 60px 0 100px;
   text-align: center;
-  background-color: transparent; 
-}
-
-.shop-action-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-}
-
-.shop-action-title {
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 400;
-  color: #6F3132;
-  letter-spacing: 0.05em;
-  margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .collections-btn {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 18px 55px;
-  text-decoration: none;
-  display: inline-block;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
-  
-  border: 2px solid #6F3132;
+  padding: 18px 50px;
   background: #6F3132;
-  color: #F7F7F0;
-}
-
-.collections-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.collections-btn:hover::before {
-  left: 100%;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: 0.3s;
 }
 
 .collections-btn:hover {
   background: #B38A6A;
-  border-color: #B38A6A;
-  color: #F7F7F0;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(111, 49, 50, 0.2);
 }
 
-/* Media Queries */
-@media (max-width: 1200px) {
-  .collections-hero {
-    padding: 80px 0 70px;
-  }
-  
-  .collections-title {
-    font-size: 4.5rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .collections-title {
-    font-size: 4rem;
-  }
-  
-  .collections-carousel {
-    padding: 60px 0 80px;
-  }
-}
-
+/* Responsive Fixes */
 @media (max-width: 1024px) {
-  .carousel-container {
-    padding: 0 15px;
-  }
-  
-  .carousel-image-wrapper {
-    padding-bottom: 70%;
-  }
-  
-  .carousel-title {
-    font-size: 1.75rem;
-  }
-  
-  .carousel-description {
-    font-size: 1rem;
-  }
-  
-  .carousel-overlay {
-    padding: 40px 30px 30px;
-  }
+  .full-screen-wrapper { height: 50vh; }
+  .collections-title { font-size: 3.5rem; }
 }
 
 @media (max-width: 768px) {
-  .collections-hero {
-    padding: 70px 0 60px;
-  }
-  
-  .hero-content-wrapper {
-    padding: 0 20px;
-  }
-  
-  .collections-icon {
-    font-size: 1.75rem;
-  }
-  
-  .collections-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-  }
-  
-  .collections-title {
-    font-size: 3rem;
-    margin-bottom: 40px;
-  }
-  
-  .intro-text {
-    font-size: 1rem;
-  }
-  
-  .section-divider {
-    margin-top: 12px;
-    margin-bottom: 35px;
-  }
-  
-  .divider-line-full {
-    width: 150px;
-  }
-  
-  .collections-carousel {
-    padding: 50px 0 70px;
-  }
-  
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .carousel-arrow-prev {
-    left: 15px;
-  }
-  
-  .carousel-arrow-next {
-    right: 15px;
-  }
-  
-  .carousel-title {
-    font-size: 1.5rem;
-  }
-  
-  .carousel-description {
-    font-size: 0.95rem;
-  }
-  
-  .carousel-overlay {
-    padding: 30px 25px 25px;
-  }
-  
-  .collections-shop-action {
-    padding: 60px 0;
-  }
-  
-  .shop-action-title {
-    font-size: 1.8rem;
-  }
-  
-  .collections-btn {
-    padding: 14px 40px;
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .collections-hero {
-    padding: 60px 0 50px;
-  }
-  
-  .collections-icon {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-  }
-  
-  .collections-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    margin-bottom: 15px;
-  }
-  
-  .collections-title {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-  }
-  
-  .intro-text {
-    font-size: 0.9375rem;
-  }
-  
-  .section-divider {
-    margin-top: 10px;
-    margin-bottom: 30px;
-  }
-  
-  .divider-line-full {
-    width: 120px;
-  }
-  
-  .collections-carousel {
-    padding: 40px 0 60px;
-  }
-  
-  .carousel-container {
-    padding: 0 10px;
-  }
-  
-  .carousel-image-wrapper {
-    padding-bottom: 100%;
-  }
-  
-  .carousel-arrow {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .carousel-arrow-prev {
-    left: 10px;
-  }
-  
-  .carousel-arrow-next {
-    right: 10px;
-  }
-  
-  .carousel-title {
-    font-size: 1.25rem;
-  }
-  
-  .carousel-description {
-    font-size: 0.875rem;
-  }
-  
-  .carousel-overlay {
-    padding: 25px 20px 20px;
-  }
-  
-  .carousel-dot {
-    width: 10px;
-    height: 10px;
-  }
-  
-  .carousel-indicators {
-    gap: 8px;
-  }
+  .full-screen-wrapper { height: 45vh; }
+  .collections-title { font-size: 2.5rem; }
+  .carousel-item-title { font-size: 1.8rem; }
+  .nav-arrow { width: 40px; height: 40px; }
+  .nav-arrow.prev { left: 10px; }
+  .nav-arrow.next { right: 10px; }
 }

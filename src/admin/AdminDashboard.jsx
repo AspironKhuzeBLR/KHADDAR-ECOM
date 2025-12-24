@@ -419,7 +419,7 @@ const AdminDashboard = () => {
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    <th>Update</th>
+                    {/* <th>Update</th> */} {/* Commented out Updated column header as requested */}
                   </tr>
                 </thead>
                 <tbody>
@@ -430,11 +430,19 @@ const AdminDashboard = () => {
                       <td>{new Date(order.created_at || order.orderDate).toLocaleDateString()}</td>
                       <td>{formatCurrency(order.total_amount || order.total)}</td>
                       <td>
-                        <span className={`status-badge ${order.order_status?.toLowerCase()}`}>
-                          {order.order_status}
-                        </span>
+                        {/* Status Toggle moved here */}
+                        <select
+                          value={order.order_status?.toLowerCase() || 'pending'}
+                          onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)}
+                          className="status-select"
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="paid">Paid</option>
+                          <option value="complete">Completed</option>
+                        </select>
                       </td>
-                      <td>
+                      {/* Commented out Updated column data cell */}
+                      {/* <td>
                         <select
                           value={order.order_status || 'pending'}
                           onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)}
@@ -446,7 +454,7 @@ const AdminDashboard = () => {
                           <option value="delivered">Delivered</option>
                           <option value="cancelled">Cancelled</option>
                         </select>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
