@@ -34,6 +34,7 @@ const AdminDashboard = () => {
   // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
+  const PRODUCTS_PER_PAGE = 10; // Constant to ensure serial numbers are calculated correctly
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null); // For Details View
   const [currentProduct, setCurrentProduct] = useState({
@@ -78,7 +79,7 @@ const AdminDashboard = () => {
 
   const loadProducts = useCallback(async () => {
     try {
-      const data = await fetchAdminProducts({ page: productsPage, limit: 10 });
+      const data = await fetchAdminProducts({ page: productsPage, limit: PRODUCTS_PER_PAGE });
       setProducts(data.products || []);
     } catch (error) {
       console.error('Load products failed', error);
@@ -339,7 +340,7 @@ const AdminDashboard = () => {
               <table className="admin-table hover-rows">
                 <thead>
                   <tr>
-                    <th>Uniq ID</th>
+                    <th>S.No</th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Category</th>
@@ -349,13 +350,14 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map(product => (
+                  {products.map((product, index) => (
                     <tr
                       key={product.id}
                       onClick={() => handleProductRowClick(product)}
                       style={{ cursor: 'pointer' }}
                     >
-                      <td>#{product.id}</td>
+                      {/* Serial Number Calculation: (Current Page - 1) * ItemsPerPage + (index + 1) */}
+                      <td>{(productsPage - 1) * PRODUCTS_PER_PAGE + (index + 1)}</td>
                       <td>
                         <img
                           src={product.image}
@@ -419,7 +421,6 @@ const AdminDashboard = () => {
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    {/* <th>Update</th> */} {/* Commented out Updated column header as requested */}
                   </tr>
                 </thead>
                 <tbody>
@@ -430,7 +431,6 @@ const AdminDashboard = () => {
                       <td>{new Date(order.created_at || order.orderDate).toLocaleDateString()}</td>
                       <td>{formatCurrency(order.total_amount || order.total)}</td>
                       <td>
-                        {/* Status Toggle moved here */}
                         <select
                           value={order.order_status?.toLowerCase() || 'pending'}
                           onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)}
@@ -441,20 +441,6 @@ const AdminDashboard = () => {
                           <option value="complete">Completed</option>
                         </select>
                       </td>
-                      {/* Commented out Updated column data cell */}
-                      {/* <td>
-                        <select
-                          value={order.order_status || 'pending'}
-                          onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)}
-                          className="status-select"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="processing">Processing</option>
-                          <option value="shipped">Shipped</option>
-                          <option value="delivered">Delivered</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-                      </td> */}
                     </tr>
                   ))}
                 </tbody>
