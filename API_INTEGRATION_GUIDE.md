@@ -84,7 +84,7 @@ GET /api/products/womens-wear-2
       "https://example.com/image1.jpg",
       "https://example.com/image2.jpg"
     ],
-    "sizes": ["XS", "S", "M", "L"],
+    "sizes": [ "S", "M", "L"],
     "colors": ["White", "Blue"],
     "description": "Product description...",
     "details": "Product details...",

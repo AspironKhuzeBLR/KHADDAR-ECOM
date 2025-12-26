@@ -507,7 +507,7 @@ const transformProductDetail = (product) => {
     salePrice: product.sale_price ? formatPrice(product.sale_price) : null,
     images: images,
     image: images[0] || '',
-    sizes: product.sizes || ['XS', 'S', 'M', 'L', 'XL'],
+    sizes: product.sizes || ['S', 'M', 'L', 'XL'],
     colors: product.colors || ['Default'],
     description: product.description || '',
     details: product.details || 'Handwoven Fabric and Organic Cotton',
@@ -518,7 +518,6 @@ const transformProductDetail = (product) => {
     isFeatured: product.is_featured || false,
     sizeChart: product.size_chart || {
       top: [
-        { size: 'XS', chest: '38', waist: '36', hips: '38', length: '26' },
         { size: 'S', chest: '40', waist: '38', hips: '40', length: '27' },
         { size: 'M', chest: '42', waist: '40', hips: '42', length: '28' },
         { size: 'L', chest: '44', waist: '42', hips: '44', length: '29' },

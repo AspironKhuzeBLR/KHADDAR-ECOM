@@ -406,7 +406,7 @@ const ProductDetail = () => {
                 </select>
               </div>
 
-              <div className="option-group">
+              {/* <div className="option-group">
                 <label className="option-label">Color</label>
                 <select
                   className="option-select"
@@ -418,7 +418,7 @@ const ProductDetail = () => {
                     <option key={color} value={color}>{color}</option>
                   ))}
                 </select>
-              </div>
+              </div> */}
 
               <div className="quantity-group">
                 <label className="option-label">Quantity</label>
