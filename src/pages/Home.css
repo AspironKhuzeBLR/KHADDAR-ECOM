@@ -4,15 +4,13 @@
   width: 100%;
 }
 
-/* Heritage Divider */
+/* Heritage Divider - HIDDEN as per request */
 .heritage-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  background-color: #F7F7F0;
+  display: none !important;
 }
 
+/* Kept these classes in case you want to enable it later, 
+   but the parent is hidden so they won't show. */
 .heritage-divider-light {
   background-color: #F7F7F0;
 }

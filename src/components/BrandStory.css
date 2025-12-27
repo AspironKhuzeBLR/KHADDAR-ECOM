@@ -64,7 +64,7 @@
 }
 
 /* Horizontal motif next to label (kept the wavy flourish as it fits the theme) */
-.brand-label::after {
+/* .brand-label::after {
   content: '';
   display: block;
   width: 35px;
@@ -73,7 +73,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='10' viewBox='0 0 35 10'%3E%3Cpath d='M0 5 C 5 1, 10 9, 17.5 5 C 25 1, 30 9, 35 5' stroke='%23F0E7E7' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='17.5' cy='5' r='2' fill='%23F0E7E7'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center left;
-}
+} */
 
 .brand-heading {
   font-family: 'Josefin Sans', sans-serif;
@@ -189,13 +189,19 @@
   }
   
   .brand-content {
-    /* Symmetrical padding for mobile */
+    /* Padding adjusted: More padding on RIGHT to fit the moved strip */
     padding: 40px 40px;
+    padding-right: 50px; 
+    padding-left: 40px; /* Reset left padding */
   }
   
-  /* Hide decorative strip on mobile */
+  /* UPDATED: Strip visible on mobile, moved to RIGHT side */
   .brand-content::after {
-    display: none;
+    display: block; 
+    left: auto;     /* Unset left position */
+    right: 15px;    /* Move to right */
+    width: 25px;    /* Slightly thinner */
+    background-size: 25px 31px; /* Scale pattern down */
   }
   
   .brand-heading {
@@ -214,6 +220,7 @@
   
   .brand-content {
     padding: 35px 30px;
+    padding-right: 45px; /* Ensure text doesn't hit strip */
   }
   
   .brand-heading {
@@ -238,6 +245,14 @@
   
   .brand-content {
     padding: 30px 20px;
+    padding-right: 40px; /* Keep clear of strip */
+  }
+
+  /* UPDATED: Smaller strip for mobile */
+  .brand-content::after {
+    right: 10px;
+    width: 20px;
+    background-size: 20px 25px;
   }
   
   .brand-label {
@@ -265,6 +280,7 @@
   
   .brand-content {
     padding: 25px 15px;
+    padding-right: 35px; /* Maintain text legibility */
   }
   
   .brand-heading {

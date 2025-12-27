@@ -15,11 +15,11 @@
   position: relative;
   z-index: 2;
   background: #F7F7F0;
-  padding: 120px 0;
+  padding: 100px 0;
   overflow: hidden;
 }
 
-/* Simple dot grid pattern - #B38A6A (Warm Sand) */
+/* Simple dot grid pattern */
 .contact-content::before {
   content: '';
   position: absolute;
@@ -50,8 +50,8 @@
 /* --- Header --- */
 .contact-header {
   text-align: center;
-  max-width: 700px;
-  margin-bottom: 90px;
+  max-width: 800px;
+  margin-bottom: 80px;
   animation: fadeUp 0.8s ease-out;
   position: relative;
 }
@@ -60,54 +60,61 @@
 .contact-header::before {
   content: '❋';
   display: block;
-  font-size: 18px;
+  font-size: 20px;
   color: #A15F22;
-  opacity: 0.4;
-  margin-bottom: 20px;
+  opacity: 0.6;
+  margin-bottom: 15px;
 }
 
 .info-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 3rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   color: #6F3132;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  line-height: 1.2;
 }
 
 .heading-underline {
-  width: 60px;
+  width: 50px;
   height: 2px;
   background-color: #A15F22;
   margin: 0 auto 30px auto;
+  opacity: 0.7;
 }
 
 .info-text {
   font-family: 'Lato', sans-serif;
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   line-height: 1.8;
   color: #6F3132;
   font-weight: 300;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
-/* --- Horizontal Layout --- */
+/* --- Horizontal Layout (Email, Phone, Follow Us) --- */
 .contact-horizontal-row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: space-between; /* Distribute space evenly */
+  align-items: stretch;           /* Forces all columns and dividers to same height */
   width: 100%;
-  max-width: 1100px;
+  max-width: 1100px;              /* Constrain width for better readability */
+  margin: 0 auto;
   animation: fadeUp 1s ease-out;
+  gap: 0;                         /* Gap handled by padding/dividers */
 }
 
+/* The Columns */
 .contact-card {
-  flex: 1;
+  flex: 1;                        /* Forces all 3 cards to be exactly equal width */
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  padding: 0 10px;
+  padding: 0 20px;                /* Internal spacing */
+  position: relative;
   transition: transform 0.3s ease;
 }
 
@@ -118,74 +125,105 @@
 /* --- Large Icons (Top of card) --- */
 .icon-circle-large {
   font-size: 1.5rem;
-  color: #A15F22;
-  margin-bottom: 20px;
-  width: 60px;
-  height: 60px;
+  color: #6F3132; 
+  margin-bottom: 25px;
+  
+  /* Dimensions must be explicit to ensure circle shape */
+  width: 70px;
+  height: 70px;
+  min-width: 70px;  /* Prevents horizontal squashing */
+  min-height: 70px; /* Prevents vertical squashing */
+  
   border-radius: 50%;
-  background-color: rgba(161, 95, 34, 0.1); /* Very subtle background */
+  background-color: #e3dcd3; 
+  
   display: flex;
   align-items: center;
   justify-content: center;
+  
   transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  
+  /* Crucial: Prevents flex container from resizing this element */
+  flex-shrink: 0; 
 }
 
 .contact-card:hover .icon-circle-large {
-  background-color: #A15F22;
+  background-color: #6F3132;
   color: #F7F7F0;
 }
 
+/* Labels (EMAIL, PHONE, FOLLOW US) */
 .info-subheading {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #A15F22;
-  margin-bottom: 15px;
+  color: #A15F22; 
+  margin-bottom: 25px; /* Consistent spacing below label */
+  height: 20px;        /* Fixed height to ensure perfect alignment across row */
+  display: flex;
+  align-items: center;
 }
 
+/* --- Boxes for Email / Phone --- */
 .info-link-large {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   color: #6F3132;
-  font-weight: 400;
+  font-weight: 500;
   text-decoration: none;
-  position: relative;
-  display: inline-block;
-  padding: 12px 24px;
-  border: 2px solid #6F3132;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 30px;    /* Increased padding for better box shape */
+  border: 1px solid #6F3132; 
+  width: 100%;           /* Fill the container width */
+  max-width: 300px;      /* But don't get too huge */
   transition: all 0.3s ease;
+  background-color: transparent;
+  box-sizing: border-box;
 }
 
 .info-link-large:hover {
   background-color: #6F3132;
   color: #F7F7F0;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(111, 49, 50, 0.2);
+  box-shadow: 0 5px 15px rgba(111, 49, 50, 0.15);
 }
 
-/* --- Dividers --- */
+/* New Class for stacking phone numbers */
+.phone-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Precise gap between the two phone boxes */
+  width: 100%;
+  align-items: center;
+}
+
+/* --- Vertical Dividers --- */
 .vertical-divider {
   width: 1px;
-  height: 140px;
-  background-color: rgba(111, 49, 50, 0.2);
-  align-self: center;
+  background: linear-gradient(to bottom, transparent, rgba(161, 95, 34, 0.3) 20%, rgba(161, 95, 34, 0.3) 80%, transparent);
+  margin: 10px 0; /* Small vertical margin so lines don't touch edges */
+  flex-shrink: 0; /* Prevents divider from disappearing */
 }
 
 /* --- Social Icon Buttons --- */
 .social-row {
   display: flex;
-  gap: 15px;
+  gap: 20px; /* Better spacing between icons */
   justify-content: center;
+  align-items: flex-start; /* Align to top to match text boxes */
+  height: 100%;
+  padding-top: 5px; /* Slight visual adjustment to align with text box tops */
 }
 
 .social-icon-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-  border: 2px solid #6F3132;
+  width: 55px;
+  height: 55px;
+  border: 1px solid #6F3132;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,13 +231,14 @@
   font-size: 1.3rem;
   transition: all 0.3s ease;
   text-decoration: none;
+  background-color: transparent;
 }
 
 .social-icon-btn:hover {
   background-color: #6F3132;
   color: #F7F7F0;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(111, 49, 50, 0.2);
+  box-shadow: 0 5px 15px rgba(111, 49, 50, 0.15);
 }
 
 /* --- Newsletter Section --- */
@@ -207,6 +246,8 @@
   background-color: #F7F7F0;
   padding: 80px 20px;
   text-align: center;
+  position: relative;
+  border-top: 1px solid rgba(161, 95, 34, 0.1);
 }
 
 .newsletter-container {
@@ -223,26 +264,26 @@
 
 .newsletter-heading {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 400;
   letter-spacing: 0.05em;
   color: #6F3132;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .newsletter-text {
   font-family: 'Lato', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.7;
   color: #6F3132;
-  margin-bottom: 40px;
+  margin-bottom: 35px;
 }
 
 .newsletter-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  max-width: 500px;
+  gap: 15px;
+  max-width: 450px;
   margin: 0 auto;
 }
 
@@ -250,27 +291,28 @@
   font-family: 'Lato', sans-serif;
   font-size: 1rem;
   padding: 15px 20px;
-  border: 2px solid #B38A6A;
+  border: 1px solid #8C6C5F;
   background: transparent;
   color: #6F3132;
   transition: all 0.3s ease;
   outline: none;
+  text-align: center;
 }
 
 .newsletter-input::placeholder {
   color: #8C6C5F;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .newsletter-input:focus {
   border-color: #6F3132;
-  box-shadow: 0 0 0 3px rgba(179, 138, 106, 0.1);
+  background-color: #ffffff;
 }
 
 .newsletter-button {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   letter-spacing: 0.15em;
   padding: 15px 40px;
   background-color: #6F3132;
@@ -282,7 +324,7 @@
 }
 
 .newsletter-button:hover {
-  background-color: #8B4D4D;
+  background-color: #A15F22;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(111, 49, 50, 0.3);
 }
@@ -307,195 +349,129 @@
 
 /* --- Animations --- */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Responsive --- */
-/* Responsive Design */
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* =========================================
+   RESPONSIVE DESIGN 
+   ========================================= */
+
 @media (max-width: 1200px) {
-  .container {
-    max-width: 1100px;
-    padding: 0 30px;
+  .contact-horizontal-row {
+    max-width: 1000px;
   }
-  
+  .info-link-large {
+    min-width: 220px;
+    padding: 15px 20px;
+    font-size: 1rem;
+  }
   .info-heading {
     font-size: 2.8rem;
   }
-  
-  .contact-header {
-    margin-bottom: 70px;
-  }
 }
 
+/* Tablet: Squeeze a bit before stacking */
 @media (max-width: 992px) {
-  .contact-content {
-    padding: 100px 0;
-  }
+  .contact-content { padding: 80px 0; }
+  .contact-horizontal-row { max-width: 900px; }
   
-  .container {
-    padding: 0 25px;
-  }
-  
-  .info-heading {
-    font-size: 2.5rem;
-  }
+  .contact-card { padding: 0 15px; }
+  .info-heading { font-size: 2.5rem; }
   
   .info-link-large {
-    font-size: 1.1rem;
+    min-width: 100%; /* Fill the card width */
+    font-size: 0.95rem;
+    padding: 15px 15px;
   }
   
-  .contact-header {
-    margin-bottom: 60px;
-  }
+  .social-row { gap: 12px; }
+  .social-icon-btn { width: 45px; height: 45px; }
 }
 
+/* Mobile Stack Breakpoint */
 @media (max-width: 768px) {
-  .contact-content {
-    padding: 80px 0;
-  }
-
-  .container {
-    padding: 0 20px;
-  }
-
+  .contact-content { padding: 60px 0; }
+  
+  /* Stack the row */
   .contact-horizontal-row {
     flex-direction: column;
-    gap: 50px;
+    align-items: center;
+    gap: 60px; /* Consistent gap between stacked sections */
   }
 
+  /* Hide the vertical lines on mobile */
   .vertical-divider {
-    width: 100px;
+    display: none;
+  }
+
+  /* Add horizontal separator lines for mobile if desired */
+  .contact-card:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 60px;
     height: 1px;
-    margin: 10px 0;
+    background-color: rgba(161, 95, 34, 0.3);
+    margin-top: 60px;
+    position: absolute;
+    bottom: -30px; /* Position half way inside the gap */
   }
 
-  .contact-header {
-    margin-bottom: 50px;
+  .contact-card {
+    width: 100%;
+    max-width: 400px; /* Don't get too wide on phones */
+    padding: 0;
   }
 
-  .info-heading {
-    font-size: 2rem;
-    letter-spacing: 0.05em;
-  }
-  
   .info-link-large {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
     font-size: 1rem;
-    padding: 10px 20px;
   }
   
-  .contact-header::before {
-    font-size: 16px;
-  }
+  .phone-stack { width: 100%; }
+
+  .contact-header { margin-bottom: 50px; }
+  .info-heading { font-size: 2rem; margin-bottom: 15px; }
+  .info-text { font-size: 1rem; }
   
-  .newsletter-section {
-    padding: 60px 20px;
-  }
-  
-  .newsletter-heading {
-    font-size: 2rem;
-  }
-  
-  .newsletter-text {
-    font-size: 1rem;
-    margin-bottom: 30px;
-  }
-  
-  .newsletter-input,
-  .newsletter-button {
-    font-size: 0.95rem;
-    padding: 12px 20px;
-  }
+  /* Newsletter adjustments */
+  .newsletter-section { padding: 50px 20px; }
+  .newsletter-heading { font-size: 1.8rem; }
 }
 
 @media (max-width: 576px) {
-  .contact-content {
-    padding: 60px 0;
-  }
+  .info-heading { font-size: 1.75rem; }
+  .heading-underline { width: 40px; margin-bottom: 20px; }
   
-  .container {
-    padding: 0 15px;
-  }
-  
-  .contact-header {
-    margin-bottom: 40px;
-  }
-  
-  .info-heading {
-    font-size: 1.75rem;
-    letter-spacing: 0.03em;
-  }
-  
-  .heading-underline {
-    width: 40px;
-    margin: 15px auto;
-  }
-  
-  .info-text {
-    font-size: 0.95rem;
-  }
-  
-  .info-link-large {
-    font-size: 0.95rem;
-    padding: 10px 18px;
-  }
-  
-  .contact-header::before {
-    font-size: 14px;
+  .icon-circle-large {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;  /* Maintain circle on small screens */
+    min-height: 60px; /* Maintain circle on small screens */
+    font-size: 1.4rem;
     margin-bottom: 15px;
   }
   
-  .newsletter-section {
-    padding: 50px 15px;
-  }
-  
-  .newsletter-icon {
-    font-size: 1.75rem;
+  .info-subheading {
     margin-bottom: 15px;
+    font-size: 0.8rem;
   }
   
-  .newsletter-heading {
-    font-size: 1.75rem;
-    margin-bottom: 15px;
+  .social-icon-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
   }
   
-  .newsletter-text {
-    font-size: 0.95rem;
-    margin-bottom: 25px;
-  }
-  
-  .newsletter-form {
-    max-width: 100%;
-  }
-  
-  .newsletter-input,
-  .newsletter-button {
+  .newsletter-input, .newsletter-button {
     font-size: 0.9rem;
     padding: 12px 18px;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-content {
-    padding: 50px 0;
-  }
-  
-  .info-heading {
-    font-size: 1.5rem;
-  }
-  
-  .info-text {
-    font-size: 0.875rem;
-  }
-  
-  .info-link-large {
-    font-size: 0.875rem;
-    padding: 8px 16px;
   }
 }

@@ -98,7 +98,7 @@
 }
 
 /* Horizontal Motif next to "Who We Are" */
-.about-label::after {
+/* .about-label::after {
   content: '';
   display: block;
   width: 40px; 
@@ -107,7 +107,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cline x1='0' y1='5' x2='20' y2='5' stroke='%236F3132' stroke-width='1' /%3E%3Crect x='8' y='3' width='4' height='4' transform='rotate(45 10 5)' fill='%236F3132' /%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-size: 20px 10px;
-}
+} */
 
 .about-heading {
   font-family: 'Josefin Sans', sans-serif;
@@ -171,12 +171,16 @@
   
   .about-content {
     padding: 40px 40px;
+    padding-right: 50px; /* Added extra space on right for the strip */
     order: 2;
   }
   
-  /* Hide decorative strips on mobile */
+  /* UPDATED: Strip is now visible and resized for tablets/mobile */
   .about-content::after {
-    display: none;
+    display: block; /* Ensure it stays visible */
+    right: 10px;    /* Move closer to the edge */
+    width: 25px;    /* Make slightly thinner */
+    background-size: 25px 25px; /* Scale down the pattern */
   }
   
   .about-heading {
@@ -197,6 +201,7 @@
   
   .about-content {
     padding: 35px 30px;
+    padding-right: 45px; /* Ensure text doesn't overlap strip */
   }
   
   .about-heading {
@@ -217,6 +222,14 @@
   
   .about-content {
     padding: 30px 20px;
+    padding-right: 40px; /* Keep text clear of the strip */
+  }
+
+  /* UPDATED: Even smaller strip for very small screens */
+  .about-content::after {
+    right: 5px;
+    width: 20px;
+    background-size: 20px 20px;
   }
   
   .about-label {
@@ -231,6 +244,7 @@
 @media (max-width: 480px) {
   .about-content {
     padding: 25px 15px;
+    padding-right: 35px; /* Maintain text legibility */
   }
   
   .about-heading {

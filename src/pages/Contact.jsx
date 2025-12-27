@@ -60,8 +60,11 @@ const Contact = () => {
                   <FaPhoneAlt />
                 </div>
                 <h3 className="info-subheading">PHONE</h3>
-                <a href="tel:+919876543210" className="info-link-large">
-                  +91 98765 43210
+                <a href="tel:+917899888491" className="info-link-large">
+                  +91 78998 88491
+                </a>
+                <a href="tel:+918296704777" className="info-link-large">
+                  +91 82967 04777
                 </a>
               </div>
 
