@@ -50,12 +50,12 @@
   /* Even spacing below icon */
   margin: 0 auto 20px auto;
   display: block;
-  animation: missionIconSpin 8s linear infinite;
+  animation: iconFloat 3s ease-in-out infinite;
 }
 
-@keyframes missionIconSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 /* Label: OUR MISSION */

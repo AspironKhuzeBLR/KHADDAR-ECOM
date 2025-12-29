@@ -687,6 +687,9 @@
     padding: 18px 0;
     width: 100%;
     border-bottom: 1px solid rgba(140, 108, 95, 0.3); /* Subtle separator */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: visible;
     color: #6F3132 !important;
     text-shadow: none !important;
   }

@@ -589,9 +589,16 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   filter: contrast(1.02) brightness(1.02);
   border: 1px solid rgba(140, 108, 95, 0.15);
+  /* iOS fixes */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .story-photo-wrapper:hover .carousel-slide.active .story-collage-image {

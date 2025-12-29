@@ -124,7 +124,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover; 
-  object-position: center 20%; 
+  object-position: center 20%;
+  /* iOS fixes */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 /* --- OVERLAY CONTENT --- */
@@ -237,7 +243,7 @@
 
 .marquee-content {
   display: flex;
-  animation: marquee 30s linear infinite;
+  animation: marquee 15s linear infinite;
   gap: 80px;
   white-space: nowrap;
 }
