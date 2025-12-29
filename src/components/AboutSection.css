@@ -17,21 +17,25 @@
   flex: 1;
   position: relative;
   overflow: hidden;
+  min-height: 500px; /* Explicit height for iOS */
 }
 
 .about-image {
   width: 100%;
   height: 100%;
+  min-height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
   filter: brightness(1);
-  /* iOS fixes */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  display: block;
+  /* Aggressive iOS fixes */
+  -webkit-transform: translateZ(0) scale(1);
+  transform: translateZ(0) scale(1);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   image-rendering: -webkit-optimize-contrast;
+  will-change: transform;
 }
 
 .about-image-wrapper:hover .about-image {
@@ -172,7 +176,8 @@
   }
   
   .about-image-wrapper {
-    height: 35vh;
+    height: 40vh;
+    min-height: 350px;
     order: 1;
   }
   
@@ -203,7 +208,8 @@
 
 @media (max-width: 768px) {
   .about-image-wrapper {
-    height: 30vh;
+    height: 35vh;
+    min-height: 300px;
   }
   
   .about-content {
@@ -223,8 +229,13 @@
 
 @media (max-width: 576px) {
   .about-image-wrapper {
-    height: 25vh;
-    min-height: 200px;
+    height: 30vh;
+    min-height: 250px;
+  }
+  
+  .about-image {
+    object-fit: cover;
+    object-position: center center;
   }
   
   .about-content {
