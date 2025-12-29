@@ -16,7 +16,7 @@ const FeaturedCollection = () => {
           />
           <div className="featured-overlay">
             <div className="featured-content">
-              <div className="featured-icon">✦</div>
+              <div className="featured-icon">❖</div>
               <span className="featured-label">Discover The Collection</span>
               <h2 className="featured-title">Kolours of Kutch</h2>
               <p className="featured-description">

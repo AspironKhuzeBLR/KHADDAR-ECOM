@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Contact.css';
 import HeroVideo from '../components/HeroVideo';
 // Importing icons from react-icons library
-import { FaInstagram, FaFacebookF, FaYoutube, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaPinterest, FaLinkedin, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
 const Contact = () => {
   const [email, setEmail] = useState('');
@@ -46,8 +46,8 @@ const Contact = () => {
                   <FaEnvelope />
                 </div>
                 <h3 className="info-subheading">EMAIL</h3>
-                <a href="mailto:info@khaddar.com" className="info-link-large">
-                  info@khaddar.com
+                <a href="mailto:Info@khaddar.shop" className="info-link-large">
+                  Info@khaddar.shop
                 </a>
               </div>
 
@@ -60,12 +60,11 @@ const Contact = () => {
                   <FaPhoneAlt />
                 </div>
                 <h3 className="info-subheading">PHONE</h3>
-                <a href="tel:+917899888491" className="info-link-large">
-                  +91 78998 88491
-                </a>
-                <a href="tel:+918296704777" className="info-link-large">
-                  +91 82967 04777
-                </a>
+                <div className="info-link-large">
+                  <a href="tel:+917899888491" className="phone-number-link">+91 78998 88491</a>
+                  <span className="phone-divider"> | </span>
+                  <a href="tel:+918296704777" className="phone-number-link">+91 82967 04777</a>
+                </div>
               </div>
 
               {/* Vertical Divider */}
@@ -82,14 +81,17 @@ const Contact = () => {
                 
                 {/* Social Icons Row */}
                 <div className="social-row">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Instagram">
+                  <a href="https://www.instagram.com/khaddar.ind?igsh=MWZ0ZnJzZ2diMmFjZg==" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Instagram">
                     <FaInstagram />
                   </a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Facebook">
+                  <a href="https://www.facebook.com/share/17nLQqtaeN/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Facebook">
                     <FaFacebookF />
                   </a>
-                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="YouTube">
-                    <FaYoutube />
+                  <a href="https://pin.it/2cWMYzr1c" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="Pinterest">
+                    <FaPinterest />
+                  </a>
+                  <a href="https://www.linkedin.com/company/khaddar.ind/" target="_blank" rel="noopener noreferrer" className="social-icon-btn" aria-label="LinkedIn">
+                    <FaLinkedin />
                   </a>
                 </div>
               </div>
@@ -103,7 +105,7 @@ const Contact = () => {
       {/* Newsletter Signup Section */}
       <section className="newsletter-section">
         <div className="newsletter-container">
-          <div className="newsletter-icon">✦</div>
+          <div className="newsletter-icon">❖</div>
           <h2 className="newsletter-heading">Join our community</h2>
           <p className="newsletter-text">
             Be part of our mission to preserve traditional craftsmanship and support sustainable fashion.

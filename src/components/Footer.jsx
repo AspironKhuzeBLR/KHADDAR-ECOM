@@ -59,11 +59,10 @@ const Footer = () => {
           <div className="footer-section">
             <h4 className="footer-heading">CONNECT</h4>
             <div className="social-links">
-              <a href="https://instagram.com" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://facebook.com" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
-              <a href="https://pinterest.com" className="social-link" aria-label="Pinterest" target="_blank" rel="noopener noreferrer">Pinterest</a>
-              <a href="https://linkedin.com" className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href="https://twitter.com" className="social-link" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+              <a href="https://www.instagram.com/khaddar.ind?igsh=MWZ0ZnJzZ2diMmFjZg==" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://www.facebook.com/share/17nLQqtaeN/?mibextid=wwXIfr" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+              <a href="https://pin.it/2cWMYzr1c" className="social-link" aria-label="Pinterest" target="_blank" rel="noopener noreferrer">Pinterest</a>
+              <a href="https://www.linkedin.com/company/khaddar.ind/" className="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </div>
           </div>
         </div>

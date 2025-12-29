@@ -52,7 +52,7 @@ const Sustainability = () => {
       <section className="sustainability-intro">
         <div className="container">
           <div className="intro-text-wrapper">
-            <div className="section-icon">☘</div>
+            <div className="section-icon">❖</div>
             <span className="section-label">Our Commitment</span>
             <h2 className="section-heading">Crafting with Care</h2>
             <p className="body-text intro-paragraph">

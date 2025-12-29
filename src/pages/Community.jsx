@@ -17,7 +17,7 @@ const Community = () => {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 1.5; // 1.5x speed
+      videoRef.current.playbackRate = 0.75; // 0.75x speed (slower)
     }
   }, []);
 
@@ -59,7 +59,7 @@ const Community = () => {
       <section className="artisan-story-section">
         <div className="container">
           <div className="artisan-story-wrapper">
-            <div className="story-icon">✦</div>
+            <div className="story-icon">❖</div>
             <span className="story-label">Our Artisans</span>
             <h2 className="story-heading">Artisans from Kutch & Ajrakhpur</h2>
             
@@ -129,7 +129,7 @@ const Community = () => {
             muted
             playsInline
           >
-            <source src="https://cdn.pixabay.com/video/2025/07/11/290603_large.mp4" type="video/mp4" />
+            <source src="/11355806-uhd_3840_2160_25fps.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <div className="video-overlay-content">
@@ -143,7 +143,7 @@ const Community = () => {
       <section className="community-intro">
         <div className="container">
           <div className="intro-content">
-            <div className="section-icon">✧</div>
+            <div className="section-icon">❖</div>
             <span className="section-label">Join Our Community</span>
             <h2 className="section-heading">Building Together</h2>
             <p className="body-text intro-text">

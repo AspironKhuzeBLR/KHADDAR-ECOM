@@ -5,7 +5,7 @@ const VisionSection = () => {
   return (
     <section className="vision-section pattern-bg">
       <div className="vision-container">
-        <div className="vision-icon">◇</div>
+        <div className="vision-icon">❖</div>
         <span className="vision-label">Our Vision</span>
         <h2 className="vision-heading">Reshaping the Fashion Landscape</h2>
         <p className="vision-text">

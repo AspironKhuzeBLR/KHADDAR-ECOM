@@ -11,7 +11,7 @@ import './Home.css';
 const HeritageDivider = ({ variant = 'default' }) => (
   <div className={`heritage-divider heritage-divider-${variant}`}>
     <span className="divider-line"></span>
-    <span className="divider-motif">◆</span>
+    <span className="divider-motif">❖</span>
     <span className="divider-line"></span>
   </div>
 );

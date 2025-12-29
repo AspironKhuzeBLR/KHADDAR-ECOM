@@ -108,7 +108,7 @@ const Collections = () => {
         <div className="hero-content-wrapper">
           <div className="collections-hero">
             <div className="hero-content-wrapper">
-              <div className="collections-icon">✧</div>
+              <div className="collections-icon">❖</div>
               <span className="collections-label">Our Collection</span>
               <h1 className="collections-title">Kolours of Kutch</h1>
               <div className="section-divider">
@@ -135,10 +135,6 @@ const Collections = () => {
               <div key={image.id} className="carousel-slide-item">
                 <div className="image-container">
                   <img src={image.src} alt={image.alt} className="optimized-carousel-img" />
-                  <div className="carousel-overlay-content">
-                    <h3 className="carousel-item-title">{image.title}</h3>
-                    <p className="carousel-item-desc">{image.description}</p>
-                  </div>
                 </div>
               </div>
             ))}
@@ -165,10 +161,30 @@ const Collections = () => {
         </div>
       </section>
 
+      {/* Marquee Strip */}
+      <div className="marquee-strip">
+        <div className="marquee-content">
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+        </div>
+      </div>
+
       <section className="collections-shop-action">
         <div className="container">
+          <h2 className="shop-action-heading">Ready to Experience Authentic Craftsmanship?</h2>
+          <p className="shop-action-subtext">Discover our complete range of handcrafted collections</p>
           <Link to="/shop-collections" className="collections-btn">
-            Explore Full Collection
+            <span>Explore Full Collection</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </Link>
         </div>
       </section>

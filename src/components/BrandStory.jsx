@@ -10,7 +10,7 @@ const BrandStory = () => {
       <div className="brand-container">
         {/* Content Side (Left) */}
         <div className="brand-content">
-          <div className="content-accent">◇</div>
+          <div className="content-accent">❖</div>
           <span className="brand-label">The Origin</span>
           <h2 className="brand-heading">The Soul of Clothing</h2>
           <p className="brand-text">

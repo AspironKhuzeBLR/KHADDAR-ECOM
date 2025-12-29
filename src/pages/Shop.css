@@ -42,7 +42,7 @@
 
 /* Decorative motif accent */
 .products-category-title::after {
-  content: '✦';
+  content: '❖';
   display: block;
   font-size: 10px;
   color: #A15F22;

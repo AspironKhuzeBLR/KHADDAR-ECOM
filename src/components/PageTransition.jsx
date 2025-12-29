@@ -64,7 +64,7 @@ const PageTransition = ({ children }) => {
       <div className={`page-transition-overlay ${isTransitioning ? 'active' : ''}`}>
         <div className="transition-content">
           {/* Decorative element */}
-          <div className="transition-motif">◆</div>
+          <div className="transition-motif">◇</div>
           
           {/* Quote */}
           <blockquote className="transition-quote">

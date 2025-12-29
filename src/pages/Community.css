@@ -684,7 +684,7 @@
 }
 
 .text-decorative-accent::before {
-  content: '◆';
+  content: '❖';
   position: absolute;
   top: -25px;
   left: 50%;
@@ -748,7 +748,7 @@
 
 .text-decorative-line::before,
 .text-decorative-line::after {
-  content: '◆';
+  content: '❖';
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

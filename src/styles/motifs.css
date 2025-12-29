@@ -15,7 +15,7 @@
 }
 
 .motif-divider::before {
-  content: '✦';
+  content: '❖';
   font-size: 14px;
   color: #8C6C5F;
   opacity: 0.4;

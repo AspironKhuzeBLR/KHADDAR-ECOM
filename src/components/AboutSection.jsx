@@ -20,7 +20,7 @@ const AboutSection = () => {
         
         {/* Content Side */}
         <div className="about-content">
-          <div className="content-accent">◆</div>
+          <div className="content-accent">❖</div>
           <span className="about-label">Who We Are</span>
           <h2 className="about-heading">Honoring Roots, Inspiring Future</h2>
           <p className="about-text">
