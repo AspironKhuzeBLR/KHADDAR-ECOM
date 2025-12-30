@@ -63,18 +63,6 @@
   z-index: 1;
 }
 
-/* Horizontal motif next to label (kept the wavy flourish as it fits the theme) */
-/* .brand-label::after {
-  content: '';
-  display: block;
-  width: 35px;
-  height: 10px;
-  opacity: 0.6;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='10' viewBox='0 0 35 10'%3E%3Cpath d='M0 5 C 5 1, 10 9, 17.5 5 C 25 1, 30 9, 35 5' stroke='%23F0E7E7' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='17.5' cy='5' r='2' fill='%23F0E7E7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center left;
-} */
-
 .brand-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.8rem;
@@ -140,7 +128,7 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  min-height: 500px; /* Explicit height for iOS */
+  min-height: 500px; /* Explicit height for Desktop */
 }
 
 .brand-image {
@@ -167,7 +155,10 @@
   filter: brightness(1.05);
 }
 
-/* Responsive Design */
+/* ========================================= */
+/* RESPONSIVE DESIGN (FIXED)                 */
+/* ========================================= */
+
 @media (max-width: 1200px) {
   .brand-container {
     min-height: 35vh;
@@ -181,7 +172,7 @@
   .brand-content::after {
     left: 15px;
     width: 35px;
-    background-size: 35px 43px; /* Adjusted for responsive scaling */
+    background-size: 35px 43px; 
   }
   
   .brand-heading {
@@ -189,30 +180,45 @@
   }
 }
 
+/* --- TABLET & MOBILE FIX START --- */
 @media (max-width: 992px) {
   .brand-container {
     flex-direction: column-reverse; /* Image on top */
     min-height: auto;
   }
   
+  /* FIX: Natural Height Logic (No cropping) */
   .brand-image-wrapper {
-    height: 35vh;
+    height: auto !important;
+    min-height: 0 !important;
+    display: block;
+    width: 100%;
+  }
+
+  /* FIX: Image scales naturally */
+  .brand-image {
+    width: 100%;
+    height: auto !important;
+    position: static;
+    object-fit: unset; 
+    transform: none; /* Reset zoom effects for mobile clarity */
+    -webkit-transform: none;
   }
   
   .brand-content {
     /* Padding adjusted: More padding on RIGHT to fit the moved strip */
     padding: 40px 40px;
     padding-right: 50px; 
-    padding-left: 40px; /* Reset left padding */
+    padding-left: 40px; 
   }
   
   /* UPDATED: Strip visible on mobile, moved to RIGHT side */
   .brand-content::after {
     display: block; 
-    left: auto;     /* Unset left position */
-    right: 15px;    /* Move to right */
-    width: 25px;    /* Slightly thinner */
-    background-size: 25px 31px; /* Scale pattern down */
+    left: auto;     
+    right: 15px;    
+    width: 25px;    
+    background-size: 25px 31px; 
   }
   
   .brand-heading {
@@ -225,14 +231,11 @@
 }
 
 @media (max-width: 768px) {
-  .brand-image-wrapper {
-    height: 35vh;
-    min-height: 300px;
-  }
+  /* Inherits auto-height from 992px block */
   
   .brand-content {
     padding: 35px 30px;
-    padding-right: 45px; /* Ensure text doesn't hit strip */
+    padding-right: 45px; 
   }
   
   .brand-heading {
@@ -250,24 +253,13 @@
 }
 
 @media (max-width: 576px) {
-  .brand-image-wrapper {
-    height: 30vh;
-    min-height: 250px;
-  }
-  
-  .brand-image {
-    object-fit: cover;
-    object-position: center center;
-    transform: scale(1);
-    -webkit-transform: scale(1) translateZ(0);
-  }
-  
+  /* Inherits auto-height from 992px block */
+
   .brand-content {
     padding: 30px 20px;
-    padding-right: 40px; /* Keep clear of strip */
+    padding-right: 40px; 
   }
 
-  /* UPDATED: Smaller strip for mobile */
   .brand-content::after {
     right: 10px;
     width: 20px;
@@ -292,14 +284,9 @@
 }
 
 @media (max-width: 480px) {
-  .brand-image-wrapper {
-    height: 25vh;
-    min-height: 180px;
-  }
-  
   .brand-content {
     padding: 25px 15px;
-    padding-right: 35px; /* Maintain text legibility */
+    padding-right: 35px; 
   }
   
   .brand-heading {

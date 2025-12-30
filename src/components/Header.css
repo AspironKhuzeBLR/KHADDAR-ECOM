@@ -9,17 +9,36 @@
   border-bottom: 1px solid #8C6C5F;
 }
 
-/* Transparent page (home, collections, etc.) - before scroll */
+/* =========================================
+   TRANSPARENT HEADER STATE (Pre-Scroll)
+   ========================================= */
+
+/* Transparent background */
 .header.transparent-page:not(.scrolled) {
   background-color: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
 }
 
-/* Make text white on transparent background */
+/* FORCE WHITE TEXT/ICONS ON TRANSPARENT BACKGROUND */
 .header.transparent-page:not(.scrolled) .nav-link,
-.header.transparent-page:not(.scrolled) .icon-btn {
-  color: #ffffff;
+.header.transparent-page:not(.scrolled) .icon-btn,
+.header.transparent-page:not(.scrolled) .logout-btn,
+.header.transparent-page:not(.scrolled) .cart-btn {
+  color: #ffffff !important;
+  border-color: transparent;
+}
+
+/* --- FIX: Force SVG children to use the white color --- */
+.header.transparent-page:not(.scrolled) .logout-btn svg,
+.header.transparent-page:not(.scrolled) .logout-btn path {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Special case for Cart Button Border on Transparent */
+.header.transparent-page:not(.scrolled) .cart-btn {
+  border: 1px solid #ffffff !important;
 }
 
 .header.transparent-page:not(.scrolled) .logo {
@@ -30,7 +49,9 @@
   color: #ffffff;
 }
 
-/* Scrolled state - always solid background */
+/* =========================================
+   SCROLLED HEADER STATE
+   ========================================= */
 .header.scrolled {
   background-color: #F7F7F0;
   border-bottom: 1px solid #8C6C5F;
@@ -43,13 +64,16 @@
   gap: 20px;
 }
 
+/* =========================================
+   ICON BUTTONS (Base Class)
+   ========================================= */
 .icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
-  color: #ffffff;
+  color: #ffffff; /* Default for transparent */
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -58,8 +82,10 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
   z-index: 1;
   text-decoration: none;
+  outline: none;
 }
 
+/* Remove filter/shadow on scrolled light background */
 .header.scrolled .icon-btn {
   color: #6F3132;
   filter: none;
@@ -81,22 +107,45 @@
   transform: scale(1.1);
 }
 
-.account-btn {
-  border: none;
-}
+/* =========================================
+   SPECIFIC BUTTON FIXES
+   ========================================= */
 
+/* --- LOGOUT BUTTON FIX (Aggressive Reset) --- */
 .logout-btn {
-  border: none;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  /* Remove any potential borders or decorations causing the line */
+  border: none !important;
+  border-top: none !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  
+  /* Ensure proper inheritance */
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.header.scrolled .logout-btn {
-  filter: none;
+/* Ensure no pseudo-elements are creating the line */
+.logout-btn::before,
+.logout-btn::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: none !important;
 }
 
+.account-btn {
+  /* Clean slate */
+}
+
+/* --- CART BUTTON STYLES --- */
 .cart-btn {
-  border: 1px solid #ffffff;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  border: 1px solid #ffffff; 
+  /* Inherits filter from .icon-btn */
 }
 
 .header.scrolled .cart-btn {
@@ -104,15 +153,18 @@
   filter: none;
 }
 
+/* Hover: Transparent background (Outline Only) */
 .cart-btn:hover {
-  background-color: #F7F7F0;
-  color: #6F3132;
+  background-color: transparent !important;
+  color: #ffffff !important;
   transform: scale(1.05);
+  border-color: #ffffff !important;
 }
 
 .header.scrolled .cart-btn:hover {
-  background-color: #6F3132;
-  color: #F7F7F0;
+  background-color: transparent !important;
+  color: #A15F22 !important;
+  border-color: #A15F22 !important;
 }
 
 .cart-count {
@@ -137,6 +189,9 @@
   color: #F7F7F0;
 }
 
+/* =========================================
+   HEADER LAYOUT
+   ========================================= */
 .header-main {
   padding: 25px 0 20px 0;
   background-color: transparent !important;
@@ -261,6 +316,9 @@
   transform: scale(1.4); 
 }
 
+/* =========================================
+   NAVIGATION
+   ========================================= */
 .nav {
   display: flex;
   align-items: center;
@@ -416,6 +474,9 @@
   color: #A15F22;
 }
 
+/* =========================================
+   MOBILE MENU & HAMBURGER
+   ========================================= */
 .mobile-menu-btn {
   display: none;
   flex-direction: column;
@@ -432,7 +493,7 @@
   border: none;
   cursor: pointer;
   z-index: 10;
-  outline: none; /* Removes focus box */
+  outline: none;
 }
 
 .hamburger {
@@ -440,7 +501,7 @@
   height: 1px;
   background-color: #ffffff;
   transition: all 0.3s ease;
-  transform-origin: center; /* Ensures smooth rotation */
+  transform-origin: center;
 }
 
 .header.scrolled .hamburger {
@@ -448,7 +509,7 @@
 }
 
 .hamburger.open:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px); /* Adjusted geometry */
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
 .hamburger.open:nth-child(2) {
@@ -456,11 +517,11 @@
 }
 
 .hamburger.open:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px); /* Adjusted geometry */
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 /* =========================================
-   RESPONSIVE DESIGN (UPDATED)
+   RESPONSIVE DESIGN
    ========================================= */
 
 @media (max-width: 1400px) {
@@ -556,7 +617,7 @@
 
 /* --- MOBILE SPECIFIC FIXES --- */
 @media (max-width: 768px) {
-  /* 1. Force Solid Header on Mobile */
+  /* Force Solid Header on Mobile */
   .header,
   .header.transparent-page:not(.scrolled) {
     background-color: #F7F7F0 !important;
@@ -566,10 +627,23 @@
   /* Force Dark Icons on Mobile */
   .header.transparent-page:not(.scrolled) .nav-link,
   .header.transparent-page:not(.scrolled) .icon-btn,
+  .header.transparent-page:not(.scrolled) .logout-btn,
+  .header.transparent-page:not(.scrolled) .cart-btn,
   .header.transparent-page:not(.scrolled) .hamburger,
   .header.transparent-page:not(.scrolled) .auth-indicator {
     color: #6F3132 !important;
     background-color: transparent;
+  }
+
+  /* Reset SVG Fill specifically for Mobile Dark Icons */
+  .header.transparent-page:not(.scrolled) .logout-btn svg,
+  .header.transparent-page:not(.scrolled) .logout-btn path {
+    fill: #6F3132 !important;
+    stroke: #6F3132 !important;
+  }
+
+  .header.transparent-page:not(.scrolled) .cart-btn {
+      border: 1px solid #6F3132 !important;
   }
 
   .hamburger,
@@ -577,15 +651,15 @@
     background-color: #6F3132 !important;
   }
 
-  /* 2. Reset Header Container Layout for Mobile */
+  /* Reset Header Container Layout for Mobile */
   .header-main {
-    padding: 10px 0; /* Reduced padding for cleaner look */
+    padding: 10px 0; 
     background-color: #F7F7F0 !important;
   }
 
   .header-main-container {
     padding: 0 20px;
-    height: 60px; /* Fixed height for stability */
+    height: 60px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -593,7 +667,7 @@
     gap: 0;
   }
   
-  /* 3. Logo Positioning - Center Absolute */
+  /* Logo Positioning */
   .logo-link {
     position: absolute;
     left: 50%;
@@ -608,24 +682,24 @@
   .logo {
     height: 100%;
     width: auto;
-    max-width: 150px; /* Prevent overlap with icons */
-    transform: scale(1); /* Reset scale so it fits */
-    filter: none !important; /* Always dark logo on mobile */
+    max-width: 150px;
+    transform: scale(1);
+    filter: none !important;
   }
   
-  /* 4. Left Icons (User/Cart) */
+  /* Left Icons (User/Cart) */
   .header-icons-left {
     position: relative;
     top: auto;
     right: auto;
     left: auto;
     transform: none;
-    order: 1; /* First item in flex */
+    order: 1;
     gap: 15px;
   }
 
   .header-icons {
-    display: none; /* Hide Desktop group */
+    display: none;
   }
   
   .icon-btn {
@@ -634,37 +708,37 @@
     color: #6F3132;
   }
   
-  /* 5. Hamburger Menu Button (Right Side) */
+  /* Hamburger Menu Button */
   .mobile-menu-btn {
     display: flex;
     position: relative;
     top: auto;
     right: auto;
     transform: none;
-    order: 3; /* Last item in flex */
+    order: 3;
     margin: 0;
     padding: 0;
     border: none !important;
     background: transparent !important;
   }
 
-  /* 6. Mobile Navigation Drawer */
+  /* Mobile Navigation Drawer */
   .nav {
     position: fixed;
-    top: 81px; /* Height of header (60px) + Padding + Border */
+    top: 81px;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: #F7F7F0 !important;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px 30px 80px 30px; /* Extra bottom padding for scrolling */
+    padding: 20px 30px 80px 30px;
     border-top: 1px solid #8C6C5F;
-    transform: translateY(-120%); /* Hide completely */
+    transform: translateY(-120%);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     max-height: calc(100vh - 81px);
-    overflow-y: auto; /* Enable scrolling */
+    overflow-y: auto;
     gap: 0;
     z-index: 999;
   }
@@ -683,10 +757,10 @@
   
   .nav-link {
     display: block;
-    font-size: 1rem; /* Larger text for mobile */
+    font-size: 1rem;
     padding: 18px 0;
     width: 100%;
-    border-bottom: 1px solid rgba(140, 108, 95, 0.3); /* Subtle separator */
+    border-bottom: 1px solid rgba(140, 108, 95, 0.3);
     white-space: normal;
     word-wrap: break-word;
     overflow: visible;
@@ -695,29 +769,22 @@
   }
 
   .nav-link:hover {
-    padding-left: 10px; /* Slide effect on touch/hover */
+    padding-left: 10px;
   }
 
-  /* Mobile Dropdown (Always Visible or Accordion style) */
   .dropdown-menu {
     position: static;
     margin: 0;
     border: none;
-    border-left: 2px solid #8C6C5F; /* Indication line */
+    border-left: 2px solid #8C6C5F;
     padding: 5px 0 5px 20px;
     box-shadow: none;
     width: 100%;
     opacity: 1;
     background-color: transparent !important;
     animation: none;
-    display: none; /* JS usually toggles this, but for CSS only: */
+    display: none;
   }
-  
-  /* If you want submenus always open on mobile, uncomment: */
-  /* .nav-link-wrapper .dropdown-menu {
-    display: block;
-  } 
-  */
 
   .dropdown-item {
     font-size: 0.85rem;
@@ -725,13 +792,11 @@
     color: #6F3132 !important;
   }
   
-  /* Hide unnecessary elements on mobile */
   .nav-link-wrapper::after {
     display: none;
   }
 }
 
-/* Search Modal Responsive */
 .search-overlay {
   padding-top: 100px;
 }
@@ -742,7 +807,7 @@
   }
   
   .nav {
-     top: 71px; /* Adjust slightly for smaller screens if header shrinks */
+     top: 71px;
      max-height: calc(100vh - 71px);
   }
 }

@@ -20,6 +20,9 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
+  
+  // NEW: Sidebar Toggle State for Mobile
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Dashboard Data State
   const [stats, setStats] = useState({
@@ -34,9 +37,9 @@ const AdminDashboard = () => {
   // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
-  const PRODUCTS_PER_PAGE = 10; // Constant to ensure serial numbers are calculated correctly
+  const PRODUCTS_PER_PAGE = 10;
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null); // For Details View
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentProduct, setCurrentProduct] = useState({
     name: '',
     price: '',
@@ -60,13 +63,11 @@ const AdminDashboard = () => {
         getRevenueAnalytics()
       ]);
 
-      console.log('Dashboard Data:', { summary, recent, revenue });
-
       setStats({
-        totalSales: summary?.data?.total_sales || summary?.data?.totalSales || summary?.data?.total_revenue || summary.total_sales || summary.totalSales || 0,
-        totalOrders: summary?.data?.total_orders || summary?.data?.totalOrders || summary.total_orders || 0,
-        visitors: summary?.data?.total_visitors || summary?.data?.visitors || summary.total_visitors || 1500,
-        conversionRate: summary?.data?.conversion_rate || summary?.data?.conversionRate || summary.conversion_rate || 2.5
+        totalSales: summary?.data?.total_sales || summary?.data?.totalSales || summary?.data?.total_revenue || 0,
+        totalOrders: summary?.data?.total_orders || summary?.data?.totalOrders || 0,
+        visitors: summary?.data?.total_visitors || summary?.data?.visitors || 1500,
+        conversionRate: summary?.data?.conversion_rate || summary?.data?.conversionRate || 2.5
       });
       setRecentOrders(recent?.data || recent?.orders || []);
       setRevenueData(revenue?.data || revenue);
@@ -95,16 +96,20 @@ const AdminDashboard = () => {
     }
   }, [ordersPage]);
 
-  // Initial Data Fetch
   useEffect(() => {
     fetchDashboardData();
   }, []);
 
-  // Fetch Data on Tab Change
   useEffect(() => {
     if (activeTab === 'products') loadProducts();
     if (activeTab === 'orders') loadAllOrders();
   }, [activeTab, loadProducts, loadAllOrders]);
+
+  // Close sidebar automatically when tab changes on mobile
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setIsSidebarOpen(false);
+  };
 
   // --- Product Handlers ---
   const handleProductSubmit = async (e) => {
@@ -119,7 +124,7 @@ const AdminDashboard = () => {
       resetProductForm();
       loadProducts();
       if (selectedProduct && isEditingProduct) {
-        setSelectedProduct(null); // Close details if open
+        setSelectedProduct(null);
       }
       alert(isEditingProduct ? 'Product updated!' : 'Product added!');
     } catch (error) {
@@ -133,7 +138,7 @@ const AdminDashboard = () => {
       try {
         await deleteProduct(id);
         loadProducts();
-        setSelectedProduct(null); // Close details if open
+        setSelectedProduct(null);
       } catch (error) {
         alert('Failed to delete product');
       }
@@ -145,7 +150,6 @@ const AdminDashboard = () => {
     setCurrentProduct(product);
     setIsEditingProduct(true);
     setIsProductModalOpen(true);
-    // Keep detail view open or close it? Let's close it to avoid modal stacking
     setSelectedProduct(null);
   };
 
@@ -178,25 +182,12 @@ const AdminDashboard = () => {
     }).format(amount);
   };
 
-  // Parse revenue data from various possible API response formats
   const parseRevenueData = () => {
     if (!revenueData) {
       return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], data: [0, 0, 0, 0, 0, 0] };
     }
-    
-    // Try different data structures
-    const months = revenueData.months || 
-                   revenueData.data?.months || 
-                   revenueData.labels ||
-                   ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    const revenue = revenueData.revenue || 
-                    revenueData.data?.revenue || 
-                    revenueData.values ||
-                    revenueData.data ||
-                    (Array.isArray(revenueData) ? revenueData : [0, 0, 0, 0, 0, 0]);
-    
-    console.log('Parsed revenue data:', { months, revenue });
+    const months = revenueData.months || revenueData.data?.months || revenueData.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    const revenue = revenueData.revenue || revenueData.data?.revenue || revenueData.values || revenueData.data || [0, 0, 0, 0, 0, 0];
     return { labels: months, data: Array.isArray(revenue) ? revenue : [0, 0, 0, 0, 0, 0] };
   };
 
@@ -224,7 +215,21 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <aside className="admin-sidebar">
+      {/* NEW: Mobile Header / Toggle Button */}
+      <div className="mobile-header">
+        <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          ☰
+        </button>
+        
+        {/* Logo centered in the header */}
+        <img src={logo} alt="Khaddar" className="mobile-header-logo" />
+        
+        {/* Invisible spacer to balance the flex layout (optional, but good for alignment) */}
+        <div style={{ width: '30px' }}></div> 
+      </div>
+
+      {/* Sidebar with dynamic class for mobile */}
+      <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="admin-logo">
           <img src={logo} alt="Khaddar" />
           <span>ADMIN</span>
@@ -232,19 +237,19 @@ const AdminDashboard = () => {
         <nav className="admin-nav">
           <button
             className={activeTab === 'overview' ? 'active' : ''}
-            onClick={() => setActiveTab('overview')}
+            onClick={() => handleTabChange('overview')}
           >
             Dashboard
           </button>
           <button
             className={activeTab === 'products' ? 'active' : ''}
-            onClick={() => setActiveTab('products')}
+            onClick={() => handleTabChange('products')}
           >
             Products
           </button>
           <button
             className={activeTab === 'orders' ? 'active' : ''}
-            onClick={() => setActiveTab('orders')}
+            onClick={() => handleTabChange('orders')}
           >
             Orders
           </button>
@@ -253,6 +258,11 @@ const AdminDashboard = () => {
           </button>
         </nav>
       </aside>
+      
+      {/* NEW: Overlay for closing sidebar on mobile */}
+      {isSidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
 
       <main className="admin-content">
         {/* OVERVIEW TAB */}
@@ -356,14 +366,9 @@ const AdminDashboard = () => {
                       onClick={() => handleProductRowClick(product)}
                       style={{ cursor: 'pointer' }}
                     >
-                      {/* Serial Number Calculation: (Current Page - 1) * ItemsPerPage + (index + 1) */}
                       <td>{(productsPage - 1) * PRODUCTS_PER_PAGE + (index + 1)}</td>
                       <td>
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="product-thumb"
-                        />
+                        <img src={product.image} alt={product.name} className="product-thumb" />
                       </td>
                       <td>{product.name}</td>
                       <td>{product.category}</td>
@@ -389,18 +394,9 @@ const AdminDashboard = () => {
             </div>
 
             <div className="pagination">
-              <button
-                disabled={productsPage === 1}
-                onClick={() => setProductsPage(p => Math.max(1, p - 1))}
-              >
-                Previous
-              </button>
+              <button disabled={productsPage === 1} onClick={() => setProductsPage(p => Math.max(1, p - 1))}>Previous</button>
               <span>Page {productsPage}</span>
-              <button
-                onClick={() => setProductsPage(p => p + 1)}
-              >
-                Next
-              </button>
+              <button onClick={() => setProductsPage(p => p + 1)}>Next</button>
             </div>
           </div>
         )}
@@ -447,12 +443,7 @@ const AdminDashboard = () => {
               </table>
             </div>
             <div className="pagination">
-              <button
-                disabled={ordersPage === 1}
-                onClick={() => setOrdersPage(p => Math.max(1, p - 1))}
-              >
-                Previous
-              </button>
+              <button disabled={ordersPage === 1} onClick={() => setOrdersPage(p => Math.max(1, p - 1))}>Previous</button>
               <span>Page {ordersPage}</span>
               <button onClick={() => setOrdersPage(p => p + 1)}>Next</button>
             </div>
@@ -468,40 +459,21 @@ const AdminDashboard = () => {
             <form onSubmit={handleProductSubmit}>
               <div className="form-group">
                 <label>Product Name</label>
-                <input
-                  type="text"
-                  value={currentProduct.name}
-                  onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
-                  required
-                />
+                <input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} required />
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label>Price</label>
-                  <input
-                    type="number"
-                    value={currentProduct.price}
-                    onChange={(e) => setCurrentProduct({ ...currentProduct, price: parseFloat(e.target.value) })}
-                    required
-                  />
+                  <input type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct({ ...currentProduct, price: parseFloat(e.target.value) })} required />
                 </div>
                 <div className="form-group">
                   <label>Stock</label>
-                  <input
-                    type="number"
-                    value={currentProduct.stock}
-                    onChange={(e) => setCurrentProduct({ ...currentProduct, stock: parseInt(e.target.value) })}
-                    required
-                  />
+                  <input type="number" value={currentProduct.stock} onChange={(e) => setCurrentProduct({ ...currentProduct, stock: parseInt(e.target.value) })} required />
                 </div>
               </div>
               <div className="form-group">
                 <label>Category</label>
-                <select
-                  value={currentProduct.category}
-                  onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-                  required
-                >
+                <select value={currentProduct.category} onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })} required>
                   <option value="">Select Category</option>
                   <option value="Men">Men</option>
                   <option value="Women">Women</option>
@@ -511,20 +483,11 @@ const AdminDashboard = () => {
               </div>
               <div className="form-group">
                 <label>Image URL</label>
-                <input
-                  type="text"
-                  value={currentProduct.image}
-                  onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.value })}
-                  placeholder="https://..."
-                />
+                <input type="text" value={currentProduct.image} onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.value })} placeholder="https://..." />
               </div>
               <div className="form-group">
                 <label>Description</label>
-                <textarea
-                  value={currentProduct.description}
-                  onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })}
-                  rows="3"
-                />
+                <textarea value={currentProduct.description} onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })} rows="3" />
               </div>
               <div className="modal-actions">
                 <button type="button" onClick={() => setIsProductModalOpen(false)} className="cancel-btn">Cancel</button>

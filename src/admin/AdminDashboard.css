@@ -5,13 +5,60 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Sidebar Styles */
+/* ========================================= */
+/* MOBILE HEADER (Hidden on Desktop)         */
+/* ========================================= */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #F7F7F0;
+  border-bottom: 1px solid #8C6C5F;
+  z-index: 1001;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between; /* Space between toggle and invisible spacer */
+}
+
+/* Centered Logo in Mobile Header */
+.mobile-header-logo {
+  height: 40px; 
+  object-fit: contain;
+  position: absolute; /* Absolute positioning keeps it dead center */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6F3132;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+/* ========================================= */
+/* SIDEBAR STYLES                            */
+/* ========================================= */
 .admin-sidebar {
   width: 260px;
-  background-color: #F7F7F0;
-  /* Pale Beige/Cream */
-  color: #6F3132;
-  /* Deep Coffee Brown */
+  background-color: #F7F7F0; /* Pale Beige/Cream */
+  color: #6F3132; /* Deep Coffee Brown */
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -19,8 +66,8 @@
   left: 0;
   top: 0;
   z-index: 1000;
-  border-right: 1px solid #8C6C5F;
-  /* Muted Clay */
+  border-right: 1px solid #8C6C5F; /* Muted Clay */
+  transition: transform 0.3s ease-in-out; /* Smooth slide for mobile */
 }
 
 .admin-logo {
@@ -43,8 +90,7 @@
   font-size: 0.8rem;
   letter-spacing: 0.2em;
   font-weight: 500;
-  color: #A15F22;
-  /* Sienna */
+  color: #A15F22; /* Sienna */
 }
 
 .admin-nav {
@@ -74,8 +120,7 @@
 }
 
 .admin-nav button:hover {
-  background-color: #B38A6A;
-  /* Warm Sand */
+  background-color: #B38A6A; /* Warm Sand */
   color: #ffffff;
 }
 
@@ -88,8 +133,8 @@
 
 .logout-btn {
   margin-top: auto;
-  border-top: 1px solid #8C6C5F !important;
-  color: #6F3132 !important;
+  /* border-top: 1px solid #8C6C5F !important;
+  color: #6F3132 !important; */
 }
 
 .logout-btn:hover {
@@ -97,7 +142,9 @@
   color: #b91c1c !important;
 }
 
-/* Content Area */
+/* ========================================= */
+/* CONTENT AREA                              */
+/* ========================================= */
 .admin-content {
   flex: 1;
   margin-left: 260px;
@@ -280,12 +327,10 @@
 
 .action-btn {
   padding: 6px 10px;
-  /* Slightly reduced padding */
   font-size: 0.7rem;
   text-transform: uppercase;
   cursor: pointer;
   margin-right: 0;
-  /* Removing margin in favor of gap */
   border: 1px solid #e0e0e0;
   background: white;
   white-space: nowrap;
@@ -293,7 +338,6 @@
   align-items: center;
   justify-content: center;
   min-width: 60px;
-  /* Ensure buttons have a minimum clickable area */
 }
 
 .action-btn:hover {
@@ -327,7 +371,7 @@
   border-color: #8C6C5F;
 }
 
-/* Modal */
+/* Modals */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -478,15 +522,18 @@
   justify-content: flex-start;
 }
 
-/* Ensure Actions column has enough width and isn't cut off */
 .admin-table th:last-child,
 .admin-table td:last-child {
   width: 240px;
-  /* Fixed width for actions */
   min-width: 240px;
   padding-left: 12px;
   padding-right: 12px;
   box-sizing: border-box;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
 }
 
 .form-group label {
@@ -509,6 +556,17 @@
   font-family: 'Montserrat', sans-serif;
   color: #1a1a1a;
   outline: none;
+  box-sizing: border-box;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-row .form-group {
+  flex: 1;
 }
 
 .form-group input:focus {
@@ -543,7 +601,13 @@
   border-color: #666;
 }
 
-/* Status select dropdown styling */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
 .status-select {
   padding: 4px 8px;
   font-family: 'Montserrat', sans-serif;
@@ -552,4 +616,157 @@
   background: white;
   color: #6F3132;
   outline: none;
+}
+
+/* ========================================= */
+/* RESPONSIVE MEDIA QUERIES                  */
+/* ========================================= */
+
+/* Tablet & Mobile Screens (Max-Width: 1024px) */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    width: 240px;
+  }
+  .admin-content {
+    margin-left: 240px;
+    padding: 30px;
+  }
+}
+
+/* Mobile Screens (Max-Width: 768px) */
+@media (max-width: 768px) {
+  
+  /* Show Mobile Header */
+  .mobile-header {
+    display: flex;
+  }
+
+  /* Make Sidebar Off-Canvas */
+  .admin-sidebar {
+    transform: translateX(-100%); /* Hide off-screen by default */
+    width: 260px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    top: 60px; /* Below mobile header */
+    height: calc(100vh - 60px);
+  }
+
+  /* Hide the Internal Logo inside the Sidebar on Mobile */
+  .admin-sidebar .admin-logo {
+    display: none;
+  }
+  
+  /* Adjust nav padding since logo is gone */
+  .admin-nav {
+    padding-top: 20px; 
+  }
+
+  /* Show Sidebar when 'open' class is active */
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Show Overlay when sidebar is open */
+  .sidebar-overlay {
+    display: block;
+    top: 60px;
+  }
+
+  /* Main Content Adjustments */
+  .admin-content {
+    margin-left: 0; /* Remove margin as sidebar is hidden */
+    padding: 20px;
+    margin-top: 60px; /* Push down for mobile header */
+    width: 100%;
+  }
+
+  /* Header Typography */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Stats Grid - Stack columns */
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+    gap: 16px;
+  }
+
+  /* Form Rows - Stack inputs */
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  /* Modals */
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+    margin: 20px auto;
+  }
+
+  /* Product Details Modal - Stack Image and Info */
+  .product-details-body {
+    grid-template-columns: 1fr; /* Stack vertically */
+    gap: 20px;
+  }
+
+  .product-details-image {
+    max-height: 300px;
+    width: 100%;
+  }
+  
+  .product-details-image img {
+    object-fit: contain;
+  }
+
+  /* Action Buttons in Modal */
+  .details-actions {
+    flex-direction: column;
+  }
+  
+  .details-actions button {
+    width: 100%;
+  }
+}
+
+/* Small Mobile Screens (Max-Width: 480px) */
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 15px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  /* Ensure tables scroll */
+  .table-responsive {
+    border: none;
+    box-shadow: none;
+  }
+  
+  .admin-table th, .admin-table td {
+    padding: 12px 10px;
+    font-size: 0.8rem;
+  }
+  
+  /* Buttons Adjustments for small screens */
+  .primary-btn {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .page-header button {
+    width: 100%;
+  }
 }

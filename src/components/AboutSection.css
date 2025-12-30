@@ -17,7 +17,7 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  min-height: 500px; /* Explicit height for iOS */
+  min-height: 500px; /* Explicit height for Desktop */
 }
 
 .about-image {
@@ -108,18 +108,6 @@
   z-index: 1;
 }
 
-/* Horizontal Motif next to "Who We Are" */
-/* .about-label::after {
-  content: '';
-  display: block;
-  width: 40px; 
-  height: 10px;
-  opacity: 0.7;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10' viewBox='0 0 20 10'%3E%3Cline x1='0' y1='5' x2='20' y2='5' stroke='%236F3132' stroke-width='1' /%3E%3Crect x='8' y='3' width='4' height='4' transform='rotate(45 10 5)' fill='%236F3132' /%3E%3C/svg%3E");
-  background-repeat: repeat-x;
-  background-size: 20px 10px;
-} */
-
 .about-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.8rem;
@@ -148,7 +136,10 @@
   max-width: 85%;
 }
 
-/* Responsive Design */
+/* ========================================= */
+/* RESPONSIVE DESIGN (UPDATED)               */
+/* ========================================= */
+
 @media (max-width: 1200px) {
   .about-container {
     min-height: 35vh;
@@ -169,30 +160,41 @@
   }
 }
 
+/* --- TABLETS & MOBILE (Breakpoints where layout stacks) --- */
 @media (max-width: 992px) {
   .about-container {
     flex-direction: column;
     min-height: auto;
   }
   
+  /* FIX: Force natural height for tablets/mobile.
+     This removes the 'cropping' effect on iPad & Phones.
+  */
   .about-image-wrapper {
-    height: 40vh;
-    min-height: 350px;
+    height: auto !important;
+    min-height: 0 !important;
+    display: block;
     order: 1;
+  }
+
+  .about-image {
+    width: 100%;
+    height: auto !important; /* Let image dictate height */
+    position: static;
+    object-fit: unset; /* Disable cover crop */
   }
   
   .about-content {
     padding: 40px 40px;
-    padding-right: 50px; /* Added extra space on right for the strip */
+    padding-right: 50px; 
     order: 2;
   }
   
-  /* UPDATED: Strip is now visible and resized for tablets/mobile */
   .about-content::after {
-    display: block; /* Ensure it stays visible */
-    right: 10px;    /* Move closer to the edge */
-    width: 25px;    /* Make slightly thinner */
-    background-size: 25px 25px; /* Scale down the pattern */
+    display: block; 
+    right: 10px;    
+    width: 25px;    
+    background-size: 25px 25px; 
   }
   
   .about-heading {
@@ -207,14 +209,11 @@
 }
 
 @media (max-width: 768px) {
-  .about-image-wrapper {
-    height: 35vh;
-    min-height: 300px;
-  }
+  /* Inherits height:auto from 992px block */
   
   .about-content {
     padding: 35px 30px;
-    padding-right: 45px; /* Ensure text doesn't overlap strip */
+    padding-right: 45px; 
   }
   
   .about-heading {
@@ -228,22 +227,13 @@
 }
 
 @media (max-width: 576px) {
-  .about-image-wrapper {
-    height: 30vh;
-    min-height: 250px;
-  }
-  
-  .about-image {
-    object-fit: cover;
-    object-position: center center;
-  }
+  /* Inherits height:auto from 992px block */
   
   .about-content {
     padding: 30px 20px;
-    padding-right: 40px; /* Keep text clear of the strip */
+    padding-right: 40px; 
   }
 
-  /* UPDATED: Even smaller strip for very small screens */
   .about-content::after {
     right: 5px;
     width: 20px;
@@ -262,7 +252,7 @@
 @media (max-width: 480px) {
   .about-content {
     padding: 25px 15px;
-    padding-right: 35px; /* Maintain text legibility */
+    padding-right: 35px; 
   }
   
   .about-heading {
