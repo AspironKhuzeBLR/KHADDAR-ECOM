@@ -6,9 +6,9 @@ const Sustainability = () => {
   const practices = [
     {
       id: 1,
-      title: 'Natural Dyes',
+      title: 'Organic Dyes',
       description: 'We use plant-based, eco-friendly dyes sourced responsibly to minimize harm to people and the planet.',
-      image: 'https://images.unsplash.com/photo-1743708825952-eb9211e1765c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzR8fHN1c3RhaW5hYmVsZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww&auto=format&fit=crop&q=80&w=1200'
+      image: '/Sustainibility_images/Organic_dyes.PNG'
     },
     {
       id: 2,
@@ -20,13 +20,13 @@ const Sustainability = () => {
       id: 3,
       title: 'Artisan Collaboration',
       description: 'We work closely with local artisan communities, ensuring fair wages, ethical practices, and cultural preservation.',
-      image: 'https://plus.unsplash.com/premium_photo-1726704085688-81adb9f4e10e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjAwfHxzdXN0YWluYWJlbGUlMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=80&w=1200'
+      image: '/Sustainibility_images/Artisan_collab.PNG'
     },
     {
       id: 4,
       title: 'Minimal Waste Approach',
       description: 'Every design is thoughtfully created to reduce waste and promote lasting value.',
-      image: 'https://images.unsplash.com/photo-1682802739047-24fa5d983e71?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTIzfHxzdXN0YWluYWJlbGUlMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=80&w=1200'
+      image: '/Sustainibility_images/Minimal_waste.PNG'
     },
     {
       id: 5,

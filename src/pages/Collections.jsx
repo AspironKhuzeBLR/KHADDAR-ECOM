@@ -164,6 +164,17 @@ const Collections = () => {
       {/* Marquee Strip */}
       <div className="marquee-strip">
         <div className="marquee-content">
+          {/* ORIGINAL SET */}
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+
+          {/* DUPLICATE SET (REQUIRED FOR SMOOTH LOOP) */}
           <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
           <span>✨ HANDCRAFTED WITH LOVE</span>
           <span>🚚 FREE DELIVERY ON ALL ORDERS</span>

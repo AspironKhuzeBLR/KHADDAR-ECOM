@@ -244,8 +244,9 @@
 .marquee-content {
   display: flex;
   animation: marquee 15s linear infinite;
-  gap: 80px;
+  /* gap: 80px;  <-- REMOVED TO FIX JUMP */
   white-space: nowrap;
+  width: max-content; /* Ensures content doesn't wrap */
 }
 
 .marquee-content span {
@@ -257,6 +258,9 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  
+  /* ADDED: Replaces the gap to ensure smooth loop calculation */
+  margin-right: 80px; 
 }
 
 @keyframes marquee {
@@ -348,6 +352,11 @@
 @media (max-width: 1024px) {
   .full-screen-wrapper { height: 60vh; }
   .collections-title { font-size: 3.5rem; }
+  
+  /* NEW: Faster marquee for iPad/Tablet */
+  .marquee-content {
+    animation-duration: 10s;
+  }
 }
 
 @media (max-width: 768px) {
@@ -375,14 +384,25 @@
     min-height: 10px !important;
   }
   
-  /* Marquee Strip - Mobile */
+  /* --- MARQUEE FIXES FOR MOBILE --- */
   .marquee-strip {
     padding: 15px 0;
+  }
+
+  .marquee-content {
+    /* Force gap to 0 to prevent "snap" calculation errors */
+    gap: 0 !important; 
+    /* Use hardware acceleration to prevent jitter */
+    will-change: transform;
+    animation-duration: 9s; 
   }
   
   .marquee-content span {
     font-size: 0.9rem;
-    gap: 8px;
+    /* Internal gap for icon+text (keep this) */
+    gap: 8px; 
+    /* Reduce loop spacing on mobile so it looks continuous */
+    margin-right: 30px; 
   }
   
   /* Shop Action Section - Mobile */
