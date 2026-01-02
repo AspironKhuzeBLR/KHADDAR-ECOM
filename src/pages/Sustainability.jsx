@@ -1,6 +1,8 @@
 import React from 'react';
 import './Sustainability.css';
 import HeroVideo from '../components/HeroVideo';
+import organicFabricImg from '../images/IMG_1735.PNG';
+import ecoimg from '../images/IMG_1734.PNG'
 
 const Sustainability = () => {
   const practices = [
@@ -14,7 +16,7 @@ const Sustainability = () => {
       id: 2,
       title: 'Organic Fabrics',
       description: 'Our collections are created from handwoven, natural textiles that are biodegradable and gentle on the earth.',
-      image: 'https://images.unsplash.com/photo-1695694477689-bef8ba8fc5c6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHN1c3RhaW5hYmVsZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww&auto=format&fit=crop&q=80&w=1200'
+      image: organicFabricImg
     },
     {
       id: 3,
@@ -32,7 +34,7 @@ const Sustainability = () => {
       id: 5,
       title: 'Eco-conscious Packaging',
       description: 'All packaging is biodegradable or recyclable, completing the cycle of sustainability.',
-      image: 'https://plus.unsplash.com/premium_photo-1671467857784-73e69ed7a02e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjA0fHxzdXN0YWluYWJlbGUlMjBjbG90aGluZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=80&w=1200'
+      image: ecoimg,
     }
   ];
 

@@ -30,6 +30,8 @@ import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import './context/Toast.css';
 import ShopCollections from './pages/ShopCollections';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 
 function AppContent() {
   const location = useLocation();
@@ -67,6 +69,8 @@ function AppContent() {
             <Route path="/copyright-policy" element={<PolicyPage />} />
             <Route path="/resale-policy" element={<PolicyPage />} />
             <Route path="/shop-collections" element={<ShopCollections />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/payment/failed" element={<PaymentFailure />} />
 
             <Route
               path="/admin/dashboard"

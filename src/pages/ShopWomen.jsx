@@ -30,13 +30,12 @@ const ShopWomen = () => {
     const loadCategories = async () => {
       try {
         const data = await fetchCategories();
-        // Ensure data is an array before filtering
         const categoriesArray = Array.isArray(data) ? data : (data?.categories || data?.data || []);
         // Filter for women's sub-categories (parent_id: 4 is Women's Wear)
         const womenCategories = categoriesArray.filter(cat => 
-          cat.parent_id === 4 || // Sub-categories of Women's Wear
+          cat.parent_id === 4 || 
           (cat.type === 'sub' && cat.parent_id === 4) ||
-          cat.main_category === "Women's Wear" // Fallback for old format
+          cat.main_category === "Women's Wear"
         );
         setCategories(womenCategories);
       } catch (error) {
@@ -113,137 +112,165 @@ const ShopWomen = () => {
 
   return (
     <div className="shop-page">
-      {/* Category Filter Sidebar */}
-      {categories.length > 0 && (
-        <aside className="shop-sidebar">
-          <h3 className="sidebar-title">Categories</h3>
-          <ul className="category-list">
-            <li>
-              <button 
-                className={`category-btn ${!selectedCategory ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(null)}
-              >
-                All Products
-              </button>
-            </li>
-            {categories.map((category) => (
-              <li key={category.id}>
+      <div className="shop-content-wrapper">
+        {/* --- SIDEBAR --- */}
+        {categories.length > 0 && (
+          <aside className="shop-sidebar">
+            <h3 className="sidebar-title">Categories</h3>
+            <ul className="category-list">
+              <li>
                 <button 
-                  className={`category-btn ${selectedCategory?.toString() === category.id?.toString() ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(category.id)}
+                  className={`category-btn ${!selectedCategory ? 'active' : ''}`}
+                  onClick={() => handleCategoryClick(null)}
                 >
-                  {category.name || category.sub_category}
+                  All Products
                 </button>
               </li>
-            ))}
-          </ul>
-        </aside>
-      )}
-
-      <div className="shop-products">
-        <div className="container">
-          {selectedCategoryData ? (
-            <>
-              <h2 className="products-category-title">{selectedCategoryData.name || selectedCategoryData.sub_category}</h2>
-              {selectedCategoryData.description && (
-                <p className="category-description">{selectedCategoryData.description}</p>
-              )}
-            </>
-          ) : (
-            <h2 className="products-category-title">Women's Wear</h2>
-          )}
-
-          {/* Products count */}
-          <p className="products-count">
-            Showing {products.length} of {pagination.total} products
-          </p>
-
-          {products.length > 0 ? (
-            <>
-              <div className="products-grid">
-                {products.map((product, index) => (
-                  <div 
-                    key={product.id} 
-                    className="product-card"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="product-image-wrapper">
-                      <img 
-                        src={product.image} 
-                        alt={product.name} 
-                        className="product-image"
-                        onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x500?text=No+Image';
-                        }}
-                      />
-                      {index < 2 && <span className="product-badge">New</span>}
-                      {!product.inStock && <span className="product-badge out-of-stock">Out of Stock</span>}
-                      <button 
-                        className="product-choose-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/product/${product.id}`);
-                        }}
-                      >
-                        Choose options
-                      </button>
-                    </div>
-                    <div className="product-info">
-                      <h3 className="product-name">{product.name}</h3>
-                      <div className="product-price">
-                        <span className="price-label">Regular price</span>
-                        <span className="price-value">{product.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {pagination.totalPages > 1 && (
-                <div className="pagination">
+              {categories.map((category) => (
+                <li key={category.id}>
                   <button 
-                    className="pagination-btn"
-                    disabled={pagination.page <= 1}
-                    onClick={() => handlePageChange(pagination.page - 1)}
+                    className={`category-btn ${selectedCategory?.toString() === category.id?.toString() ? 'active' : ''}`}
+                    onClick={() => handleCategoryClick(category.id)}
                   >
-                    ← Previous
+                    {category.name || category.sub_category}
                   </button>
-                  
-                  <div className="pagination-numbers">
-                    {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
-                      <button
-                        key={pageNum}
-                        className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
-                        onClick={() => handlePageChange(pageNum)}
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+
+        {/* --- MAIN CONTENT AREA (Marquee + Products) --- */}
+        <div className="shop-main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          
+          {/* --- MARQUEE STRIP --- */}
+          <div className="marquee-strip">
+            <div className="marquee-content">
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              {/* Duplicate set for smooth loop */}
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+              <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+              <span>✨ HANDCRAFTED WITH LOVE</span>
+            </div>
+          </div>
+
+          {/* --- PRODUCTS SECTION --- */}
+          <div className="shop-products">
+            <div className="container">
+              {selectedCategoryData ? (
+                <>
+                  <h2 className="products-category-title">{selectedCategoryData.name || selectedCategoryData.sub_category}</h2>
+                  {selectedCategoryData.description && (
+                    <p className="category-description">{selectedCategoryData.description}</p>
+                  )}
+                </>
+              ) : (
+                <h2 className="products-category-title">Women's Wear</h2>
+              )}
+
+              <p className="products-count">
+                Showing {products.length} of {pagination.total} products
+              </p>
+
+              {products.length > 0 ? (
+                <>
+                  <div className="products-grid">
+                    {products.map((product, index) => (
+                      <div 
+                        key={product.id} 
+                        className="product-card"
+                        onClick={() => navigate(`/product/${product.id}`)}
+                        style={{ cursor: 'pointer' }}
                       >
-                        {pageNum}
-                      </button>
+                        <div className="product-image-wrapper">
+                          <img 
+                            src={product.image} 
+                            alt={product.name} 
+                            className="product-image"
+                            onError={(e) => {
+                              e.target.src = 'https://via.placeholder.com/400x500?text=No+Image';
+                            }}
+                          />
+                          {index < 2 && <span className="product-badge">New</span>}
+                          {!product.inStock && <span className="product-badge out-of-stock">Out of Stock</span>}
+                          <button 
+                            className="product-choose-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/product/${product.id}`);
+                            }}
+                          >
+                            Choose options
+                          </button>
+                        </div>
+                        <div className="product-info">
+                          <h3 className="product-name">{product.name}</h3>
+                          <div className="product-price">
+                            <span className="price-label">Regular price</span>
+                            <span className="price-value">{product.price}</span>
+                          </div>
+                        </div>
+                      </div>
                     ))}
                   </div>
 
+                  {pagination.totalPages > 1 && (
+                    <div className="pagination">
+                      <button 
+                        className="pagination-btn"
+                        disabled={pagination.page <= 1}
+                        onClick={() => handlePageChange(pagination.page - 1)}
+                      >
+                        ← Previous
+                      </button>
+                      
+                      <div className="pagination-numbers">
+                        {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
+                          <button
+                            key={pageNum}
+                            className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
+                            onClick={() => handlePageChange(pageNum)}
+                          >
+                            {pageNum}
+                          </button>
+                        ))}
+                      </div>
+
+                      <button 
+                        className="pagination-btn"
+                        disabled={pagination.page >= pagination.totalPages}
+                        onClick={() => handlePageChange(pagination.page + 1)}
+                      >
+                        Next →
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="no-products">
+                  <p>No products found in this category.</p>
                   <button 
-                    className="pagination-btn"
-                    disabled={pagination.page >= pagination.totalPages}
-                    onClick={() => handlePageChange(pagination.page + 1)}
+                    className="btn-view-all"
+                    onClick={() => handleCategoryClick(null)}
                   >
-                    Next →
+                    View All Products
                   </button>
                 </div>
               )}
-            </>
-          ) : (
-            <div className="no-products">
-              <p>No products found in this category.</p>
-              <button 
-                className="btn-view-all"
-                onClick={() => handleCategoryClick(null)}
-              >
-                View All Products
-              </button>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

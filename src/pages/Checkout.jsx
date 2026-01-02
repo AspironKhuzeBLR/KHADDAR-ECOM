@@ -151,30 +151,33 @@ const Checkout = () => {
       const orderResponse = await createOrder(orderData);
       console.log('Order Response:', orderResponse);
 
-      if (orderResponse && (orderResponse.success || orderResponse.data || orderResponse.order_id)) {
-        const orderInfo = orderResponse.data || orderResponse;
-        const orderId = orderInfo.order_id || orderInfo.id;
+      // Extract Order ID from response structure
+      const orderId = orderResponse?.data?.order_id || orderResponse?.order_id;
 
-        if (!orderId) {
-          throw new Error('Order ID not received from server');
-        }
-
-        // Now submit payment immediately
+      if (orderId) {
         console.log('Submitting Payment for Order:', orderId);
         const paymentData = { payment_method: paymentMethod };
         const paymentResponse = await submitPayment(orderId, paymentData);
         console.log('Payment Response:', paymentResponse);
 
-        if (paymentResponse && (paymentResponse.success || paymentResponse.status === 'success' || paymentResponse.payment_status === 'completed')) {
-          // Clear cart
+        // CHECK FOR HDFC REDIRECT URL
+        if (paymentResponse?.data?.payment_url) {
+            // Replaced toast.info with toast.success to avoid the error
+            toast.success('Redirecting to Payment Gateway...');
+            
+            // Clear cart before redirecting
+            sessionStorage.removeItem('cartItems');
+
+            // Redirect to the actual HDFC Bank payment page
+            window.location.href = paymentResponse.data.payment_url;
+        } 
+        else if (paymentResponse && (paymentResponse.success || paymentResponse.status === 'success')) {
           sessionStorage.removeItem('cartItems');
-          
-          // Show success message
-          setCurrentOrder(orderInfo);
+          setCurrentOrder(orderResponse.data);
           setShowPaymentModal(true);
-          toast.success('🎉 Payment successful! Your order has been placed.');
+          toast.success('🎉 Order placed successfully!');
         } else {
-          throw new Error('Payment processing failed');
+          throw new Error('Payment initialization failed');
         }
       } else {
         throw new Error('Failed to create order');
@@ -376,8 +379,6 @@ const Checkout = () => {
                 <span>₹{calculateSubtotal().toLocaleString('en-IN')}</span>
               </div>
 
-
-
               <div className="summary-divider"></div>
 
               <div className="summary-row total">
@@ -409,6 +410,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+
       {/* Success Modal */}
       {showPaymentModal && currentOrder && (
         <div className="modal-overlay">
@@ -471,4 +473,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-
