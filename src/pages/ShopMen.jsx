@@ -33,8 +33,8 @@ const ShopMen = () => {
         const categoriesArray = Array.isArray(data) ? data : (data?.categories || data?.data || []);
         const menCategories = categoriesArray.filter(cat => 
           cat.parent_id === 1 || 
-          (cat.type === 'sub' && cat.parent_id === 1) ||
-          cat.main_category === "Men's Wear"
+          cat.main_category === "Men's Wear" ||
+          cat.id === 29 
         );
         setCategories(menCategories);
       } catch (error) {

@@ -64,31 +64,30 @@ const handleResponse = async (response) => {
  * @returns {Promise<Object>} API response
  */
 export const updateOrderStatus = async (orderId, status) => {
-    try {
-        // Try admin endpoint first for status update
-        const path = `${API_CONFIG.ENDPOINTS.ADMIN_ORDERS}/${orderId}/status`;
-        const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+  const token = getAdminToken();
+  try {
+    // FIX: Explicitly add /api before /orders
+    // The browser was hitting: http://localhost:3000/orders
+    // The backend wants: http://localhost:3000/api/orders
+    const url = `${API_BASE_URL}/api/orders/${orderId}/status`; 
 
-        console.log('Updating order status:', { orderId, status, url });
+    console.log(`Updating order status:`, { orderId, status, url });
 
-        const response = await withTimeout(
-            fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getAdminToken()}`
-                },
-                body: JSON.stringify({ order_status: status, status: status })
-            })
-        );
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      // Ensure the key is 'order_status' and value is 'completed'
+      body: JSON.stringify({ order_status: status }) 
+    });
 
-        const result = await handleResponse(response);
-        console.log('Order status update result:', result);
-        return result;
-    } catch (error) {
-        console.error('Error updating order status:', error);
-        throw error;
-    }
+    return await handleResponse(response);
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    throw error;
+  }
 };
 
 /**

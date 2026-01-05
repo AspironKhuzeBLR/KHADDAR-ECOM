@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 import { useAuth } from '../context/AuthContext';
 import { FaSignOutAlt } from 'react-icons/fa';
+// Import the service to fetch categories
+import { fetchCategories } from '../services/productService';
 
 const logo = '/logo_file_page-0001.png';
 
@@ -18,6 +20,9 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTransparent, setIsTransparent] = useState(false);
+  // State for dynamic categories
+  const [navCategories, setNavCategories] = useState([]);
+  
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   const { isAuthenticated, user, logout } = useAuth();
@@ -35,6 +40,7 @@ const Header = () => {
   const adminUser = isAdminRoute && isAdminAuthenticated
     ? JSON.parse(sessionStorage.getItem('adminUser') || '{}')
     : null;
+    
   const displayName = useMemo(() => {
     if (user?.name) {
       return user.name.trim().split(/\s+/)[0];
@@ -44,6 +50,22 @@ const Header = () => {
     }
     return 'Account';
   }, [user]);
+
+  // Fetch Categories for the Dropdown
+  useEffect(() => {
+    const getNavData = async () => {
+      try {
+        const data = await fetchCategories();
+        const categoriesArray = Array.isArray(data) ? data : (data?.categories || data?.data || []);
+        setNavCategories(categoriesArray);
+      } catch (err) {
+        console.error("Failed to load nav categories", err);
+      }
+    };
+    if (!isAdminRoute) {
+      getNavData();
+    }
+  }, [isAdminRoute]);
 
   useEffect(() => {
     // Pages that should have transparent header initially (have hero images/videos)
@@ -93,6 +115,10 @@ const Header = () => {
     setIsMenuOpen(false);
     navigate(isAdminRoute ? '/login' : '/');
   };
+
+  // Filter logic for dropdown links
+  const menLinks = navCategories.filter(cat => cat.parent_id === 1 || cat.id === 29);
+  const womenLinks = navCategories.filter(cat => cat.parent_id === 4);
 
   return (
     <>
@@ -218,11 +244,16 @@ const Header = () => {
                           MEN'S WEAR
                         </Link>
                         <div className="dropdown-submenu">
-                          <Link to="/shop/mens-wear?category=shirts" className="dropdown-subitem" onClick={closeMenu}>Shirts</Link>
-                          <Link to="/shop/mens-wear?category=trousers" className="dropdown-subitem" onClick={closeMenu}>Trousers</Link>
-                          <Link to="/shop/mens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
-                          <Link to="/shop/mens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers / Jackets</Link>
-                          <Link to="/shop/mens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
+                          {menLinks.map(cat => (
+                            <Link 
+                              key={cat.id} 
+                              to={`/shop/mens-wear?category=${cat.id}`} 
+                              className="dropdown-subitem" 
+                              onClick={closeMenu}
+                            >
+                              {cat.name || cat.sub_category}
+                            </Link>
+                          ))}
                         </div>
                       </div>
                       <div className="dropdown-item-wrapper">
@@ -230,14 +261,16 @@ const Header = () => {
                           WOMEN'S WEAR
                         </Link>
                         <div className="dropdown-submenu">
-                          <Link to="/shop/womens-wear?category=blouses" className="dropdown-subitem" onClick={closeMenu}>Blouses</Link>
-                          <Link to="/shop/womens-wear?category=skirts-trousers" className="dropdown-subitem" onClick={closeMenu}>Skirts/ Trousers</Link>
-                          <Link to="/shop/womens-wear?category=corsets" className="dropdown-subitem" onClick={closeMenu}>Corsets</Link>
-                          <Link to="/shop/womens-wear?category=co-ords" className="dropdown-subitem" onClick={closeMenu}>Co-ords</Link>
-                          <Link to="/shop/womens-wear?category=blazers-jackets" className="dropdown-subitem" onClick={closeMenu}>Blazers/ Jackets</Link>
-                          <Link to="/shop/womens-wear?category=kurtas" className="dropdown-subitem" onClick={closeMenu}>Kurtas</Link>
-                          <Link to="/shop/womens-wear?category=dresses" className="dropdown-subitem" onClick={closeMenu}>Dresses</Link>
-                          <Link to="/shop/womens-wear?category=sarees" className="dropdown-subitem" onClick={closeMenu}>Sarees</Link>
+                          {womenLinks.map(cat => (
+                            <Link 
+                              key={cat.id} 
+                              to={`/shop/womens-wear?category=${cat.id}`} 
+                              className="dropdown-subitem" 
+                              onClick={closeMenu}
+                            >
+                              {cat.name || cat.sub_category}
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -270,4 +303,3 @@ const Header = () => {
 };
 
 export default Header;
-

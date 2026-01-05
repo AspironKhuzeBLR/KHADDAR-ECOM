@@ -770,3 +770,154 @@
     width: 100%;
   }
 }
+/* ========================================= */
+/* UPDATED MODAL & FORM CSS                  */
+/* ========================================= */
+
+.modal-content.admin-modal {
+  background: #ffffff;
+  padding: 40px;
+  width: 100%;
+  max-width: 650px;
+  border: 1px solid #8C6C5F;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #6F3132;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Base style for all Inputs, Selects, and Textareas */
+.form-group input, 
+.form-group select, 
+.form-group textarea,
+.size-input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background-color: #F7F7F0; /* Light cream background to match your screenshot */
+  font-family: 'Montserrat', sans-serif;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.size-input-group input:focus {
+  border-color: #6F3132;
+}
+
+/* STOCK PER SIZE SECTION */
+.form-sizes-section {
+  margin-bottom: 25px;
+}
+
+.form-sizes-section label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #6F3132;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.sizes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  background: transparent; /* Removed the grey background */
+  padding: 15px;
+  border: 1px solid #8C6C5F; /* Using themed brown border */
+  box-sizing: border-box;
+}
+
+.size-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.size-input-group span {
+  font-weight: 700;
+  color: #6F3132;
+  font-size: 0.9rem;
+}
+
+/* Ensure size inputs look exactly like Name/Price inputs */
+.size-input-group input {
+  text-align: center;
+  padding: 8px !important;
+  background-color: #F7F7F0 !important;
+}
+
+/* IMAGE UPLOAD SECTION */
+.image-upload-wrapper {
+  border: 1px dashed #8C6C5F;
+  padding: 20px;
+  background-color: #F7F7F0;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.image-upload-wrapper input[type="file"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.form-image-preview {
+  width: 120px;
+  height: 150px;
+  object-fit: cover;
+  margin-top: 15px;
+  border: 1px solid #8C6C5F;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* TEXTAREA DESCRIPTION */
+.form-group textarea {
+  resize: vertical;
+  background-color: #F7F7F0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-btn {
+  background-color: #6F3132;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #4C2E2E;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 12px 25px;
+  color: #666;
+  text-transform: uppercase;
+  cursor: pointer;
+}

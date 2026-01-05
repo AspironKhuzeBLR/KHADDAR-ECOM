@@ -16,6 +16,7 @@
  */
 
 import { API_CONFIG } from './config';
+import { supabase } from './supabaseClient';
 
 const API_BASE_URL = API_CONFIG.API_BASE_URL;
 const REQUEST_TIMEOUT = API_CONFIG.TIMEOUT || 15000;
@@ -64,9 +65,13 @@ const handleResponse = async (response) => {
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json();
-      throw new Error(data?.message || data?.error || `HTTP error ${response.status}`);
+      // LOG THIS: This will tell us exactly which field is failing!
+      console.error("BACKEND VALIDATION ERROR:", data); 
+      throw new Error(data?.message || data?.error || JSON.stringify(data));
     }
-    throw new Error(`HTTP error ${response.status}`);
+    const text = await response.text();
+    console.error("BACKEND ERROR TEXT:", text);
+    throw new Error(`HTTP error ${response.status}: ${text}`);
   }
   
   const contentType = response.headers.get('content-type');
@@ -114,12 +119,12 @@ export const fetchProducts = async (options = {}) => {
     
     // If a specific sub-category is selected, use it
     // Otherwise, if mainCategory is specified, use the main category ID
-    if (category) {
-      params.category = category;
-    } else if (mainCategory && MAIN_CATEGORY_IDS[mainCategory]) {
-      params.category = MAIN_CATEGORY_IDS[mainCategory];
+    if (mainCategory && MAIN_CATEGORY_IDS[mainCategory]) {
+        params.main_category = MAIN_CATEGORY_IDS[mainCategory];
     }
-
+    if (category) {
+        params.sub_category = category;
+    }
     if (inStockOnly) {
       params.in_stock_only = 'true';
     }
@@ -293,28 +298,36 @@ export const fetchCategoriesByGender = async (gender) => {
  * @param {Object} productData - Product data to add
  * @returns {Promise<Object>} Created product
  */
+// In productService.js
+// Inside productService.js
+
 export const addProduct = async (productData) => {
   const token = getAdminToken();
-  
   try {
-    const path = API_CONFIG.ENDPOINTS.ADMIN_PRODUCTS;
-    const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+    const url = `${API_BASE_URL}/admin/products`;
     
-    const response = await withTimeout(
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` })
-        },
-        body: JSON.stringify(formatProductForAPI(productData))
-      })
-    );
+    // Check if we are sending a File (FormData) or just JSON
+    const isFormData = productData instanceof FormData;
 
-    const data = await handleResponse(response);
-    return data.product || data.data || data;
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+
+    // IMPORTANT: When sending FormData, DO NOT set 'Content-Type'. 
+    // The browser will set it automatically with the correct "boundary".
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: isFormData ? productData : JSON.stringify(productData)
+    });
+
+    return await handleResponse(response);
   } catch (error) {
-    console.error('Error adding product:', error);
+    console.error("Add Product Error:", error);
     throw error;
   }
 };
@@ -325,9 +338,9 @@ export const addProduct = async (productData) => {
  * @param {Object} productData - Updated product data
  * @returns {Promise<Object>} Updated product
  */
+// NEW VERSION - USE THIS
 export const updateProduct = async (productId, productData) => {
   const token = getAdminToken();
-  
   try {
     const path = `${API_CONFIG.ENDPOINTS.ADMIN_PRODUCTS}/${productId}`;
     const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
@@ -337,14 +350,14 @@ export const updateProduct = async (productId, productData) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` })
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formatProductForAPI(productData))
+        // FIX: Send productData directly as it is already formatted in the Dashboard
+        body: JSON.stringify(productData) 
       })
     );
 
-    const data = await handleResponse(response);
-    return data.product || data.data || data;
+    return await handleResponse(response);
   } catch (error) {
     console.error('Error updating product:', error);
     throw error;
@@ -409,19 +422,28 @@ export const fetchAdminProducts = async (options = {}) => {
     const products = data.products || data.data || data || [];
     
     // Transform for admin display
-    const transformedProducts = products.map(product => {
-      const { mainCategory, subCategory } = extractCategories(product.categories);
-      return {
-        id: product.id,
-        name: product.name,
-        category: mainCategory || product.main_category || "Men's Wear",
-        subCategory: subCategory || product.sub_category || '',
-        price: product.price,
-        stock: product.stock || 0,
-        image: product.images?.[0]?.image_url || product.image || '',
-        description: product.description || '',
-        slug: product.slug || '',
-        isFeatured: product.is_featured || false
+    // Inside fetchAdminProducts in productService.js
+const transformedProducts = products.map(product => {
+  const { mainCategory, subCategory } = extractCategories(product.categories);
+  return {
+    id: product.id,
+    name: product.name,
+    category: mainCategory || product.main_category || "Men's Wear",
+    subCategory: subCategory || product.sub_category || '',
+    price: product.price,
+    stock: product.stock || 0,
+    image: product.images?.[0]?.image_url || product.image || '',
+    description: product.description || '',
+    slug: product.slug || '',
+    isFeatured: product.is_featured || false,
+    
+    // ADD THIS LINE: It ensures sizes are passed to the dashboard
+    sizes: product.sizes || [
+      { size: 'S', stock: 0 },
+      { size: 'M', stock: 0 },
+      { size: 'L', stock: 0 },
+      { size: 'XL', stock: 0 }
+      ]
       };
     });
 
@@ -527,38 +549,6 @@ const transformProductDetail = (product) => {
   };
 };
 
-/**
- * Format product data for API submission
- */
-const formatProductForAPI = (product) => {
-  const apiProduct = {
-    name: product.name,
-    description: product.description || '',
-    price: parseFloat(product.price) || 0,
-    stock: parseInt(product.stock) || 0,
-    main_category: product.category || product.main_category || "Men's Wear",
-    sub_category: product.subCategory || product.sub_category || ''
-  };
-
-  // Handle images
-  if (product.image || product.images) {
-    const imageUrl = product.image || product.images?.[0]?.image_url || product.images?.[0];
-    if (imageUrl) {
-      apiProduct.images = [{
-        image_url: imageUrl,
-        alt_text: product.name,
-        sort_order: 1
-      }];
-    }
-  }
-
-  // Include slug if updating
-  if (product.slug) {
-    apiProduct.slug = product.slug;
-  }
-
-  return apiProduct;
-};
 
 /**
  * Format price to Indian Rupee format
@@ -569,4 +559,36 @@ const formatPrice = (price) => {
   }
   const numPrice = parseFloat(price) || 0;
   return `₹${numPrice.toLocaleString('en-IN')}`;
+};
+/**
+ * Uploads a file to Supabase Storage
+ * @param {File} file - The file object from the input
+ * @returns {Promise<string>} The public URL of the uploaded image
+ */
+// Inside src/services/productService.js
+
+export const uploadImageToSupabase = async (file) => {
+  try {
+    // 1. Create a clean file name
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+    
+    // 2. MATCH THE DEVELOPER'S FOLDER: "product images"
+    const filePath = `product images/${fileName}`;
+
+    const { error } = await supabase.storage
+      .from('product-images') // Bucket name
+      .upload(filePath, file);
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('product-images')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw new Error('Image upload failed: ' + error.message);
+  }
 };

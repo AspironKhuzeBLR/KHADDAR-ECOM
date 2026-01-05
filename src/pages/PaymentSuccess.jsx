@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import './Checkout.css'; // Reusing your existing checkout styles for consistency
+import './Checkout.css';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
-  // Most gateways pass order info back in the URL
-  const orderId = searchParams.get('order_id') || searchParams.get('orderNo') || 'N/A';
+  // Extracting values from URL search parameters
+  // Expected URL example: /payment-success?order_number=ORDBA381D99&amount=1&order_id=ba381...
+  const orderNumber = searchParams.get('order_number') || searchParams.get('orderNo') || 'N/A';
+  const totalAmount = searchParams.get('amount') || searchParams.get('total') || '0';
+
 
   useEffect(() => {
-    // Clear cart on mount to ensure it's empty after successful purchase
+    // Clear cart on mount
     sessionStorage.removeItem('cartItems');
     window.scrollTo(0, 0);
   }, []);
@@ -27,7 +30,7 @@ const PaymentSuccess = () => {
           boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
           borderRadius: '8px'
         }}>
-          {/* Animated/Attractive Success Icon */}
+          {/* Success Icon */}
           <div style={{ 
             width: '100px', height: '100px', 
             background: '#f0fdf4', 
@@ -48,31 +51,40 @@ const PaymentSuccess = () => {
             fontSize: '2.4rem', 
             fontWeight: '400', 
             color: '#1a1a1a',
-            marginBottom: '15px',
-            letterSpacing: '-0.02em'
+            marginBottom: '15px'
           }}>
-            Order Confirmed!
+            Payment Successful!
           </h1>
           
           <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '35px' }}>
-            Thank you for your purchase. We've received your payment and are now preparing your handcrafted pieces.
+            Thank you for your purchase. Your order has been placed successfully and is being processed.
           </p>
 
+          {/* Order Details Box */}
           <div style={{ 
             background: '#fafafa', 
             border: '1px dashed #e0e0e0',
-            padding: '20px', 
+            padding: '25px', 
             borderRadius: '6px', 
-            marginBottom: '40px' 
+            marginBottom: '40px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '20px'
           }}>
-            <p style={{ margin: '0', fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Order ID</p>
-            <p style={{ margin: '5px 0 0', fontSize: '1.2rem', fontWeight: '500', color: '#1a1a1a' }}>{orderId}</p>
+            <div style={{ textAlign: 'left', borderRight: '1px solid #eee' }}>
+              <p style={{ margin: '0', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Order Number</p>
+              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>{orderNumber}</p>
+            </div>
+            <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
+              <p style={{ margin: '0', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Amount Paid</p>
+              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>₹{parseFloat(totalAmount).toLocaleString()}</p>
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <button 
               className="place-order-btn" 
-              style={{ width: '100%', padding: '16px' }}
+              style={{ width: '100%', padding: '16px', cursor: 'pointer' }}
               onClick={() => navigate('/profile')}
             >
               View My Orders
