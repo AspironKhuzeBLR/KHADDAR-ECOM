@@ -87,9 +87,8 @@ const Sustainability = () => {
             loop
             muted
             playsInline
-            poster="https://images.unsplash.com/photo-1718128306989-a5bd41566cde?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2000"
           >
-            <source src="https://cdn.pixabay.com/video/2018/10/25/18897-297379518_tiny.mp4" type="video/mp4" />
+            <source src="/AZtpB680-jgsyWHHaBVPkw-AZtpB680GHlBvl6d3T3TzA.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <div className="video-quote-wrapper">

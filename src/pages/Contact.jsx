@@ -127,8 +127,8 @@ const Contact = () => {
       <section className="contact-image-section">
         <div className="contact-image-wrapper">
           <img 
-            src="https://images.unsplash.com/photo-1743708825952-eb9211e1765c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzR8fHN1c3RhaW5hYmVsZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww&auto=format&fit=crop&q=80&w=2000" 
-            alt="Contact us"
+            src="https://cdn.pixabay.com/photo/2016/11/19/15/38/craftsman-1839920_1280.jpg" 
+            alt="Craftsman at work"
             className="contact-image"
           />
         </div>
