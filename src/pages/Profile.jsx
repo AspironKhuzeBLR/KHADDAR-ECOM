@@ -33,12 +33,9 @@ const Profile = () => {
         const profile = await getUserProfile(token);
         setProfileData(profile?.user || profile?.data || profile || user);
       } catch (err) {
-        // Profile endpoint doesn't exist yet (404) - use stored user data
-        // Only log if it's not a 404
         if (!err.message?.includes('Route not found') && !err.message?.includes('404')) {
           console.warn('Could not fetch profile:', err);
         }
-        // Use stored user data as fallback
         setProfileData(user);
       } finally {
         setLoading(false);
@@ -47,7 +44,6 @@ const Profile = () => {
 
     // Fetch orders
     const fetchOrders = async () => {
-      // Wait for user profile data to be available or user object from auth
       const currentUser = profileData || user;
 
       if (!currentUser?.email) {
@@ -59,9 +55,7 @@ const Profile = () => {
       try {
         console.log('Fetching orders for email:', currentUser.email);
         const response = await getMyOrders(currentUser.email);
-        console.log('Orders API Response:', response);
         
-        // Handle different response formats from API
         let ordersList = [];
         if (Array.isArray(response)) {
           ordersList = response;
@@ -73,7 +67,6 @@ const Profile = () => {
           ordersList = response.data.orders;
         }
         
-        console.log('Processed orders list:', ordersList);
         setOrders(ordersList);
       } catch (err) {
         console.error('Error fetching orders:', err);
@@ -84,10 +77,9 @@ const Profile = () => {
       }
     };
 
-    // Chain the calls or handle dependencies
     fetchProfile().then(() => fetchOrders());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isBootstrapped, navigate, token, user, profileData]);
+    // ESLint fix: Added 'toast' to the dependency array below
+  }, [isAuthenticated, isBootstrapped, navigate, token, user, profileData, toast]);
 
   if (!isBootstrapped || loading) {
     return (
@@ -132,7 +124,6 @@ const Profile = () => {
       <div className="container">
         <div className="auth-container" style={{ maxWidth: '900px' }}>
           <h1 className="auth-title">My Profile</h1>
-
 
           <div className="profile-info">
             <h2 style={{
@@ -204,15 +195,17 @@ const Profile = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {orders.map((order, index) => {
-                  const orderId = order.order_id || order.id || order.orderId || order.order_number;
+                  // This ensures ORD... shows up instead of the long ID
+                  const displayOrderNumber = order.order_number || order.order_id || order.id || 'N/A';
+                  
                   const orderDate = order.created_at || order.createdAt || order.date || order.orderDate;
-                  const orderStatus = order.payment_status || order.status || 'pending';
+                  const orderStatus = order.order_status || order.payment_status || order.status || 'pending';
                   const orderTotal = order.total_amount || order.total || order.totalAmount || order.amount;
                   const orderItems = order.items || order.products || [];
 
                   return (
                     <div
-                      key={orderId || index}
+                      key={order.id || index}
                       style={{
                         border: '1px solid #e0e0e0',
                         padding: '20px',
@@ -234,7 +227,7 @@ const Profile = () => {
                             fontWeight: 400,
                             marginBottom: '5px'
                           }}>
-                            Order #{orderId || 'N/A'}
+                            Order #{displayOrderNumber}
                           </h3>
                           <p style={{
                             fontSize: '0.875rem',
@@ -245,7 +238,7 @@ const Profile = () => {
                           </p>
                           <p style={{
                             fontSize: '0.875rem',
-                            color: orderStatus === 'completed' ? '#4CAF50' : '#8C6C5F',
+                            color: orderStatus === 'paid' || orderStatus === 'completed' ? '#4CAF50' : '#8C6C5F',
                             fontWeight: 500
                           }}>
                             Status: <span style={{ textTransform: 'capitalize' }}>{orderStatus}</span>

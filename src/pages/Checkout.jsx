@@ -89,6 +89,12 @@ const Checkout = () => {
       }
     }
 
+    // --- ADDED ADDRESS LENGTH VALIDATION HERE ---
+    if (shippingDetails.address.trim().length < 10) {
+      toast.error('Address is too short. Please provide a more detailed address (at least 10 characters).');
+      return false;
+    }
+
     // Validate phone
     if (!/^[6-9]\d{9}$/.test(shippingDetails.phone)) {
       toast.error('Please enter a valid 10-digit phone number');

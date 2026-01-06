@@ -1,20 +1,54 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { getPaymentStatus } from '../services/orderService';
 import './Checkout.css';
 
 const PaymentFailure = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  // Extracting values from URL search parameters
-  // Expected URL example: /payment-failure?order_number=ORDBA381D99&amount=1&message=Declined
-  const orderNumber = searchParams.get('order_number') || searchParams.get('orderNo') || 'N/A';
-  const totalAmount = searchParams.get('amount') || searchParams.get('total') || '0';
-  const errorMessage = searchParams.get('message') || "We encountered an issue while processing your transaction.";
+  // State for API data
+  const [orderInfo, setOrderInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  // REMOVED: error and setError state to fix ESLint warnings
+
+  // 1. Extract values from URL search parameters
+  const orderId = searchParams.get('order_id') || searchParams.get('id');
+  const urlErrorMessage = searchParams.get('message') || searchParams.get('resp_message') || searchParams.get('error');
 
   useEffect(() => {
+    const fetchOrderDetails = async () => {
+      if (!orderId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const result = await getPaymentStatus(orderId);
+        if (result.success) {
+          setOrderInfo(result.data);
+        }
+      } catch (err) {
+        console.error("Could not fetch order details for failure page");
+        // No need to set a local error state as we use urlErrorMessage for display
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
     window.scrollTo(0, 0);
-  }, []);
+  }, [orderId]);
+
+  if (loading) {
+    return (
+      <div className="checkout-page" style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontSize: '1.2rem', color: '#666' }}>Processing payment details...</p>
+      </div>
+    );
+  }
+
+  const displayMessage = urlErrorMessage || "We encountered an issue while processing your transaction.";
 
   return (
     <div className="checkout-page">
@@ -28,7 +62,6 @@ const PaymentFailure = () => {
           boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
           borderRadius: '8px'
         }}>
-          {/* Failure Icon */}
           <div style={{ 
             width: '100px', height: '100px', 
             background: '#fef2f2', 
@@ -56,13 +89,12 @@ const PaymentFailure = () => {
           </h1>
           
           <p style={{ color: '#666', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '35px' }}>
-            {errorMessage}
+            {displayMessage}
           </p>
 
-          {/* Failed Order Details Box */}
           <div style={{ 
             background: '#fafafa', 
-            border: '1px dashed #ef4444', // Red dashed border to indicate issue
+            border: '1px dashed #ef4444', 
             padding: '25px', 
             borderRadius: '6px', 
             marginBottom: '40px',
@@ -72,11 +104,11 @@ const PaymentFailure = () => {
           }}>
             <div style={{ textAlign: 'left', borderRight: '1px solid #eee' }}>
               <p style={{ margin: '0', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Order Number</p>
-              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>{orderNumber}</p>
+              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>{orderInfo?.order_number || 'N/A'}</p>
             </div>
             <div style={{ textAlign: 'left', paddingLeft: '10px' }}>
               <p style={{ margin: '0', fontSize: '0.8rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Attempted Amount</p>
-              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>₹{parseFloat(totalAmount).toLocaleString()}</p>
+              <p style={{ margin: '5px 0 0', fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' }}>₹{orderInfo?.total_amount ? parseFloat(orderInfo.total_amount).toLocaleString('en-IN') : '0'}</p>
             </div>
           </div>
 
