@@ -87,7 +87,6 @@ const FAQs = () => {
       <div className="policy-container">
         <div className="policy-header">
           <h1 className="policy-title">Frequently Asked Questions</h1>
-          <p className="policy-updated">Last Updated: December 2024</p>
         </div>
         
         <div className="policy-content">

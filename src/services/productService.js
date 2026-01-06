@@ -569,6 +569,11 @@ const formatPrice = (price) => {
 
 export const uploadImageToSupabase = async (file) => {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      throw new Error('Supabase is not configured. Please add REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY to your .env file.');
+    }
+
     // 1. Create a clean file name
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
