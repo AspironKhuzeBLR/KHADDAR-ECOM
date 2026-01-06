@@ -60,16 +60,9 @@ export const createOrder = async (orderData) => {
         const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 
         console.log('Creating order at:', url);
-        console.log('Order data:', JSON.stringify(orderData, null, 2));
-
         const token = sessionStorage.getItem('khaddar.auth.token') || sessionStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const response = await withTimeout(
             fetch(url, {
@@ -79,9 +72,7 @@ export const createOrder = async (orderData) => {
             })
         );
 
-        const result = await handleResponse(response);
-        console.log('Order creation response:', result);
-        return result;
+        return await handleResponse(response);
     } catch (error) {
         console.error('Error creating order:', error);
         throw error;
@@ -91,30 +82,22 @@ export const createOrder = async (orderData) => {
 /**
  * Submit payment for an order
  * @param {string} orderId - Order ID
- * @param {Object} paymentData - Payment details (e.g., transaction_id)
- * @returns {Promise<Object>} Payment confirmation
+ * @param {Object} paymentData - Payment details
  */
 export const submitPayment = async (orderId, paymentData) => {
     try {
         const path = `${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}/pay`;
         const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 
-        console.log('Submitting payment to:', url);
-        console.log('Payment data:', paymentData);
-
         const response = await withTimeout(
             fetch(url, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(paymentData)
             })
         );
 
-        const result = await handleResponse(response);
-        console.log('Payment submission response:', result);
-        return result;
+        return await handleResponse(response);
     } catch (error) {
         console.error('Error submitting payment:', error);
         throw error;
@@ -123,39 +106,19 @@ export const submitPayment = async (orderId, paymentData) => {
 
 /**
  * Get user's order history
- * @param {string} email - User email
- * @param {number} page - Page number
- * @param {number} limit - Items per page
- * @returns {Promise<Object>} List of orders
  */
 export const getMyOrders = async (email, page = 1, limit = 10) => {
     try {
-        // Construct URL with query params
         const path = `${API_CONFIG.ENDPOINTS.ORDERS}/my-orders`;
         let url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
-
-        const queryParams = new URLSearchParams({
-            email,
-            page,
-            limit
-        });
-
+        const queryParams = new URLSearchParams({ email, page, limit });
         url = `${url}?${queryParams.toString()}`;
 
-        console.log('Fetching orders from:', url);
-
         const response = await withTimeout(
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+            fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } })
         );
 
-        const result = await handleResponse(response);
-        console.log('Get orders response:', result);
-        return result;
+        return await handleResponse(response);
     } catch (error) {
         console.error('Error fetching orders:', error);
         throw error;
@@ -164,13 +127,33 @@ export const getMyOrders = async (email, page = 1, limit = 10) => {
 
 /**
  * Get order details by ID
- * @param {string} orderId - Order ID
- * @returns {Promise<Object>} Order details
  */
 export const getOrderById = async (orderId) => {
     try {
         const path = `${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}`;
         const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+
+        const response = await withTimeout(
+            fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } })
+        );
+
+        return await handleResponse(response);
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+        throw error;
+    }
+};
+
+/**
+ * NEW: Get payment status from developer's specific URL
+ * @param {string} orderId - The UUID of the order
+ */
+export const getPaymentStatus = async (orderId) => {
+    try {
+        // Explicitly using the production URL provided by your developer
+        const url = `https://djbudi2bkm.us-east-1.awsapprunner.com/api/orders/${orderId}/payment/status`;
+        
+        console.log('Verifying payment status at:', url);
 
         const response = await withTimeout(
             fetch(url, {
@@ -183,7 +166,7 @@ export const getOrderById = async (orderId) => {
 
         return await handleResponse(response);
     } catch (error) {
-        console.error('Error fetching order details:', error);
+        console.error('Error fetching payment status:', error);
         throw error;
     }
 };
