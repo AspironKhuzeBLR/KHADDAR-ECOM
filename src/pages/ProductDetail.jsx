@@ -26,7 +26,6 @@ const ProductDetail = () => {
         setProduct(data);
         
         if (data?.sizes?.length > 0) {
-          // If the first size is an object, extract the string value
           const firstSize = data.sizes[0];
           setSelectedSize(typeof firstSize === 'object' ? firstSize.size : firstSize);
         }
@@ -180,13 +179,28 @@ const ProductDetail = () => {
               <div className="price-row">
                 <span className="price-label">Regular price</span>
                 <span className="regular-price">
-                  {/* Safety check for price object */}
                   {typeof product.price === 'object' ? product.price.value : product.price}
                 </span>
               </div>
             </div>
 
             <div className="product-options">
+              {/* Color Selection Logic */}
+              <div className="option-group">
+                <label className="option-label">Color</label>
+                <div className="color-options">
+                  {product.colors?.map((color, idx) => (
+                    <button 
+                      key={idx}
+                      className={`color-pill ${selectedColor === color ? 'active' : ''}`}
+                      onClick={() => setSelectedColor(color)}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="option-group">
                 <label className="option-label">Size</label>
                 <select
@@ -196,7 +210,6 @@ const ProductDetail = () => {
                 >
                   <option value="">Select Size</option>
                   {product.sizes?.map((item, idx) => {
-                    // Check if size is an object {size, stock} or just a string
                     const val = typeof item === 'object' ? item.size : item;
                     return <option key={idx} value={val}>{val}</option>;
                   })}
@@ -221,21 +234,30 @@ const ProductDetail = () => {
             <div className="product-tabs">
               <button className={`tab-btn ${activeTab === 'description' ? 'active' : ''}`} onClick={() => setActiveTab('description')}>Description</button>
               <button className={`tab-btn ${activeTab === 'details' ? 'active' : ''}`} onClick={() => setActiveTab('details')}>Details</button>
-              <button className={`tab-btn ${activeTab === 'size' ? 'active' : ''}`} onClick={() => setActiveTab('size')}>Size</button>
+              <button className={`tab-btn ${activeTab === 'size' ? 'active' : ''}`} onClick={() => setActiveTab('size')}>Size Chart</button>
             </div>
 
             <div className="tab-content">
               {activeTab === 'description' && <div className="tab-panel"><p>{product.description}</p></div>}
-              {activeTab === 'details' && <div className="tab-panel"><p>{product.details}</p></div>}
+              {activeTab === 'details' && <div className="tab-panel"><p>{product.details}</p><p>{product.care}</p></div>}
               {activeTab === 'size' && product.sizeChart && (
                 <div className="tab-panel">
-                    {/* Size chart tables remain the same as they already access specific keys like row.size */}
                     {product.sizeChart.top && (
                         <table className="size-table">
-                            <thead><tr><th>Size</th><th>Chest</th><th>Waist</th></tr></thead>
+                            <thead>
+                              <tr>
+                                <th>Size</th>
+                                <th>Chest (in)</th>
+                                <th>Waist (in)</th>
+                              </tr>
+                            </thead>
                             <tbody>
                                 {product.sizeChart.top.map((row, i) => (
-                                    <tr key={i}><td>{row.size}</td><td>{row.chest}</td><td>{row.waist}</td></tr>
+                                    <tr key={i}>
+                                      <td>{row.size}</td>
+                                      <td>{row.chest}</td>
+                                      <td>{row.waist}</td>
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>
