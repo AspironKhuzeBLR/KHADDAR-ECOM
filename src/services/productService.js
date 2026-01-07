@@ -517,7 +517,25 @@ const transformProductDetail = (product) => {
   const { mainCategory, subCategory } = extractCategories(product.categories);
   const images = product.images?.map(img => img.image_url) || [product.image].filter(Boolean);
   const resolvedMainCategory = mainCategory || product.main_category || '';
-  
+  const gender = resolvedMainCategory === "Men's Wear" ? 'men' : 'women';
+    const menSizeChart = {
+    top: [
+      { size: 'S', chest: '36', waist: '34' },
+      { size: 'M', chest: '38', waist: '36' },
+      { size: 'L', chest: '40', waist: '38' },
+      { size: 'XL', chest: '42', waist: '40' },
+      {size: 'XXL', chest: '---', waist: '42'}
+    ]
+  };
+
+  const womenSizeChart = {
+    top: [
+      { size: 'S', chest: '34', waist: '30' },
+      { size: 'M', chest: '36', waist: '32' },
+      { size: 'L', chest: '38', waist: '34' },
+      { size: 'XL', chest: '40', waist: '36' }
+    ]
+  };
   return {
     id: product.id,
     name: product.name,
@@ -538,14 +556,7 @@ const transformProductDetail = (product) => {
     inStock: (product.stock || 0) > 0,
     slug: product.slug || '',
     isFeatured: product.is_featured || false,
-    sizeChart: product.size_chart || {
-      top: [
-        { size: 'S', chest: '40', waist: '38', hips: '40', length: '27' },
-        { size: 'M', chest: '42', waist: '40', hips: '42', length: '28' },
-        { size: 'L', chest: '44', waist: '42', hips: '44', length: '29' },
-        { size: 'XL', chest: '46', waist: '44', hips: '46', length: '30' }
-      ]
-    }
+   sizeChart: product.size_chart || (gender === 'men' ? menSizeChart : womenSizeChart)
   };
 };
 
