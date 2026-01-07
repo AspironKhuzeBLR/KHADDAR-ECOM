@@ -19,6 +19,10 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
             loop
             muted
             playsInline
+            preload="metadata"
+            poster="/logo_file_page-0001.png"
+            webkit-playsinline="true"
+            x5-playsinline="true"
           >
             <source src="/KhaddarXSummersalt.mp4" type="video/mp4" />
             Your browser does not support the video tag.

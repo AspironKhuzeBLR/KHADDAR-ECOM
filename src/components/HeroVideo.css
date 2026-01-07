@@ -30,6 +30,7 @@
   left: 0;
   overflow: hidden;
   z-index: 0;
+  background-color: #000;
 }
 
 .hero-mobile-video {
@@ -37,6 +38,18 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  /* GPU acceleration for smooth playback */
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+  /* Reduce rendering quality for better performance */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  /* Optimize video rendering */
+  image-rendering: optimizeSpeed;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 /* --- 1. THE IMAGE (Breathing Zoom) --- */
@@ -310,9 +323,25 @@
     display: none;
   }
   
-  /* Disable animations on mobile for better performance */
+  /* Disable heavy effects on mobile for better video performance */
+  .film-grain {
+    display: none;
+  }
+  
+  .light-sweep {
+    display: none;
+  }
+  
+  /* Optimize video for mobile */
   .hero-mobile-video {
     animation: none;
+    /* Further optimization for low-end devices */
+    filter: brightness(1);
+  }
+  
+  /* Reduce overlay complexity */
+  .video-overlay {
+    background: rgba(0,0,0,0.3);
   }
   
   /* Make sure the custom subtitle prop works on mobile */
