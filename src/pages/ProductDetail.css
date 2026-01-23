@@ -85,6 +85,21 @@
   background-color: #F7F7F0;
 }
 
+.main-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+.main-image-container.zoomed {
+  cursor: zoom-out;
+  overflow: hidden;
+}
+
 .main-product-image {
   position: absolute;
   top: 0;
@@ -92,6 +107,36 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.1s ease-out;
+}
+
+.zoom-hint {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: rgba(111, 49, 50, 0.85);
+  color: #F7F7F0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeInZoomHint 0.5s ease-in 1s forwards;
+}
+
+@keyframes fadeInZoomHint {
+  to {
+    opacity: 1;
+  }
+}
+
+.zoom-hint svg {
+  flex-shrink: 0;
 }
 
 .image-nav-btn {
@@ -145,36 +190,66 @@
 
 .thumbnail-images {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: #8C6C5F #F7F7F0;
+  padding: 5px 0;
+  margin-top: 15px;
 }
 
 .thumbnail-images::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+
+.thumbnail-images::-webkit-scrollbar-track {
+  background: #F7F7F0;
+  border-radius: 3px;
+}
+
+.thumbnail-images::-webkit-scrollbar-thumb {
+  background: #8C6C5F;
+  border-radius: 3px;
+}
+
+.thumbnail-images::-webkit-scrollbar-thumb:hover {
+  background: #A15F22;
 }
 
 .thumbnail-btn {
   flex-shrink: 0;
-  width: 80px;
-  height: 100px;
+  width: 90px;
+  height: 110px;
   padding: 0;
-  border: 2px solid transparent;
-  background: none;
+  border: 3px solid transparent;
+  background: #F7F7F0;
   cursor: pointer;
   overflow: hidden;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.thumbnail-btn:hover {
+  border-color: #B38A6A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(140, 108, 95, 0.2);
 }
 
 .thumbnail-btn.active {
   /* Updated Active Thumbnail Border: Rich Burnt Orange/Sienna (#A15F22) - was #1a1a1a */
   border-color: #A15F22;
+  box-shadow: 0 4px 12px rgba(161, 95, 34, 0.3);
 }
 
 .thumbnail-btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail-btn:hover img {
+  transform: scale(1.05);
 }
 
 .product-info {
@@ -567,8 +642,20 @@
   }
 
   .thumbnail-btn {
-    width: 60px;
-    height: 75px;
+    width: 70px;
+    height: 85px;
+  }
+
+  .zoom-hint {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+    top: 10px;
+    left: 10px;
+  }
+
+  .zoom-hint svg {
+    width: 16px;
+    height: 16px;
   }
 
   .product-detail-title {

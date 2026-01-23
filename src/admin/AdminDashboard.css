@@ -294,6 +294,18 @@
   border-color: rgba(111, 49, 50, 0.2);
 }
 
+.status-badge.confirmed {
+  background-color: rgba(34, 139, 34, 0.1);
+  color: #228B22;
+  border-color: rgba(34, 139, 34, 0.2);
+}
+
+.status-badge.paid {
+  background-color: rgba(0, 128, 0, 0.1);
+  color: #008000;
+  border-color: rgba(0, 128, 0, 0.2);
+}
+
 .status-badge.pending,
 .status-badge.processing,
 .stock-badge.low {

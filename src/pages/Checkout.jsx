@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { createOrder, submitPayment } from '../services/orderService';
+import { createOrder, confirmCOD } from '../services/orderService';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -18,8 +18,9 @@ const Checkout = () => {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-  // Payment method - HDFC by default
-  const paymentMethod = 'hdfc';
+  // Payment method - COD only (Online payment temporarily disabled)
+  // NOTE: Backend order creation doesn't accept 'cod' yet, so we use 'upi' then convert to COD
+  const paymentMethod = 'upi'; // Will be converted to COD via /cod endpoint
 
   // Shipping details
   const [shippingDetails, setShippingDetails] = useState({
@@ -161,6 +162,26 @@ const Checkout = () => {
       const orderId = orderResponse?.data?.order_id || orderResponse?.order_id;
 
       if (orderId) {
+        // COD ORDER - Confirm COD with backend
+        console.log('COD Order Created Successfully:', orderId);
+        
+        // Try to confirm COD (endpoint might not be deployed yet)
+        try {
+          console.log('Attempting to confirm COD...');
+          const codResponse = await confirmCOD(orderId);
+          console.log('COD Confirmation Response:', codResponse);
+        } catch (codError) {
+          console.warn('COD endpoint not available yet (404). Proceeding without COD confirmation:', codError.message);
+          // Continue anyway - order is already created
+        }
+
+        // Clear cart and show success regardless
+        sessionStorage.removeItem('cartItems');
+        setCurrentOrder(orderResponse.data);
+        setShowPaymentModal(true);
+        toast.success('🎉 Order placed successfully with Cash on Delivery!');
+
+        /* ========== ONLINE PAYMENT (TEMPORARILY DISABLED) ==========
         console.log('Submitting Payment for Order:', orderId);
         const paymentData = { payment_method: paymentMethod };
         const paymentResponse = await submitPayment(orderId, paymentData);
@@ -168,7 +189,6 @@ const Checkout = () => {
 
         // CHECK FOR HDFC REDIRECT URL
         if (paymentResponse?.data?.payment_url) {
-            // Replaced toast.info with toast.success to avoid the error
             toast.success('Redirecting to Payment Gateway...');
             
             // Clear cart before redirecting
@@ -185,6 +205,7 @@ const Checkout = () => {
         } else {
           throw new Error('Payment initialization failed');
         }
+        ========== END ONLINE PAYMENT ========== */
       } else {
         throw new Error('Failed to create order');
       }
@@ -346,6 +367,34 @@ const Checkout = () => {
                 </div>
               </div>
             </section>
+
+            {/* Payment Method Selection */}
+            <section className="checkout-section">
+              <h2>Payment Method</h2>
+              <div className="payment-methods">
+                <div className="payment-option selected">
+                  <span className="payment-icon">💵</span>
+                  <div className="payment-info">
+                    <span className="payment-name">Cash on Delivery (COD)</span>
+                    <span className="payment-desc">Pay when you receive your order</span>
+                  </div>
+                  <span className="payment-check">✓</span>
+                </div>
+                
+                {/* Online Payment - Temporarily Disabled */}
+                {/* <div className="payment-option disabled">
+                  <span className="payment-icon">💳</span>
+                  <div className="payment-info">
+                    <span className="payment-name">Online Payment</span>
+                    <span className="payment-desc">Credit/Debit Card, UPI, Net Banking (Coming Soon)</span>
+                  </div>
+                </div> */}
+              </div>
+              <div className="secure-payment-badge">
+                <span className="lock-icon">🔒</span>
+                <span>Your information is safe and secure</span>
+              </div>
+            </section>
           </div>
 
           {/* Right Column - Order Summary */}
@@ -403,7 +452,7 @@ const Checkout = () => {
                     Processing...
                   </>
                 ) : (
-                  'Proceed to Payment'
+                  'Place Order (COD)'
                 )}
               </button>
 
@@ -423,12 +472,12 @@ const Checkout = () => {
           <div className="payment-modal success-modal">
             <div className="modal-header success-header">
               <div className="success-icon">✓</div>
-              <h2>Payment Successful!</h2>
+              <h2>Order Placed Successfully!</h2>
             </div>
             <div className="modal-body">
               <div className="success-message">
                 <p className="success-text">
-                  Thank you for your purchase! Your payment has been processed successfully and your order is confirmed.
+                  Thank you for your order! Your order has been placed successfully. Please keep the cash ready for payment on delivery.
                 </p>
                 
                 <div className="order-details-card">
@@ -438,12 +487,12 @@ const Checkout = () => {
                     <span className="detail-value">{currentOrder?.order_number || currentOrder?.order_id || 'N/A'}</span>
                   </div>
                   <div className="detail-row">
-                    <span className="detail-label">Amount Paid:</span>
+                    <span className="detail-label">Amount to Pay:</span>
                     <span className="detail-value">₹{calculateTotal().toLocaleString('en-IN')}</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">Payment Method:</span>
-                    <span className="detail-value">HDFC Payment Gateway</span>
+                    <span className="detail-value">Cash on Delivery (COD)</span>
                   </div>
                   <div className="detail-row">
                     <span className="detail-label">Email:</span>
@@ -452,7 +501,8 @@ const Checkout = () => {
                 </div>
 
                 <p className="confirmation-note">
-                  📧 A confirmation email has been sent to <strong>{shippingDetails.email}</strong>
+                  📧 A confirmation email has been sent to <strong>{shippingDetails.email}</strong>. 
+                  Please keep ₹{calculateTotal().toLocaleString('en-IN')} cash ready for the delivery.
                 </p>
               </div>
 
