@@ -105,6 +105,33 @@ export const submitPayment = async (orderId, paymentData) => {
 };
 
 /**
+ * Submit COD (Cash on Delivery) confirmation for an order
+ * @param {string} orderId - Order ID
+ * @returns {Promise<Object>} COD confirmation response
+ */
+export const confirmCOD = async (orderId) => {
+    try {
+        const path = `${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}/cod`;
+        const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+
+        console.log('Confirming COD for order:', orderId, 'at:', url);
+
+        const response = await withTimeout(
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({}) // Empty body as per backend requirement
+            })
+        );
+
+        return await handleResponse(response);
+    } catch (error) {
+        console.error('Error confirming COD:', error);
+        throw error;
+    }
+};
+
+/**
  * Get user's order history
  */
 export const getMyOrders = async (email, page = 1, limit = 10) => {

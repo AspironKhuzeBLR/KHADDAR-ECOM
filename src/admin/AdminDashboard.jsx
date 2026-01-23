@@ -572,6 +572,7 @@ const logo = '/logo_file_page-0001.png';
                             className="status-select"
                           >
                             <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed (COD)</option>
                             <option value="paid">Paid</option>
                             <option value="completed">Completed</option>
                           </select>
