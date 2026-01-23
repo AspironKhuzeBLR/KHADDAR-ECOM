@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { createOrder, submitPayment, confirmCOD } from '../services/orderService';
+import { createOrder, confirmCOD } from '../services/orderService';
 import './Checkout.css';
 
 const Checkout = () => {
