@@ -599,6 +599,11 @@
   background: #A15F22;
 }
 
+.save-btn:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
 .cancel-btn {
   padding: 12px 20px;
   background: transparent;
@@ -813,7 +818,7 @@
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
-  background-color: #F7F7F0; /* Light cream background to match your screenshot */
+  background-color: #F7F7F0; 
   font-family: 'Montserrat', sans-serif;
   color: #1a1a1a;
   outline: none;
@@ -841,37 +846,7 @@
   text-transform: uppercase;
 }
 
-.sizes-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  background: transparent; /* Removed the grey background */
-  padding: 15px;
-  border: 1px solid #8C6C5F; /* Using themed brown border */
-  box-sizing: border-box;
-}
-
-.size-input-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.size-input-group span {
-  font-weight: 700;
-  color: #6F3132;
-  font-size: 0.9rem;
-}
-
-/* Ensure size inputs look exactly like Name/Price inputs */
-.size-input-group input {
-  text-align: center;
-  padding: 8px !important;
-  background-color: #F7F7F0 !important;
-}
-
-/* IMAGE UPLOAD SECTION */
+/* IMAGE UPLOAD SECTION (UPDATED) */
 .image-upload-wrapper {
   border: 1px dashed #8C6C5F;
   padding: 20px;
@@ -887,15 +862,54 @@
   cursor: pointer;
 }
 
-.form-image-preview {
-  width: 120px;
-  height: 150px;
+/* NEW: Multi-Image Grid */
+.image-preview-grid {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  justify-content: flex-start;
+}
+
+.preview-item {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin-top: 15px;
+  border-radius: 4px;
   border: 1px solid #8C6C5F;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+}
+
+.preview-item.new-file img {
+  border: 2px solid #6F3132; /* Distinct border for new files */
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  background-color: #b91c1c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.remove-image-btn:hover {
+  background-color: #991b1b;
 }
 
 /* TEXTAREA DESCRIPTION */
@@ -932,4 +946,53 @@
   color: #666;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+/* ======================================= */
+/* NEW: DYNAMIC SIZES LIST                 */
+/* ======================================= */
+.dynamic-sizes-list {
+  background: #F7F7F0; /* Light cream background */
+  border: 1px solid #8C6C5F;
+  padding: 15px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.size-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.size-row input {
+  background: white !important; /* Make inputs pop against the cream background */
+  border: 1px solid #ccc;
+  padding: 8px !important;
+  font-family: 'Montserrat', sans-serif;
+  height: 38px;
+}
+
+.size-row input:focus {
+  border-color: #6F3132;
+}
+
+.remove-size-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #b91c1c;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.remove-size-btn:hover {
+  background: #fecaca;
 }
