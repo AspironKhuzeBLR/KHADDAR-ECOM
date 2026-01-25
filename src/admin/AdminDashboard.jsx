@@ -105,20 +105,26 @@ const AdminDashboard = () => {
   };
 
   const loadProducts = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await fetchAdminProducts({ page: productsPage, limit: PRODUCTS_PER_PAGE });
       setProducts(data.products || []);
     } catch (error) {
       console.error('Load products failed', error);
+    } finally {
+      setLoading(false);
     }
   }, [productsPage]);
 
   const loadAllOrders = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await getAllOrders(ordersPage, 10);
       setAllOrders(data.orders || data.data || []);
     } catch (error) {
       console.error('Load orders failed', error);
+    } finally {
+      setLoading(false);
     }
   }, [ordersPage]);
 
@@ -138,7 +144,7 @@ const AdminDashboard = () => {
 
   // --- Product Handlers ---
 
-  // UPDATED: Handle Size Name OR Stock changes dynamically
+  // Handle Size Name OR Stock changes dynamically
   const handleSizeChange = (index, field, value) => {
     const updatedSizes = [...currentProduct.sizes];
     if (field === 'stock') {
@@ -149,7 +155,7 @@ const AdminDashboard = () => {
     setCurrentProduct({ ...currentProduct, sizes: updatedSizes });
   };
 
-  // NEW: Add a new size row
+  // Add a new size row
   const handleAddSize = () => {
     setCurrentProduct(prev => ({
       ...prev,
@@ -157,7 +163,7 @@ const AdminDashboard = () => {
     }));
   };
 
-  // NEW: Remove a size row
+  // Remove a size row
   const handleRemoveSize = (index) => {
     const updatedSizes = [...currentProduct.sizes];
     updatedSizes.splice(index, 1);
@@ -281,7 +287,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Populate Edit Modal
+  // UPDATED: Populate Edit Modal with Robust Image Handling
   const openEditModal = (product, e) => {
     if (e) e.stopPropagation();
     
@@ -295,13 +301,27 @@ const AdminDashboard = () => {
       ? product.sizes 
       : defaultSizes;
 
-    // Handle existing images
+    // --- FIXED IMAGE HANDLING ---
     let initialImages = [];
-    if (product.images && Array.isArray(product.images)) {
-      initialImages = product.images;
-    } else if (product.image) {
+
+    // 1. Prioritize the 'images' array if it exists and has items
+    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+      // Normalize data: Ensure every item is an object with an image_url property.
+      // This handles cases where the backend might send an array of strings ['url1', 'url2']
+      // vs an array of objects [{image_url:'url1'}, {image_url:'url2'}]
+      initialImages = product.images.map(img => {
+        if (typeof img === 'string') {
+            return { image_url: img };
+        }
+        // If it's already an object, return it (assuming it has image_url)
+        return img;
+      });
+    } 
+    // 2. Fallback: If the array is missing/empty, check the legacy single 'image' field
+    else if (product.image && typeof product.image === 'string') {
       initialImages = [{ image_url: product.image }];
     }
+    // --- END FIX ---
 
     setCurrentProduct({
       id: product.id,
@@ -579,10 +599,26 @@ const AdminDashboard = () => {
               </table>
             </div>
 
+            {/* UPDATED: Pagination Logic - "Length Based" */}
             <div className="pagination">
-              <button disabled={productsPage === 1} onClick={() => setProductsPage(p => Math.max(1, p - 1))}>Previous</button>
+              <button 
+                disabled={productsPage === 1 || loading} 
+                onClick={() => setProductsPage(p => Math.max(1, p - 1))}
+                style={{ opacity: (productsPage === 1 || loading) ? 0.5 : 1 }}
+              >
+                Previous
+              </button>
+              
               <span>Page {productsPage}</span>
-              <button onClick={() => setProductsPage(p => p + 1)}>Next</button>
+              
+              <button 
+                /* DISABLE LOGIC: If we fetched fewer items than limit, it's the end */
+                disabled={products.length < PRODUCTS_PER_PAGE || loading} 
+                onClick={() => setProductsPage(p => p + 1)}
+                style={{ opacity: (products.length < PRODUCTS_PER_PAGE || loading) ? 0.5 : 1 }}
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
@@ -629,10 +665,26 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
             </div>
+            
+            {/* UPDATED: Pagination Logic - "Length Based" */}
             <div className="pagination">
-              <button disabled={ordersPage === 1} onClick={() => setOrdersPage(p => Math.max(1, p - 1))}>Previous</button>
+              <button 
+                disabled={ordersPage === 1 || loading} 
+                onClick={() => setOrdersPage(p => Math.max(1, p - 1))}
+                style={{ opacity: (ordersPage === 1 || loading) ? 0.5 : 1 }}
+              >
+                Previous
+              </button>
+              
               <span>Page {ordersPage}</span>
-              <button onClick={() => setOrdersPage(p => p + 1)}>Next</button>
+              
+              <button 
+                disabled={allOrders.length < 10 || loading} 
+                onClick={() => setOrdersPage(p => p + 1)}
+                style={{ opacity: (allOrders.length < 10 || loading) ? 0.5 : 1 }}
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
@@ -691,7 +743,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              {/* UPDATED: Dynamic Sizes and Stock Section */}
+              {/* Dynamic Sizes and Stock Section */}
               <div className="form-sizes-section">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                   <label style={{ margin: 0 }}>Stock & Sizes</label>
