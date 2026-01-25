@@ -21,7 +21,6 @@ import './AdminDashboard.css'
 
 const logo = '/logo_file_page-0001.png';
 
-// 1. EXACT CATEGORY MAPPING
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
   "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
@@ -32,11 +31,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
-  
-  // Sidebar Toggle State for Mobile
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Dashboard Data State
   const [stats, setStats] = useState({
     totalSales: 0,
     totalOrders: 0,
@@ -46,7 +42,6 @@ const AdminDashboard = () => {
   const [recentOrders, setRecentOrders] = useState([]);
   const [revenueData, setRevenueData] = useState(null);
 
-  // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
   const PRODUCTS_PER_PAGE = 10;
@@ -54,7 +49,6 @@ const AdminDashboard = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isEditingProduct, setIsEditingProduct] = useState(false);
 
-  // 2. PRODUCT FORM STATE
   const initialProductState = {
     name: '',
     price: '',
@@ -68,17 +62,15 @@ const AdminDashboard = () => {
       { size: 'L', stock: '' },
       { size: 'XL', stock: '' }
     ],
-    existingImages: [], // URLs already in DB
-    newFiles: []        // File objects waiting to be uploaded
+    existingImages: [], 
+    newFiles: []
   };
   
   const [currentProduct, setCurrentProduct] = useState(initialProductState);
-
-  // Orders State
   const [allOrders, setAllOrders] = useState([]);
   const [ordersPage, setOrdersPage] = useState(1);
 
-  // --- Data Fetching Logic ---
+  // --- Data Fetching ---
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -142,9 +134,8 @@ const AdminDashboard = () => {
     setIsSidebarOpen(false);
   };
 
-  // --- Product Handlers ---
+  // --- Handlers ---
 
-  // Handle Size Name OR Stock changes dynamically
   const handleSizeChange = (index, field, value) => {
     const updatedSizes = [...currentProduct.sizes];
     if (field === 'stock') {
@@ -155,7 +146,6 @@ const AdminDashboard = () => {
     setCurrentProduct({ ...currentProduct, sizes: updatedSizes });
   };
 
-  // Add a new size row
   const handleAddSize = () => {
     setCurrentProduct(prev => ({
       ...prev,
@@ -163,21 +153,19 @@ const AdminDashboard = () => {
     }));
   };
 
-  // Remove a size row
   const handleRemoveSize = (index) => {
     const updatedSizes = [...currentProduct.sizes];
     updatedSizes.splice(index, 1);
     setCurrentProduct(prev => ({ ...prev, sizes: updatedSizes }));
   };
 
-  // Handle selecting multiple files
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
       const newFileObjects = files.map(file => ({
         file: file,
         preview: URL.createObjectURL(file),
-        id: Date.now() + Math.random() // Temp ID for UI
+        id: Date.now() + Math.random() 
       }));
 
       setCurrentProduct(prev => ({
@@ -187,7 +175,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handle removing images (both existing and new)
   const handleRemoveImage = (type, index) => {
     setCurrentProduct(prev => {
       if (type === 'existing') {
@@ -202,19 +189,16 @@ const AdminDashboard = () => {
     });
   };
 
-  // Submit with Multiple Image Uploads & Dynamic Sizes
   const handleProductSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Upload ALL new images concurrently
       const uploadPromises = currentProduct.newFiles.map(item => 
         uploadImageToSupabase(item.file)
       );
       const newUploadedUrls = await Promise.all(uploadPromises);
 
-      // 2. Combine Existing URLs + New URLs
       const allImages = [
         ...currentProduct.existingImages.map((img, i) => ({
           image_url: img.image_url || img, 
@@ -228,10 +212,8 @@ const AdminDashboard = () => {
         }))
       ];
 
-      // 3. Calculate TOTAL STOCK dynamically
       const totalStock = currentProduct.sizes.reduce((sum, s) => sum + Number(s.stock || 0), 0);
 
-      // 4. Prepare Payload
       const payload = {
         name: currentProduct.name,
         description: currentProduct.description || "",
@@ -244,10 +226,8 @@ const AdminDashboard = () => {
           stock: s.stock === '' ? 0 : Number(s.stock) 
         })),
         is_featured: Boolean(currentProduct.is_featured),
-        images: allImages // Send array of images
+        images: allImages 
       };
-
-      console.log("Sending data to backend:", payload);
 
       if (isEditingProduct) {
         await updateProduct(currentProduct.id, payload);
@@ -269,17 +249,14 @@ const AdminDashboard = () => {
 
   const handleDeleteProduct = async (id, e) => {
     if (e) e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
     
-    if (!window.confirm('Are you sure you want to delete this product?')) {
-      return;
-    }
     const previousProducts = [...products];
     setProducts(prevProducts => prevProducts.filter(p => p.id !== id));
     try {
       await deleteProduct(id);
       setSelectedProduct(null);
       alert('✅ Success: Product removed.');
-
     } catch (error) {
       setProducts(previousProducts);
       console.error('Delete failed:', error);
@@ -287,41 +264,54 @@ const AdminDashboard = () => {
     }
   };
 
-  // UPDATED: Populate Edit Modal with Robust Image Handling
+  // --- UPDATED: openEditModal with JSON Parsing Logic ---
   const openEditModal = (product, e) => {
     if (e) e.stopPropagation();
     
-    // Ensure we load existing sizes or default fallback
     const defaultSizes = [
       { size: 'S', stock: 0 }, { size: 'M', stock: 0 },
       { size: 'L', stock: 0 }, { size: 'XL', stock: 0 }
     ];
 
-    const productSizes = product.sizes && product.sizes.length > 0 
-      ? product.sizes 
-      : defaultSizes;
+    const productSizes = product.sizes && product.sizes.length > 0 ? product.sizes : defaultSizes;
 
-    // --- FIXED IMAGE HANDLING ---
+    // --- FIX STARTS HERE ---
     let initialImages = [];
+    let rawImages = product.images;
 
-    // 1. Prioritize the 'images' array if it exists and has items
-    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-      // Normalize data: Ensure every item is an object with an image_url property.
-      // This handles cases where the backend might send an array of strings ['url1', 'url2']
-      // vs an array of objects [{image_url:'url1'}, {image_url:'url2'}]
-      initialImages = product.images.map(img => {
+    // 1. Handle potential JSON string from backend (common Supabase issue)
+    if (typeof rawImages === 'string') {
+      try {
+        // Try parsing "[{'url':'...'},{'url':'...'}]"
+        rawImages = JSON.parse(rawImages);
+      } catch (err) {
+        // If parsing fails, treat it as a single URL string if it looks like one
+        if (rawImages.startsWith('http')) {
+             rawImages = [rawImages];
+        }
+      }
+    }
+
+    // 2. Process the Array (if it is one now)
+    if (Array.isArray(rawImages) && rawImages.length > 0) {
+      initialImages = rawImages.map(img => {
+        // Case A: Simple string URL
         if (typeof img === 'string') {
             return { image_url: img };
         }
-        // If it's already an object, return it (assuming it has image_url)
-        return img;
+        // Case B: Object - Capture URL from any likely key
+        // This ensures { url: '...' } works even if code expects { image_url: '...' }
+        return {
+          image_url: img.image_url || img.url || img.src || '', 
+          ...img // Preserve other properties like id or sort_order
+        };
       });
     } 
-    // 2. Fallback: If the array is missing/empty, check the legacy single 'image' field
+    // 3. Fallback: Legacy single 'image' field
     else if (product.image && typeof product.image === 'string') {
       initialImages = [{ image_url: product.image }];
     }
-    // --- END FIX ---
+    // --- FIX ENDS HERE ---
 
     setCurrentProduct({
       id: product.id,
@@ -355,14 +345,8 @@ const AdminDashboard = () => {
   const handleStatusUpdate = async (orderId, newStatus) => {
     const previousOrders = [...allOrders];
     const previousRecent = [...recentOrders];
-
-    const updater = (orders) => 
-      orders.map(order => 
-        (order.id === orderId || order.order_id === orderId) 
-          ? { ...order, order_status: newStatus } 
-          : order
-      );
-
+    const updater = (orders) => orders.map(order => (order.id === orderId || order.order_id === orderId) ? { ...order, order_status: newStatus } : order);
+    
     setAllOrders(updater(allOrders));
     setRecentOrders(updater(recentOrders));
 
@@ -378,26 +362,16 @@ const AdminDashboard = () => {
   };
 
   // --- Helpers ---
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+  const formatCurrency = (amount) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(amount);
 
   const parseRevenueData = () => {
-    if (!revenueData) {
-      return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], data: [0, 0, 0, 0, 0, 0] };
-    }
+    if (!revenueData) return { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], data: [0, 0, 0, 0, 0, 0] };
     const months = revenueData.months || revenueData.data?.months || revenueData.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
     const revenue = revenueData.revenue || revenueData.data?.revenue || revenueData.values || revenueData.data || [0, 0, 0, 0, 0, 0];
     return { labels: months, data: Array.isArray(revenue) ? revenue : [0, 0, 0, 0, 0, 0] };
   };
 
   const parsedRevenue = parseRevenueData();
-  
   const chartData = {
     labels: parsedRevenue.labels,
     datasets: [{
@@ -420,50 +394,26 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {/* Mobile Header */}
       <div className="mobile-header">
-        <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          ☰
-        </button>
+        <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>☰</button>
         <img src={logo} alt="Khaddar" className="mobile-header-logo" />
         <div style={{ width: '30px' }}></div> 
       </div>
 
-      {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="admin-logo">
           <img src={logo} alt="Khaddar" />
           <span>ADMIN</span>
         </div>
         <nav className="admin-nav">
-          <button
-            className={activeTab === 'overview' ? 'active' : ''}
-            onClick={() => handleTabChange('overview')}
-          >
-            Dashboard
-          </button>
-          <button
-            className={activeTab === 'products' ? 'active' : ''}
-            onClick={() => handleTabChange('products')}
-          >
-            Products
-          </button>
-          <button
-            className={activeTab === 'orders' ? 'active' : ''}
-            onClick={() => handleTabChange('orders')}
-          >
-            Orders
-          </button>
-          <button onClick={() => { logout(); navigate('/'); }} className="logout-btn">
-            Logout
-          </button>
+          <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => handleTabChange('overview')}>Dashboard</button>
+          <button className={activeTab === 'products' ? 'active' : ''} onClick={() => handleTabChange('products')}>Products</button>
+          <button className={activeTab === 'orders' ? 'active' : ''} onClick={() => handleTabChange('orders')}>Orders</button>
+          <button onClick={() => { logout(); navigate('/'); }} className="logout-btn">Logout</button>
         </nav>
       </aside>
       
-      {/* Overlay for mobile */}
-      {isSidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
-      )}
+      {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>}
 
       <main className="admin-content">
         {/* OVERVIEW TAB */}
@@ -473,46 +423,21 @@ const AdminDashboard = () => {
               <h1>Overview</h1>
               <p>Welcome back, Admin</p>
             </header>
-
             <div className="stats-grid">
-              <div className="stat-card">
-                <h3>Total Sales</h3>
-                <p className="stat-value">{formatCurrency(stats.totalSales)}</p>
-              </div>
-              <div className="stat-card">
-                <h3>Orders</h3>
-                <p className="stat-value">{stats.totalOrders}</p>
-              </div>
-              <div className="stat-card">
-                <h3>Visitors</h3>
-                <p className="stat-value">{stats.visitors}</p>
-              </div>
-              <div className="stat-card">
-                <h3>Conversion</h3>
-                <p className="stat-value">{stats.conversionRate}%</p>
-              </div>
+              <div className="stat-card"><h3>Total Sales</h3><p className="stat-value">{formatCurrency(stats.totalSales)}</p></div>
+              <div className="stat-card"><h3>Orders</h3><p className="stat-value">{stats.totalOrders}</p></div>
+              <div className="stat-card"><h3>Visitors</h3><p className="stat-value">{stats.visitors}</p></div>
+              <div className="stat-card"><h3>Conversion</h3><p className="stat-value">{stats.conversionRate}%</p></div>
             </div>
-
             <div className="chart-section">
               <h2>Revenue Analytics</h2>
-              <div className="chart-wrapper">
-                <Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
-              </div>
+              <div className="chart-wrapper"><Line data={chartData} options={{ responsive: true, maintainAspectRatio: false }} /></div>
             </div>
-
             <div className="recent-orders-section">
               <h2>Recent Orders</h2>
               <div className="table-responsive">
                 <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Order ID</th>
-                      <th>Customer</th>
-                      <th>Date</th>
-                      <th>Amount</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
                   <tbody>
                     {recentOrders.map(order => (
                       <tr key={order.id || order.order_id}>
@@ -520,11 +445,7 @@ const AdminDashboard = () => {
                         <td>{order.customer_name || 'Guest'}</td>
                         <td>{new Date(order.created_at || order.orderDate).toLocaleDateString()}</td>
                         <td>{formatCurrency(order.total_amount || order.total)}</td>
-                        <td>
-                          <span className={`status-badge ${order.order_status?.toLowerCase()}`}>
-                            {order.order_status}
-                          </span>
-                        </td>
+                        <td><span className={`status-badge ${order.order_status?.toLowerCase()}`}>{order.order_status}</span></td>
                       </tr>
                     ))}
                   </tbody>
@@ -539,51 +460,26 @@ const AdminDashboard = () => {
           <div className="products-content fade-in">
             <header className="page-header">
               <h1>Products</h1>
-              <button
-                className="primary-btn"
-                onClick={() => { resetProductForm(); setIsProductModalOpen(true); }}
-              >
-                + Add Product
-              </button>
+              <button className="primary-btn" onClick={() => { resetProductForm(); setIsProductModalOpen(true); }}>+ Add Product</button>
             </header>
 
             <div className="table-responsive">
               <table className="admin-table hover-rows">
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>S.No</th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
                 <tbody>
                   {products.map((product, index) => (
-                    <tr
-                      key={product.id}
-                      onClick={() => handleProductRowClick(product)}
-                      style={{ cursor: 'pointer' }}
-                    >
+                    <tr key={product.id} onClick={() => handleProductRowClick(product)} style={{ cursor: 'pointer' }}>
                       <td>{(productsPage - 1) * PRODUCTS_PER_PAGE + (index + 1)}</td>
                       <td>
-                         {/* Display first image from array, or legacy string */}
                          <img 
                             src={Array.isArray(product.images) && product.images.length > 0 ? (product.images[0].image_url || product.images[0]) : product.image} 
-                            alt={product.name} 
-                            className="product-thumb" 
+                            alt={product.name} className="product-thumb" 
                           />
                       </td>
                       <td>{product.name}</td>
                       <td>{product.category} ({product.subCategory})</td>
                       <td>{formatCurrency(product.price)}</td>
-                      <td>
-                        <span className={`stock-badge ${product.stock < 10 ? 'low' : 'good'}`}>
-                          {product.stock}
-                        </span>
-                      </td>
+                      <td><span className={`stock-badge ${product.stock < 10 ? 'low' : 'good'}`}>{product.stock}</span></td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <div className="action-buttons">
                           <button className="action-btn edit" onClick={(e) => openEditModal(product, e)}>Edit</button>
@@ -592,33 +488,15 @@ const AdminDashboard = () => {
                       </td>
                     </tr>
                   ))}
-                  {products.length === 0 && (
-                    <tr><td colSpan="7" className="text-center">No products found.</td></tr>
-                  )}
+                  {products.length === 0 && <tr><td colSpan="7" className="text-center">No products found.</td></tr>}
                 </tbody>
               </table>
             </div>
 
-            {/* UPDATED: Pagination Logic - "Length Based" */}
             <div className="pagination">
-              <button 
-                disabled={productsPage === 1 || loading} 
-                onClick={() => setProductsPage(p => Math.max(1, p - 1))}
-                style={{ opacity: (productsPage === 1 || loading) ? 0.5 : 1 }}
-              >
-                Previous
-              </button>
-              
+              <button disabled={productsPage === 1 || loading} onClick={() => setProductsPage(p => Math.max(1, p - 1))} style={{ opacity: (productsPage === 1 || loading) ? 0.5 : 1 }}>Previous</button>
               <span>Page {productsPage}</span>
-              
-              <button 
-                /* DISABLE LOGIC: If we fetched fewer items than limit, it's the end */
-                disabled={products.length < PRODUCTS_PER_PAGE || loading} 
-                onClick={() => setProductsPage(p => p + 1)}
-                style={{ opacity: (products.length < PRODUCTS_PER_PAGE || loading) ? 0.5 : 1 }}
-              >
-                Next
-              </button>
+              <button disabled={products.length < PRODUCTS_PER_PAGE || loading} onClick={() => setProductsPage(p => p + 1)} style={{ opacity: (products.length < PRODUCTS_PER_PAGE || loading) ? 0.5 : 1 }}>Next</button>
             </div>
           </div>
         )}
@@ -629,18 +507,9 @@ const AdminDashboard = () => {
             <header className="page-header">
               <h1>Manage Orders</h1>
             </header>
-
             <div className="table-responsive">
               <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
                 <tbody>
                   {allOrders.map(order => (
                     <tr key={order.id || order.order_id}>
@@ -649,11 +518,7 @@ const AdminDashboard = () => {
                       <td>{new Date(order.created_at || order.orderDate).toLocaleDateString()}</td>
                       <td>{formatCurrency(order.total_amount || order.total)}</td>
                       <td>
-                        <select
-                          value={order.order_status?.toLowerCase() || 'pending'}
-                          onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)}
-                          className="status-select"
-                        >
+                        <select value={order.order_status?.toLowerCase() || 'pending'} onChange={(e) => handleStatusUpdate(order.order_id || order.id, e.target.value)} className="status-select">
                           <option value="pending">Pending</option>
                           <option value="confirmed">Confirmed (COD)</option>
                           <option value="paid">Paid</option>
@@ -665,260 +530,100 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
             </div>
-            
-            {/* UPDATED: Pagination Logic - "Length Based" */}
             <div className="pagination">
-              <button 
-                disabled={ordersPage === 1 || loading} 
-                onClick={() => setOrdersPage(p => Math.max(1, p - 1))}
-                style={{ opacity: (ordersPage === 1 || loading) ? 0.5 : 1 }}
-              >
-                Previous
-              </button>
-              
+              <button disabled={ordersPage === 1 || loading} onClick={() => setOrdersPage(p => Math.max(1, p - 1))} style={{ opacity: (ordersPage === 1 || loading) ? 0.5 : 1 }}>Previous</button>
               <span>Page {ordersPage}</span>
-              
-              <button 
-                disabled={allOrders.length < 10 || loading} 
-                onClick={() => setOrdersPage(p => p + 1)}
-                style={{ opacity: (allOrders.length < 10 || loading) ? 0.5 : 1 }}
-              >
-                Next
-              </button>
+              <button disabled={allOrders.length < 10 || loading} onClick={() => setOrdersPage(p => p + 1)} style={{ opacity: (allOrders.length < 10 || loading) ? 0.5 : 1 }}>Next</button>
             </div>
           </div>
         )}
       </main>
 
-      {/* Product Edit/Add Modal */}
+      {/* MODALS */}
       {isProductModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content admin-modal">
             <h2>{isEditingProduct ? 'Edit Product' : 'Add New Product'}</h2>
             <form onSubmit={handleProductSubmit}>
-              <div className="form-group">
-                <label>Product Name</label>
-                <input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} required />
-              </div>
-
+              <div className="form-group"><label>Product Name</label><input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} required /></div>
               <div className="form-row">
-                <div className="form-group">
-                  <label>Price (₹)</label>
-                  <input type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })} required />
-                </div>
-                <div className="form-group">
-                  <label>Featured</label>
-                  <select value={currentProduct.is_featured} onChange={(e) => setCurrentProduct({ ...currentProduct, is_featured: e.target.value === 'true' })}>
-                    <option value="false">No</option>
-                    <option value="true">Yes</option>
-                  </select>
-                </div>
+                <div className="form-group"><label>Price (₹)</label><input type="number" value={currentProduct.price} onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })} required /></div>
+                <div className="form-group"><label>Featured</label><select value={currentProduct.is_featured} onChange={(e) => setCurrentProduct({ ...currentProduct, is_featured: e.target.value === 'true' })}><option value="false">No</option><option value="true">Yes</option></select></div>
               </div>
-
               <div className="form-row">
-                <div className="form-group">
-                  <label>Main Category</label>
-                  <select 
-                    value={currentProduct.main_category} 
-                    onChange={(e) => setCurrentProduct({ ...currentProduct, main_category: e.target.value, sub_category: '' })} 
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {Object.keys(CATEGORY_MAP).map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Sub Category</label>
-                  <select 
-                    value={currentProduct.sub_category} 
-                    onChange={(e) => setCurrentProduct({ ...currentProduct, sub_category: e.target.value })} 
-                    disabled={!currentProduct.main_category}
-                    required
-                  >
-                    <option value="">Select Sub Category</option>
-                    {currentProduct.main_category && CATEGORY_MAP[currentProduct.main_category].map(sub => (
-                      <option key={sub} value={sub}>{sub}</option>
-                    ))}
-                  </select>
-                </div>
+                <div className="form-group"><label>Main Category</label><select value={currentProduct.main_category} onChange={(e) => setCurrentProduct({ ...currentProduct, main_category: e.target.value, sub_category: '' })} required><option value="">Select Category</option>{Object.keys(CATEGORY_MAP).map(cat => <option key={cat} value={cat}>{cat}</option>)}</select></div>
+                <div className="form-group"><label>Sub Category</label><select value={currentProduct.sub_category} onChange={(e) => setCurrentProduct({ ...currentProduct, sub_category: e.target.value })} disabled={!currentProduct.main_category} required><option value="">Select Sub Category</option>{currentProduct.main_category && CATEGORY_MAP[currentProduct.main_category].map(sub => (<option key={sub} value={sub}>{sub}</option>))}</select></div>
               </div>
 
-              {/* Dynamic Sizes and Stock Section */}
               <div className="form-sizes-section">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                   <label style={{ margin: 0 }}>Stock & Sizes</label>
-                  <button 
-                    type="button" 
-                    onClick={handleAddSize} 
-                    style={{ 
-                      background: '#6F3132', color: 'white', border: 'none', 
-                      padding: '5px 10px', fontSize: '0.7rem', cursor: 'pointer', borderRadius: '4px' 
-                    }}
-                  >
-                    + Add Variant
-                  </button>
+                  <button type="button" onClick={handleAddSize} style={{ background: '#6F3132', color: 'white', border: 'none', padding: '5px 10px', fontSize: '0.7rem', cursor: 'pointer', borderRadius: '4px' }}>+ Add Variant</button>
                 </div>
-
                 <div className="dynamic-sizes-list">
                   {currentProduct.sizes.map((s, idx) => (
                     <div key={idx} className="size-row">
-                      {/* Size Name Input (e.g., S, XL, One Size) */}
-                      <div style={{ flex: 1 }}>
-                        <input 
-                          type="text" 
-                          placeholder="Size (e.g. XL)" 
-                          value={s.size} 
-                          onChange={(e) => handleSizeChange(idx, 'size', e.target.value)}
-                          required
-                          style={{ width: '100%', textAlign: 'center' }}
-                        />
-                      </div>
-
-                      {/* Stock Input */}
-                      <div style={{ flex: 1 }}>
-                        <input 
-                          type="number" 
-                          placeholder="Stock" 
-                          value={s.stock === 0 ? '' : s.stock} 
-                          onChange={(e) => handleSizeChange(idx, 'stock', e.target.value)} 
-                          style={{ width: '100%', textAlign: 'center' }}
-                        />
-                      </div>
-
-                      {/* Remove Button */}
-                      <button 
-                        type="button" 
-                        onClick={() => handleRemoveSize(idx)}
-                        className="remove-size-btn"
-                        title="Remove Size"
-                      >
-                        &times;
-                      </button>
+                      <div style={{ flex: 1 }}><input type="text" placeholder="Size (e.g. XL)" value={s.size} onChange={(e) => handleSizeChange(idx, 'size', e.target.value)} required style={{ width: '100%', textAlign: 'center' }} /></div>
+                      <div style={{ flex: 1 }}><input type="number" placeholder="Stock" value={s.stock === 0 ? '' : s.stock} onChange={(e) => handleSizeChange(idx, 'stock', e.target.value)} style={{ width: '100%', textAlign: 'center' }} /></div>
+                      <button type="button" onClick={() => handleRemoveSize(idx)} className="remove-size-btn" title="Remove Size">&times;</button>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Multi-Image Upload Section */}
               <div className="form-group">
                 <label>Upload Images (Select Multiple)</label>
                 <div className="image-upload-wrapper">
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    multiple 
-                    onChange={handleFileChange} 
-                  />
-                  
-                  {/* Image Grid Preview */}
+                  <input type="file" accept="image/*" multiple onChange={handleFileChange} />
                   <div className="image-preview-grid">
-                    {/* Existing Images from DB */}
                     {currentProduct.existingImages.map((img, idx) => (
                       <div key={`exist-${idx}`} className="preview-item">
-                        <img 
-                          src={img.image_url || img} 
-                          alt="Existing" 
-                        />
-                        <button 
-                          type="button"
-                          className="remove-image-btn"
-                          onClick={() => handleRemoveImage('existing', idx)}
-                        >
-                          &times;
-                        </button>
+                        <img src={img.image_url || img} alt="Existing" />
+                        <button type="button" className="remove-image-btn" onClick={() => handleRemoveImage('existing', idx)}>&times;</button>
                       </div>
                     ))}
-
-                    {/* New Files waiting for upload */}
                     {currentProduct.newFiles.map((item, idx) => (
                       <div key={`new-${item.id}`} className="preview-item new-file">
-                        <img 
-                          src={item.preview} 
-                          alt="New Upload" 
-                        />
-                        <button 
-                          type="button"
-                          className="remove-image-btn"
-                          onClick={() => handleRemoveImage('new', idx)}
-                        >
-                          &times;
-                        </button>
+                        <img src={item.preview} alt="New Upload" />
+                        <button type="button" className="remove-image-btn" onClick={() => handleRemoveImage('new', idx)}>&times;</button>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              <div className="form-group">
-                <label>Description</label>
-                <textarea value={currentProduct.description} onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })} rows="3" />
-              </div>
-
-              <div className="modal-actions">
-                <button type="button" onClick={() => setIsProductModalOpen(false)} className="cancel-btn">Cancel</button>
-                <button type="submit" className="save-btn" disabled={loading}>
-                    {loading ? 'Saving...' : 'Save Product'}
-                </button>
-              </div>
+              <div className="form-group"><label>Description</label><textarea value={currentProduct.description} onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })} rows="3" /></div>
+              <div className="modal-actions"><button type="button" onClick={() => setIsProductModalOpen(false)} className="cancel-btn">Cancel</button><button type="submit" className="save-btn" disabled={loading}>{loading ? 'Saving...' : 'Save Product'}</button></div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Product Details Modal */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
           <div className="modal-content product-details-modal" onClick={e => e.stopPropagation()}>
-            <div className="product-details-header">
-              <h2>Product Details</h2>
-              <button className="close-icon-btn" onClick={() => setSelectedProduct(null)}>&times;</button>
-            </div>
-
+            <div className="product-details-header"><h2>Product Details</h2><button className="close-icon-btn" onClick={() => setSelectedProduct(null)}>&times;</button></div>
             <div className="product-details-body">
+              {/* --- UPDATED: Image Gallery --- */}
               <div className="product-details-image">
-                {/* Show first image */}
-                 <img 
-                    src={Array.isArray(selectedProduct.images) && selectedProduct.images.length > 0 
-                          ? (selectedProduct.images[0].image_url || selectedProduct.images[0]) 
-                          : selectedProduct.image} 
-                    alt={selectedProduct.name} 
-                  />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '10px', overflowY: 'auto', maxHeight: '400px' }}>
+                  {Array.isArray(selectedProduct.images) && selectedProduct.images.length > 0 ? (
+                    selectedProduct.images.map((img, idx) => (
+                      <img key={idx} src={typeof img === 'string' ? img : (img.image_url || img.url || img.src)} alt={`${selectedProduct.name} - ${idx + 1}`} style={{ width: '100%', borderRadius: '4px', border: '1px solid #eee' }} />
+                    ))
+                  ) : (
+                    <img src={selectedProduct.image} alt={selectedProduct.name} style={{ width: '100%', borderRadius: '4px' }} />
+                  )}
+                </div>
               </div>
               <div className="product-details-info">
-                <h3>{selectedProduct.name}</h3>
-                <p className="product-id">ID: #{selectedProduct.id}</p>
-
-                <div className="detail-row">
-                  <span className="label">Main Category:</span>
-                  <span className="value">{selectedProduct.mainCategory || selectedProduct.category}</span>
-                </div>
-                
-                <div className="detail-row">
-                  <span className="label">Sub Category:</span>
-                  <span className="value">{selectedProduct.subCategory}</span>
-                </div>
-
-                <div className="detail-row">
-                  <span className="label">Price:</span>
-                  <span className="value price">{formatCurrency(selectedProduct.price)}</span>
-                </div>
-
-                <div className="detail-row">
-                  <span className="label">Stock:</span>
-                  <span className={`value stock-badge ${selectedProduct.stock < 10 ? 'low' : 'good'}`}>
-                    {selectedProduct.stock} units
-                  </span>
-                </div>
-
-                <div className="detail-section">
-                  <span className="label">Description:</span>
-                  <p className="description">{selectedProduct.description || 'No description available.'}</p>
-                </div>
-
-                <div className="details-actions">
-                  <button className="primary-btn" onClick={() => openEditModal(selectedProduct)}>Edit Product</button>
-                  <button className="action-btn delete" onClick={() => handleDeleteProduct(selectedProduct.id)}>Delete Product</button>
-                </div>
+                <h3>{selectedProduct.name}</h3><p className="product-id">ID: #{selectedProduct.id}</p>
+                <div className="detail-row"><span className="label">Main Category:</span><span className="value">{selectedProduct.mainCategory || selectedProduct.category}</span></div>
+                <div className="detail-row"><span className="label">Sub Category:</span><span className="value">{selectedProduct.subCategory}</span></div>
+                <div className="detail-row"><span className="label">Price:</span><span className="value price">{formatCurrency(selectedProduct.price)}</span></div>
+                <div className="detail-row"><span className="label">Stock:</span><span className={`value stock-badge ${selectedProduct.stock < 10 ? 'low' : 'good'}`}>{selectedProduct.stock} units</span></div>
+                <div className="detail-section"><span className="label">Description:</span><p className="description">{selectedProduct.description || 'No description available.'}</p></div>
+                <div className="details-actions"><button className="primary-btn" onClick={() => openEditModal(selectedProduct)}>Edit Product</button><button className="action-btn delete" onClick={() => handleDeleteProduct(selectedProduct.id)}>Delete Product</button></div>
               </div>
             </div>
           </div>
