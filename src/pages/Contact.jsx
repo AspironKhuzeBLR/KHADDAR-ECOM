@@ -62,8 +62,6 @@ const Contact = () => {
                 <h3 className="info-subheading">PHONE</h3>
                 <div className="info-link-large">
                   <a href="tel:+917899888491" className="phone-number-link">+91 78998 88491</a>
-                  <span className="phone-divider"> | </span>
-                  <a href="tel:+918296704777" className="phone-number-link">+91 82967 04777</a>
                 </div>
               </div>
 

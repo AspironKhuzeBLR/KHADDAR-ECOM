@@ -23,6 +23,16 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
             poster="/logo_file_page-0001.png"
             webkit-playsinline="true"
             x5-playsinline="true"
+            onPlay={(e) => {
+              // Once video starts playing, switch to cover mode to fill screen
+              e.target.style.objectFit = 'cover';
+              e.target.style.width = '100%';
+              e.target.style.height = '100%';
+            }}
+            onLoadedData={(e) => {
+              // Backup: also switch when data loads
+              e.target.style.objectFit = 'cover';
+            }}
           >
             <source src="/KhaddarXSummersalt.mp4" type="video/mp4" />
             Your browser does not support the video tag.
