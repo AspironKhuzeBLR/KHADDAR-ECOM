@@ -210,6 +210,14 @@
   margin: 0;
 }
 
+.stat-label {
+  font-size: 0.75rem;
+  color: #8C6C5F;
+  margin-top: 5px;
+  display: block;
+  font-style: italic;
+}
+
 /* Charts */
 .chart-section {
   background: #ffffff;
