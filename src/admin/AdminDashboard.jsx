@@ -92,8 +92,8 @@ const AdminDashboard = () => {
       setStats({
         totalSales: summary?.data?.total_sales || summary?.data?.totalSales || summary?.data?.total_revenue || 0,
         totalOrders: summary?.data?.total_orders || summary?.data?.totalOrders || 0,
-        visitors: summary?.data?.total_visitors || summary?.data?.visitors || 1500,
-        conversionRate: summary?.data?.conversion_rate || summary?.data?.conversionRate || 2.5
+        visitors: summary?.data?.total_visitors || summary?.data?.visitors || 0,
+        conversionRate: summary?.data?.conversion_rate || summary?.data?.conversionRate || 0
       });
       setRecentOrders(recent?.data || recent?.orders || []);
       setRevenueData(revenue?.data || revenue);
@@ -494,8 +494,9 @@ const AdminDashboard = () => {
                 <p className="stat-value">{stats.totalOrders}</p>
               </div>
               <div className="stat-card">
-                <h3>Visitors</h3>
+                <h3>Registered Users</h3>
                 <p className="stat-value">{stats.visitors}</p>
+                <span className="stat-label">Logged-in visitors</span>
               </div>
               <div className="stat-card">
                 <h3>Conversion</h3>

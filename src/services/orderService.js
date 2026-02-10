@@ -197,3 +197,35 @@ export const getPaymentStatus = async (orderId) => {
         throw error;
     }
 };
+
+/**
+ * Request order cancellation
+ * @param {string} orderId - Order ID to cancel
+ * @param {string} reason - Reason for cancellation
+ * @returns {Promise<Object>} Cancellation response
+ */
+export const requestCancellation = async (orderId, reason) => {
+    try {
+        const path = `${API_CONFIG.ENDPOINTS.ORDERS}/request-cancellation`;
+        const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+
+        console.log('Requesting cancellation for order:', orderId);
+
+        const response = await withTimeout(
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    type: 'Cancellation',
+                    reason: reason
+                })
+            })
+        );
+
+        return await handleResponse(response);
+    } catch (error) {
+        console.error('Error requesting cancellation:', error);
+        throw error;
+    }
+};
