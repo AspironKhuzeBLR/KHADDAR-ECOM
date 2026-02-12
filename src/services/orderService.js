@@ -204,12 +204,12 @@ export const getPaymentStatus = async (orderId) => {
  * @param {string} reason - Reason for cancellation
  * @returns {Promise<Object>} Cancellation response
  */
-export const requestCancellation = async (orderId, reason) => {
+export const requestCancellation = async (orderId, reason, type = 'Cancellation') => {
     try {
         const path = `${API_CONFIG.ENDPOINTS.ORDERS}/request-cancellation`;
         const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 
-        console.log('Requesting cancellation for order:', orderId);
+        console.log(`Requesting ${type} for order:`, orderId);
 
         const response = await withTimeout(
             fetch(url, {
@@ -217,7 +217,7 @@ export const requestCancellation = async (orderId, reason) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     order_id: orderId,
-                    type: 'Cancellation',
+                    type: type, // Now uses the dynamic type (Cancellation or Exchange)
                     reason: reason
                 })
             })
@@ -225,7 +225,7 @@ export const requestCancellation = async (orderId, reason) => {
 
         return await handleResponse(response);
     } catch (error) {
-        console.error('Error requesting cancellation:', error);
+        console.error(`Error requesting ${type}:`, error);
         throw error;
     }
 };
