@@ -41,7 +41,7 @@ const AdminDashboard = () => {
     totalSales: 0,
     totalOrders: 0,
     visitors: 0,
-    conversionRate: 0
+    cancelledOrders: 0
   });
   const [recentOrders, setRecentOrders] = useState([]);
   const [revenueData, setRevenueData] = useState(null);
@@ -53,6 +53,8 @@ const AdminDashboard = () => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isEditingProduct, setIsEditingProduct] = useState(false);
+  const [orderSearchTerm, setOrderSearchTerm] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
 
   // 2. PRODUCT FORM STATE
   const initialProductState = {
@@ -93,7 +95,7 @@ const AdminDashboard = () => {
         totalSales: summary?.data?.total_sales || summary?.data?.totalSales || summary?.data?.total_revenue || 0,
         totalOrders: summary?.data?.total_orders || summary?.data?.totalOrders || 0,
         visitors: summary?.data?.total_visitors || summary?.data?.visitors || 0,
-        conversionRate: summary?.data?.conversion_rate || summary?.data?.conversionRate || 0
+        cancelledOrders: summary?.data?.order_overview?.cancelled_orders || 0 
       });
       setRecentOrders(recent?.data || recent?.orders || []);
       setRevenueData(revenue?.data || revenue);
@@ -428,6 +430,21 @@ const AdminDashboard = () => {
     return <div className="admin-loading">Loading Dashboard...</div>;
   }
 
+  const filteredOrders = allOrders.filter(order => {
+    // 1. Search Logic (Checks Name or ID)
+    const searchTerm = orderSearchTerm.toLowerCase();
+    const matchesSearch = 
+      (order.customer_name?.toLowerCase() || '').includes(searchTerm) ||
+      (order.order_number?.toLowerCase() || '').includes(searchTerm) ||
+      (order.order_id?.toLowerCase() || '').includes(searchTerm);
+
+    // 2. Filter Logic (Checks Status)
+    const matchesStatus = orderStatusFilter === 'all' || 
+      order.order_status?.toLowerCase() === orderStatusFilter.toLowerCase();
+
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="admin-dashboard">
       {/* Mobile Header */}
@@ -499,8 +516,8 @@ const AdminDashboard = () => {
                 <span className="stat-label">Logged-in visitors</span>
               </div>
               <div className="stat-card">
-                <h3>Conversion</h3>
-                <p className="stat-value">{stats.conversionRate}%</p>
+                <h3>Cancelled Orders</h3>
+                <p className="stat-value">{stats.cancelledOrders}</p>
               </div>
             </div>
 
@@ -622,7 +639,51 @@ const AdminDashboard = () => {
         {activeTab === 'orders' && (
           <div className="orders-content fade-in">
             <header className="page-header">
-              <h1>Manage Orders</h1>
+                <div className="orders-header-row" style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  marginBottom: '10px',
+                  width: '100%',
+                  flexWrap: 'wrap' // This ensures it looks good on smaller screens too
+                }}>
+                  <h1 style={{ margin: 0 }}>Manage Orders</h1>
+
+                  <div className="table-controls" style={{ display: 'flex', gap: '15px', alignItems: 'center', marginLeft : 'auto'}}>
+                    <input
+                      type="text"
+                      placeholder="Search by ID or Name..."
+                      value={orderSearchTerm}
+                      onChange={(e) => setOrderSearchTerm(e.target.value)}
+                      style={{ 
+                        padding: '8px 15px', 
+                        borderRadius: '5px', 
+                        border: '1px solid #ddd', 
+                        width: '220px',
+                        fontSize: '14px'
+                      }}
+                    />
+                    <select
+                      value={orderStatusFilter}
+                      onChange={(e) => setOrderStatusFilter(e.target.value)}
+                      style={{ 
+                        padding: '8px 12px', 
+                        borderRadius: '5px', 
+                        border: '1px solid #ddd', 
+                        minWidth: '150px',
+                        fontSize: '14px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <option value="all">All Statuses</option>
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="paid">Paid</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
             </header>
 
             <div className="table-responsive">
@@ -637,7 +698,7 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {allOrders.map(order => (
+                  {filteredOrders.map(order => (
                     <tr key={order.id || order.order_id}>
                       <td>#{order.order_number || (order.order_id ? order.order_id.substring(0, 8) : 'N/A')}</td>
                       <td>{order.customer_name || 'Guest'}</td>
@@ -653,6 +714,7 @@ const AdminDashboard = () => {
                           <option value="confirmed">Confirmed (COD)</option>
                           <option value="paid">Paid</option>
                           <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
                         </select>
                       </td>
                     </tr>
