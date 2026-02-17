@@ -5,7 +5,6 @@ import { useToast } from "../context/ToastContext";
 import {
   createOrder,
   submitPayment,
-  confirmCOD,
 } from "../services/orderService";
 import "./Checkout.css";
 
@@ -13,18 +12,10 @@ const Checkout = () => {
   const { isAuthenticated, isBootstrapped, user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
-
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-
-  // Order state
-  const [currentOrder, setCurrentOrder] = useState(null);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-
-  // Payment method - COD only (Online payment temporarily disabled)
-  // NOTE: Backend order creation doesn't accept 'cod' yet, so we use 'upi' then convert to COD
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState("upi");
 
   // Shipping details
   const [shippingDetails, setShippingDetails] = useState({
@@ -185,25 +176,8 @@ const Checkout = () => {
       const orderResponse = await createOrder(orderData);
       const orderId = orderResponse?.data?.order_id || orderResponse?.order_id;
 
-      if (!orderId) throw new Error("Failed to create order");
-
-      if (paymentMethod === "cod") {
-        // --- COD FLOW ---
-        try {
-          await confirmCOD(orderId);
-        } catch (e) {
-          console.warn("COD confirmation error:", e);
-        }
-
-        sessionStorage.removeItem("cartItems");
-        setCurrentOrder(orderResponse.data);
-        setShowPaymentModal(true);
-        toast.success("🎉 Order placed successfully (COD)!");
-      } else {
-        // --- ONLINE FLOW ---
-        // Changed toast.info to toast.success to fix your error
+      if (!orderId) throw new Error("Failed to create order");{
         toast.success("Redirecting to secure payment...");
-
         const paymentResponse = await submitPayment(orderId, {
           payment_method: paymentMethod,
         });
@@ -385,24 +359,6 @@ const Checkout = () => {
             <section className="checkout-section">
               <h2>Payment Method</h2>
               <div className="payment-methods">
-                {/* COD Option */}
-                <div
-                  className={`payment-option ${paymentMethod === "cod" ? "selected" : ""}`}
-                  onClick={() => setPaymentMethod("cod")}
-                  style={{ cursor: "pointer" }}
-                >
-                  <span className="payment-icon">💵</span>
-                  <div className="payment-info">
-                    <span className="payment-name">Cash on Delivery (COD)</span>
-                    <span className="payment-desc">
-                      Pay when you receive your order
-                    </span>
-                  </div>
-                  {paymentMethod === "cod" && (
-                    <span className="payment-check">✓</span>
-                  )}
-                </div>
-
                 {/* Online Payment Option */}
                 <div
                   className={`payment-option ${paymentMethod !== "cod" ? "selected" : ""}`} // Selected if NOT cod
@@ -484,8 +440,6 @@ const Checkout = () => {
                     <span className="btn-spinner"></span>
                     Processing...
                   </>
-                ) : paymentMethod === "cod" ? (
-                  "Place Order (COD)"
                 ) : (
                   "Proceed to Payment"
                 )}
@@ -499,74 +453,6 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-
-      {/* Success Modal */}
-      {showPaymentModal && currentOrder && (
-        <div className="modal-overlay">
-          <div className="payment-modal success-modal">
-            <div className="modal-header success-header">
-              <div className="success-icon">✓</div>
-              <h2>Order Placed Successfully!</h2>
-            </div>
-            <div className="modal-body">
-              <div className="success-message">
-                <p className="success-text">
-                  Thank you for your order! Your order has been placed
-                  successfully. Please keep the cash ready for payment on
-                  delivery.
-                </p>
-
-                <div className="order-details-card">
-                  <h3>Order Details</h3>
-                  <div className="detail-row">
-                    <span className="detail-label">Order ID:</span>
-                    <span className="detail-value">
-                      {currentOrder?.order_number ||
-                        currentOrder?.order_id ||
-                        "N/A"}
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Amount to Pay:</span>
-                    <span className="detail-value">
-                      ₹{calculateTotal().toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Payment Method:</span>
-                    <span className="detail-value">Cash on Delivery (COD)</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Email:</span>
-                    <span className="detail-value">
-                      {shippingDetails.email}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="confirmation-note">
-                  📧 A confirmation email has been sent to{" "}
-                  <strong>{shippingDetails.email}</strong>. Please keep ₹
-                  {calculateTotal().toLocaleString("en-IN")} cash ready for the
-                  delivery.
-                </p>
-              </div>
-
-              <div className="modal-actions">
-                <button
-                  className="confirm-payment-btn success-btn"
-                  onClick={() => navigate("/profile")}
-                >
-                  View My Orders
-                </button>
-                <button className="secondary-btn" onClick={() => navigate("/")}>
-                  Continue Shopping
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

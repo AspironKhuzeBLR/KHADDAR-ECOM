@@ -677,7 +677,7 @@ const AdminDashboard = () => {
                     >
                       <option value="all">All Statuses</option>
                       <option value="pending">Pending</option>
-                      <option value="confirmed">Confirmed</option>
+                      {/* <option value="confirmed">Confirmed</option> */}
                       <option value="paid">Paid</option>
                       <option value="completed">Completed</option>
                       <option value="cancelled">Cancelled</option>
@@ -711,7 +711,7 @@ const AdminDashboard = () => {
                           className="status-select"
                         >
                           <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed (COD)</option>
+                          {/* <option value="confirmed">Confirmed (COD)</option> */}
                           <option value="paid">Paid</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
