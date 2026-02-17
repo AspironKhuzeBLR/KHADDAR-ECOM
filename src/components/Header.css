@@ -29,14 +29,14 @@
   border-color: transparent;
 }
 
-/* --- FIX: Force SVG children to use the white color --- */
+/* Force SVG children to use white */
 .header.transparent-page:not(.scrolled) .logout-btn svg,
 .header.transparent-page:not(.scrolled) .logout-btn path {
   fill: currentColor !important;
   stroke: currentColor !important;
 }
 
-/* Special case for Cart Button Border on Transparent */
+/* Special case for Cart Button Border */
 .header.transparent-page:not(.scrolled) .cart-btn {
   border: 1px solid #ffffff !important;
 }
@@ -65,7 +65,7 @@
 }
 
 /* =========================================
-   ICON BUTTONS (Base Class)
+   ICON BUTTONS
    ========================================= */
 .icon-btn {
   display: flex;
@@ -73,7 +73,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  color: #ffffff; /* Default for transparent */
+  color: #ffffff;
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -85,7 +85,6 @@
   outline: none;
 }
 
-/* Remove filter/shadow on scrolled light background */
 .header.scrolled .icon-btn {
   color: #6F3132;
   filter: none;
@@ -102,50 +101,31 @@
   opacity: 0.8;
 }
 
-.search-btn:hover,
-.account-btn:hover {
-  transform: scale(1.1);
-}
-
 /* =========================================
    SPECIFIC BUTTON FIXES
    ========================================= */
 
-/* --- LOGOUT BUTTON FIX (Aggressive Reset) --- */
 .logout-btn {
-  /* Remove any potential borders or decorations causing the line */
   border: none !important;
   border-top: none !important;
   text-decoration: none !important;
   background: transparent !important;
   box-shadow: none !important;
   outline: none !important;
-  
-  /* Ensure proper inheritance */
   color: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Ensure no pseudo-elements are creating the line */
 .logout-btn::before,
 .logout-btn::after {
   content: none !important;
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  border: none !important;
 }
 
-.account-btn {
-  /* Clean slate */
-}
-
-/* --- CART BUTTON STYLES --- */
 .cart-btn {
   border: 1px solid #ffffff; 
-  /* Inherits filter from .icon-btn */
 }
 
 .header.scrolled .cart-btn {
@@ -153,7 +133,6 @@
   filter: none;
 }
 
-/* Hover: Transparent background (Outline Only) */
 .cart-btn:hover {
   background-color: transparent !important;
   color: #ffffff !important;
@@ -317,14 +296,14 @@
 }
 
 /* =========================================
-   NAVIGATION
+   NAVIGATION (Desktop Base)
    ========================================= */
 .nav {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 35px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allowed on desktop */
 }
 
 .nav-link {
@@ -396,7 +375,7 @@
   background-color: #F7F7F0;
   backdrop-filter: blur(10px);
   border: 1px solid #8C6C5F;
-  min-width: 250px;
+  min-width: 250px; /* Desktop only */
   padding: 15px 0;
   opacity: 0;
   animation: fadeIn 0.3s ease forwards;
@@ -615,7 +594,9 @@
   }
 }
 
-/* --- MOBILE SPECIFIC FIXES --- */
+/* =========================================
+   MOBILE SPECIFIC FIXES (CRITICAL)
+   ========================================= */
 @media (max-width: 768px) {
   /* Force Solid Header on Mobile */
   .header,
@@ -624,7 +605,7 @@
     border-bottom: 1px solid #8C6C5F !important;
   }
 
-  /* Force Dark Icons on Mobile */
+  /* Force Dark Icons */
   .header.transparent-page:not(.scrolled) .nav-link,
   .header.transparent-page:not(.scrolled) .icon-btn,
   .header.transparent-page:not(.scrolled) .logout-btn,
@@ -635,7 +616,6 @@
     background-color: transparent;
   }
 
-  /* Reset SVG Fill specifically for Mobile Dark Icons */
   .header.transparent-page:not(.scrolled) .logout-btn svg,
   .header.transparent-page:not(.scrolled) .logout-btn path {
     fill: #6F3132 !important;
@@ -651,7 +631,7 @@
     background-color: #6F3132 !important;
   }
 
-  /* Reset Header Container Layout for Mobile */
+  /* Reset Header Container */
   .header-main {
     padding: 10px 0; 
     background-color: #F7F7F0 !important;
@@ -667,7 +647,7 @@
     gap: 0;
   }
   
-  /* Logo Positioning */
+  /* Logo */
   .logo-link {
     position: absolute;
     left: 50%;
@@ -687,7 +667,7 @@
     filter: none !important;
   }
   
-  /* Left Icons (User/Cart) */
+  /* Left Icons */
   .header-icons-left {
     position: relative;
     top: auto;
@@ -708,7 +688,7 @@
     color: #6F3132;
   }
   
-  /* Hamburger Menu Button */
+  /* Hamburger */
   .mobile-menu-btn {
     display: flex;
     position: relative;
@@ -722,7 +702,10 @@
     background: transparent !important;
   }
 
-  /* Mobile Navigation Drawer */
+  /* * MOBILE NAV DRAWER FIXES
+   * 1. flex-wrap: nowrap is CRITICAL to prevent sidebar breaking
+   * 2. overflow-y: auto allows scrolling when menu gets tall
+   */
   .nav {
     position: fixed;
     top: 81px;
@@ -731,6 +714,7 @@
     bottom: 0;
     background-color: #F7F7F0 !important;
     flex-direction: column;
+    flex-wrap: nowrap !important; /* PREVENTS SECOND COLUMN CREATION */
     align-items: flex-start;
     padding: 20px 30px 80px 30px;
     border-top: 1px solid #8C6C5F;
@@ -738,7 +722,7 @@
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     max-height: calc(100vh - 81px);
-    overflow-y: auto;
+    overflow-y: auto; /* ALLOWS SCROLLING */
     gap: 0;
     z-index: 999;
   }
@@ -749,7 +733,6 @@
     pointer-events: auto;
   }
   
-  /* Mobile Links Styling */
   .nav-link-wrapper {
     width: 100%;
     display: block;
@@ -772,14 +755,18 @@
     padding-left: 10px;
   }
 
+  /* * DROPDOWN RESET
+   * Removed min-width so it doesn't cause horizontal scroll 
+   */
   .dropdown-menu {
-    position: static;
+    position: static !important;
     margin: 0;
     border: none;
     border-left: 2px solid #8C6C5F;
     padding: 5px 0 5px 20px;
     box-shadow: none;
-    width: 100%;
+    width: 100% !important;
+    min-width: auto !important; /* FIXES OVERFLOW */
     opacity: 1;
     background-color: transparent !important;
     animation: none;
@@ -790,6 +777,7 @@
     font-size: 0.85rem;
     padding: 10px 0;
     color: #6F3132 !important;
+    width: 100%;
   }
   
   .nav-link-wrapper::after {
@@ -809,5 +797,48 @@
   .nav {
      top: 71px;
      max-height: calc(100vh - 71px);
+  }
+}
+
+/* =========================================
+   ACCORDION TOGGLE CLASSES (Universal Mobile)
+   ========================================= */
+
+@media (max-width: 1200px) {
+  .dropdown-menu.mobile-visible {
+    display: block !important;
+    /* Redundant safety check for mobile logic */
+    position: static !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dropdown-submenu.mobile-visible {
+    display: block !important;
+    padding-left: 15px;
+    border-left: 1px solid rgba(140, 108, 95, 0.3);
+  }
+  
+  .mobile-arrow {
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+  }
+
+  /* Reset hover effects */
+  .nav-link-wrapper:hover .dropdown-menu {
+    display: none; 
+  }
+  
+  .nav-link-wrapper .dropdown-menu.mobile-visible {
+    display: block !important;
+  }
+}
+
+@media (min-width: 1201px) {
+  .mobile-arrow {
+    display: none;
   }
 }

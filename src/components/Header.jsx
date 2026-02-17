@@ -23,6 +23,10 @@ const Header = () => {
   // State for dynamic categories
   const [navCategories, setNavCategories] = useState([]);
   
+  // NEW: Mobile Accordion State
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null); // 'mens' or 'womens'
+  
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   const { isAuthenticated, user, logout } = useAuth();
@@ -96,14 +100,21 @@ const Header = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
     setHoveredMenu(null);
+    // Optional: Close mobile accordions when main menu closes
+    // setMobileCategoryOpen(false); 
   };
 
   const handleMenuHover = (menu) => {
-    setHoveredMenu(menu);
+    // Only allow hover on desktop (> 1200px)
+    if (window.innerWidth > 1200) {
+      setHoveredMenu(menu);
+    }
   };
 
   const handleMenuLeave = () => {
-    setHoveredMenu(null);
+    if (window.innerWidth > 1200) {
+      setHoveredMenu(null);
+    }
   };
 
   const handleLogout = () => {
@@ -116,9 +127,32 @@ const Header = () => {
     navigate(isAdminRoute ? '/login' : '/');
   };
 
+  // NEW: Handler for mobile accordion clicks
+  const handleMobileClick = (e, type, id) => {
+    // Check if we are on mobile/tablet (matching CSS breakpoint max-width: 1200px)
+    if (window.innerWidth <= 1200) {
+      e.preventDefault(); // Stop navigation
+      e.stopPropagation();
+
+      if (type === 'main') {
+        setMobileCategoryOpen(!mobileCategoryOpen);
+      } else if (type === 'sub') {
+        // Toggle submenu: close if same clicked, open if different
+        setMobileSubCategoryOpen(mobileSubCategoryOpen === id ? null : id);
+      }
+    } else {
+       // On Desktop, clicking the link closes the menu normally
+       closeMenu(); 
+    }
+  };
+
   // Filter logic for dropdown links
   const menLinks = navCategories.filter(cat => cat.parent_id === 1 || cat.id === 29);
-  const womenLinks = navCategories.filter(cat => cat.parent_id === 4);
+  const womenLinks = navCategories.filter(cat => 
+  cat.parent_id === 4 || 
+  cat.id === 17 || 
+  cat.name === 'Kurtas'
+);
 
   return (
     <>
@@ -222,28 +256,41 @@ const Header = () => {
                   <Link to="/collections" className="nav-link" onClick={closeMenu}>COLLECTIONS</Link>
                 </div>
 
+                {/* SHOP BY CATEGORY - MODIFIED FOR MOBILE ACCORDION */}
                 <div
                   className="nav-link-wrapper"
                   onMouseEnter={() => handleMenuHover('shop')}
-                  onMouseLeave={(e) => {
-                    if (!e.relatedTarget || !(e.relatedTarget instanceof Node) || !e.currentTarget.contains(e.relatedTarget)) {
-                      handleMenuLeave();
-                    }
-                  }}
+                  onMouseLeave={handleMenuLeave}
                 >
-                  <Link to="/shop/mens-wear" className="nav-link" onClick={closeMenu}>SHOP BY CATEGORY</Link>
-                  {hoveredMenu === 'shop' && (
+                  <Link 
+                    to="/shop/mens-wear" 
+                    className="nav-link" 
+                    onClick={(e) => handleMobileClick(e, 'main')}
+                  >
+                    SHOP BY CATEGORY
+                    {/* Arrow visible only on mobile */}
+                    <span className="mobile-arrow show-mobile">▾</span>
+                  </Link>
+
+                  {/* Show if Hovered (Desktop) OR Open (Mobile) */}
+                  {(hoveredMenu === 'shop' || mobileCategoryOpen) && (
                     <div
-                      className="dropdown-menu"
+                      className={`dropdown-menu ${mobileCategoryOpen ? 'mobile-visible' : ''}`}
                       onMouseEnter={() => handleMenuHover('shop')}
                       onMouseLeave={handleMenuLeave}
                       onClick={(e) => e.stopPropagation()}
                     >
+                      {/* MEN'S WEAR SECTION */}
                       <div className="dropdown-item-wrapper">
-                        <Link to="/shop/mens-wear" className="dropdown-item" onClick={closeMenu}>
+                        <Link 
+                          to="/shop/mens-wear" 
+                          className="dropdown-item" 
+                          onClick={(e) => handleMobileClick(e, 'sub', 'mens')}
+                        >
                           MEN'S WEAR
                         </Link>
-                        <div className="dropdown-submenu">
+                        
+                        <div className={`dropdown-submenu ${mobileSubCategoryOpen === 'mens' ? 'mobile-visible' : ''}`}>
                           {menLinks.map(cat => (
                             <Link 
                               key={cat.id} 
@@ -256,11 +303,18 @@ const Header = () => {
                           ))}
                         </div>
                       </div>
+
+                      {/* WOMEN'S WEAR SECTION */}
                       <div className="dropdown-item-wrapper">
-                        <Link to="/shop/womens-wear" className="dropdown-item" onClick={closeMenu}>
+                        <Link 
+                          to="/shop/womens-wear" 
+                          className="dropdown-item" 
+                          onClick={(e) => handleMobileClick(e, 'sub', 'womens')}
+                        >
                           WOMEN'S WEAR
                         </Link>
-                        <div className="dropdown-submenu">
+                        
+                        <div className={`dropdown-submenu ${mobileSubCategoryOpen === 'womens' ? 'mobile-visible' : ''}`}>
                           {womenLinks.map(cat => (
                             <Link 
                               key={cat.id} 

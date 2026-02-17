@@ -1,58 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import { createOrder, submitPayment } from '../services/orderService';
-import './Checkout.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import {
+  createOrder,
+  submitPayment,
+} from "../services/orderService";
+import "./Checkout.css";
 
 const Checkout = () => {
   const { isAuthenticated, isBootstrapped, user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
-
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
-
-  // Order state
-  const [currentOrder, setCurrentOrder] = useState(null);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-
-  // Payment method - HDFC by default
-  const paymentMethod = 'hdfc';
+  const [paymentMethod, setPaymentMethod] = useState("upi");
 
   // Shipping details
   const [shippingDetails, setShippingDetails] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
-    country: 'India'
+    fullName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    country: "India",
   });
 
   useEffect(() => {
     if (!isBootstrapped) return;
     if (!isAuthenticated) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
     // Get cart items from sessionStorage or API
-    const savedCart = sessionStorage.getItem('cartItems');
+    const savedCart = sessionStorage.getItem("cartItems");
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
     }
 
     // Pre-fill user details if available
     if (user) {
-      setShippingDetails(prev => ({
+      setShippingDetails((prev) => ({
         ...prev,
-        fullName: user.name || '',
-        email: user.email || '',
-        phone: user.phone || ''
+        fullName: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
       }));
     }
 
@@ -61,18 +57,30 @@ const Checkout = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setShippingDetails(prev => ({
+
+    // Only allow numbers for phone and pincode
+    if (name === "phone" || name === "pincode") {
+      const onlyNums = value.replace(/[^0-9]/g, "");
+      setShippingDetails((prev) => ({
+        ...prev,
+        [name]: onlyNums,
+      }));
+      return;
+    }
+
+    setShippingDetails((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
-      const price = typeof item.price === 'string'
-        ? parseFloat(item.price.replace(/[₹,]/g, ''))
-        : item.price;
-      return total + (price * (item.quantity || 1));
+      const price =
+        typeof item.price === "string"
+          ? parseFloat(item.price.replace(/[₹,]/g, ""))
+          : item.price;
+      return total + price * (item.quantity || 1);
     }, 0);
   };
 
@@ -81,35 +89,47 @@ const Checkout = () => {
   };
 
   const validateForm = () => {
-    const required = ['fullName', 'email', 'phone', 'address', 'city', 'state', 'pincode'];
+    const required = [
+      "fullName",
+      "email",
+      "phone",
+      "address",
+      "city",
+      "state",
+      "pincode",
+    ];
     for (const field of required) {
       if (!shippingDetails[field]?.trim()) {
-        toast.error(`Please enter your ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`);
+        toast.error(
+          `Please enter your ${field.replace(/([A-Z])/g, " $1").toLowerCase()}`,
+        );
         return false;
       }
     }
 
     // --- ADDED ADDRESS LENGTH VALIDATION HERE ---
     if (shippingDetails.address.trim().length < 10) {
-      toast.error('Address is too short. Please provide a more detailed address (at least 10 characters).');
+      toast.error(
+        "Address is too short. Please provide a more detailed address (at least 10 characters).",
+      );
       return false;
     }
 
     // Validate phone
     if (!/^[6-9]\d{9}$/.test(shippingDetails.phone)) {
-      toast.error('Please enter a valid 10-digit phone number');
+      toast.error("Please enter a valid 10-digit phone number");
       return false;
     }
 
     // Validate email
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingDetails.email)) {
-      toast.error('Please enter a valid email address');
+      toast.error("Please enter a valid email address");
       return false;
     }
 
     // Validate pincode
     if (!/^\d{6}$/.test(shippingDetails.pincode)) {
-      toast.error('Please enter a valid 6-digit pincode');
+      toast.error("Please enter a valid 6-digit pincode");
       return false;
     }
 
@@ -118,25 +138,24 @@ const Checkout = () => {
 
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
-
     if (cartItems.length === 0) {
-      toast.error('Your cart is empty');
+      toast.error("Your cart is empty");
       return;
     }
 
     setProcessing(true);
 
     try {
-      // Map cart items to API format
-      const orderItems = cartItems.map(item => ({
+      const orderItems = cartItems.map((item) => ({
         product_id: item.id || item.productId,
         name: item.name,
-        size: item.size || 'M',
-        color: item.color || 'Default',
+        size: item.size || "M",
+        color: item.color || "Default",
         quantity: item.quantity || 1,
-        price: typeof item.price === 'string'
-          ? parseFloat(item.price.replace(/[₹,]/g, ''))
-          : item.price
+        price:
+          typeof item.price === "string"
+            ? parseFloat(item.price.replace(/[₹,]/g, ""))
+            : item.price,
       }));
 
       const orderData = {
@@ -150,52 +169,39 @@ const Checkout = () => {
         items: orderItems,
         subtotal: calculateSubtotal(),
         total_amount: calculateTotal(),
-        payment_method: paymentMethod
+        payment_method: paymentMethod, // This will be 'cod' or 'upi'
       };
 
-      console.log('Creating Order:', JSON.stringify(orderData, null, 2));
+      // 1. Create Order
       const orderResponse = await createOrder(orderData);
-      console.log('Order Response:', orderResponse);
-
-      // Extract Order ID from response structure
       const orderId = orderResponse?.data?.order_id || orderResponse?.order_id;
 
-      if (orderId) {
-        console.log('Submitting Payment for Order:', orderId);
-        const paymentData = { payment_method: paymentMethod };
-        const paymentResponse = await submitPayment(orderId, paymentData);
-        console.log('Payment Response:', paymentResponse);
+      if (!orderId) throw new Error("Failed to create order");{
+        toast.success("Redirecting to secure payment...");
+        const paymentResponse = await submitPayment(orderId, {
+          payment_method: paymentMethod,
+        });
 
-        // CHECK FOR HDFC REDIRECT URL
         if (paymentResponse?.data?.payment_url) {
-            // Replaced toast.info with toast.success to avoid the error
-            toast.success('Redirecting to Payment Gateway...');
-            
-            // Clear cart before redirecting
-            sessionStorage.removeItem('cartItems');
-
-            // Redirect to the actual HDFC Bank payment page
-            window.location.href = paymentResponse.data.payment_url;
-        } 
-        else if (paymentResponse && (paymentResponse.success || paymentResponse.status === 'success')) {
-          sessionStorage.removeItem('cartItems');
-          setCurrentOrder(orderResponse.data);
-          setShowPaymentModal(true);
-          toast.success('🎉 Order placed successfully!');
+          sessionStorage.removeItem("cartItems");
+          window.location.href = paymentResponse.data.payment_url;
         } else {
-          throw new Error('Payment initialization failed');
+          throw new Error("Payment gateway could not be reached.");
         }
-      } else {
-        throw new Error('Failed to create order');
       }
     } catch (error) {
-      console.error('Order/Payment error:', error);
-      toast.error(error.message || 'Failed to process order. Please try again.');
+      console.error("Checkout Error:", error);
+      // Display error message clearly
+      let msg = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (parsed.errors) msg = parsed.errors[0].msg;
+      } catch (e) {}
+      toast.error(msg || "An error occurred during checkout");
     } finally {
       setProcessing(false);
     }
   };
-
 
   if (!isBootstrapped || loading) {
     return (
@@ -231,7 +237,9 @@ const Checkout = () => {
       <div className="checkout-container">
         <div className="checkout-header">
           <h1>Checkout</h1>
-          <Link to="/cart" className="back-to-cart">← Back to Cart</Link>
+          <Link to="/cart" className="back-to-cart">
+            ← Back to Cart
+          </Link>
         </div>
 
         <div className="checkout-content">
@@ -346,6 +354,34 @@ const Checkout = () => {
                 </div>
               </div>
             </section>
+
+            {/* Payment Method Selection */}
+            <section className="checkout-section">
+              <h2>Payment Method</h2>
+              <div className="payment-methods">
+                {/* Online Payment Option */}
+                <div
+                  className={`payment-option ${paymentMethod !== "cod" ? "selected" : ""}`} // Selected if NOT cod
+                  onClick={() => setPaymentMethod("upi")} // Set to 'upi' which the backend accepts
+                  style={{ cursor: "pointer" }}
+                >
+                  <span className="payment-icon">💳</span>
+                  <div className="payment-info">
+                    <span className="payment-name">Online Payment</span>
+                    <span className="payment-desc">
+                      Credit/Debit Card, UPI, Net Banking
+                    </span>
+                  </div>
+                  {paymentMethod !== "cod" && (
+                    <span className="payment-check">✓</span>
+                  )}
+                </div>
+              </div>
+              <div className="secure-payment-badge">
+                <span className="lock-icon">🔒</span>
+                <span>Your information is safe and secure</span>
+              </div>
+            </section>
           </div>
 
           {/* Right Column - Order Summary */}
@@ -366,13 +402,16 @@ const Checkout = () => {
                     </div>
                     <div className="item-details">
                       <span className="item-name">{item.name}</span>
-                      {item.size && <span className="item-variant">Size: {item.size}</span>}
+                      {item.size && (
+                        <span className="item-variant">Size: {item.size}</span>
+                      )}
                     </div>
                     <span className="item-price">
-                      ₹{(typeof item.price === 'string'
-                        ? parseFloat(item.price.replace(/[₹,]/g, ''))
+                      ₹
+                      {(typeof item.price === "string"
+                        ? parseFloat(item.price.replace(/[₹,]/g, ""))
                         : item.price
-                      ).toLocaleString('en-IN')}
+                      ).toLocaleString("en-IN")}
                     </span>
                   </div>
                 ))}
@@ -382,16 +421,15 @@ const Checkout = () => {
 
               <div className="summary-row">
                 <span>Subtotal</span>
-                <span>₹{calculateSubtotal().toLocaleString('en-IN')}</span>
+                <span>₹{calculateSubtotal().toLocaleString("en-IN")}</span>
               </div>
 
               <div className="summary-divider"></div>
 
               <div className="summary-row total">
                 <span>Total</span>
-                <span>₹{calculateTotal().toLocaleString('en-IN')}</span>
+                <span>₹{calculateTotal().toLocaleString("en-IN")}</span>
               </div>
-
               <button
                 className="place-order-btn"
                 onClick={handlePlaceOrder}
@@ -403,77 +441,18 @@ const Checkout = () => {
                     Processing...
                   </>
                 ) : (
-                  'Proceed to Payment'
+                  "Proceed to Payment"
                 )}
               </button>
-
               <p className="terms-note">
-                By placing this order, you agree to our{' '}
-                <Link to="/terms">Terms & Conditions</Link> and{' '}
+                By placing this order, you agree to our{" "}
+                <Link to="/terms">Terms & Conditions</Link> and{" "}
                 <Link to="/privacy">Privacy Policy</Link>
               </p>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Success Modal */}
-      {showPaymentModal && currentOrder && (
-        <div className="modal-overlay">
-          <div className="payment-modal success-modal">
-            <div className="modal-header success-header">
-              <div className="success-icon">✓</div>
-              <h2>Payment Successful!</h2>
-            </div>
-            <div className="modal-body">
-              <div className="success-message">
-                <p className="success-text">
-                  Thank you for your purchase! Your payment has been processed successfully and your order is confirmed.
-                </p>
-                
-                <div className="order-details-card">
-                  <h3>Order Details</h3>
-                  <div className="detail-row">
-                    <span className="detail-label">Order ID:</span>
-                    <span className="detail-value">{currentOrder?.order_number || currentOrder?.order_id || 'N/A'}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Amount Paid:</span>
-                    <span className="detail-value">₹{calculateTotal().toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Payment Method:</span>
-                    <span className="detail-value">HDFC Payment Gateway</span>
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Email:</span>
-                    <span className="detail-value">{shippingDetails.email}</span>
-                  </div>
-                </div>
-
-                <p className="confirmation-note">
-                  📧 A confirmation email has been sent to <strong>{shippingDetails.email}</strong>
-                </p>
-              </div>
-
-              <div className="modal-actions">
-                <button 
-                  className="confirm-payment-btn success-btn" 
-                  onClick={() => navigate('/profile')}
-                >
-                  View My Orders
-                </button>
-                <button 
-                  className="secondary-btn" 
-                  onClick={() => navigate('/')}
-                >
-                  Continue Shopping
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

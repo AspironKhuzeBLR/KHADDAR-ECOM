@@ -34,6 +34,7 @@ const ShopWomen = () => {
         // Filter for women's sub-categories (parent_id: 4 is Women's Wear)
         const womenCategories = categoriesArray.filter(cat => 
           cat.parent_id === 4 || 
+           cat.id === 17 ||  
           (cat.type === 'sub' && cat.parent_id === 4) ||
           cat.main_category === "Women's Wear"
         );
@@ -46,33 +47,41 @@ const ShopWomen = () => {
     loadCategories();
   }, []);
 
-  // Fetch products when category or page changes
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const result = await fetchProducts({
-          page: pagination.page,
-          limit: pagination.limit,
-          category: selectedCategory,
-          mainCategory: "Women's Wear"
-        });
-        
-        setProducts(result.products);
-        setPagination(prev => ({
-          ...prev,
-          total: result.pagination?.total || result.products.length,
-          totalPages: result.pagination?.totalPages || 1
-        }));
-      } catch (error) {
-        console.error('Error loading products:', error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [selectedCategory, pagination.page, pagination.limit]);
+  
+useEffect(() => {
+  const loadProducts = async () => {
+    
+    const categoryFromUrl = searchParams.get('category');
+    const pageFromUrl = parseInt(searchParams.get('page')) || 1;
+    setSelectedCategory(categoryFromUrl);
+
+    setLoading(true);
+    try {
+      const result = await fetchProducts({
+        page: pageFromUrl,
+        limit: pagination.limit,
+        category: categoryFromUrl, 
+        mainCategory: "Women's Wear" 
+      });
+      
+      setProducts(result.products);
+      setPagination(prev => ({
+        ...prev,
+        page: pageFromUrl,
+        total: result.pagination?.total || result.products.length,
+        totalPages: result.pagination?.totalPages || 1
+      }));
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadProducts();
+  
+}, [searchParams, pagination.limit]);
 
   const handleCategoryClick = (categoryId) => {
     const params = new URLSearchParams();

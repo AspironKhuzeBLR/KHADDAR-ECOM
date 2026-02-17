@@ -292,6 +292,16 @@
   opacity: 1;
 }
 
+.payment-option.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #e8e8e8;
+}
+
+.payment-option.disabled:hover {
+  border-color: #8C6C5F;
+}
+
 .secure-payment-badge {
   display: flex;
   align-items: center;

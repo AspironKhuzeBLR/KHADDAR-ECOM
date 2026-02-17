@@ -22,7 +22,6 @@ const BrandStory = () => {
             Every piece is a journey from the skilled hands of local weavers to your wardrobe, 
             crafted with respect for the land and its people.
           </p>
-          <div className="brand-signature">— Kutch Heritage</div>
         </div>
         
         {/* Image Side (Right) */}

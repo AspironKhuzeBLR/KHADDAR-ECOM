@@ -46,32 +46,40 @@ const ShopMen = () => {
   }, []);
 
   // Fetch products when category or page changes
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const result = await fetchProducts({
-          page: pagination.page,
-          limit: pagination.limit,
-          category: selectedCategory,
-          mainCategory: "Men's Wear"
-        });
-        
-        setProducts(result.products);
-        setPagination(prev => ({
-          ...prev,
-          total: result.pagination?.total || result.products.length,
-          totalPages: result.pagination?.totalPages || 1
-        }));
-      } catch (error) {
-        console.error('Error loading products:', error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [selectedCategory, pagination.page, pagination.limit]);
+   // FETCH PRODUCTS & SYNC PARAMS (Consolidated to fix Nav Bar race condition)
+useEffect(() => {
+  const loadProducts = async () => {
+    // 1. Extract values directly from URL immediately
+    const categoryFromUrl = searchParams.get('category');
+    const pageFromUrl = parseInt(searchParams.get('page')) || 1;
+    setSelectedCategory(categoryFromUrl);
+    setLoading(true);
+    try {
+      const result = await fetchProducts({
+        page: pageFromUrl,
+        limit: pagination.limit,
+        category: categoryFromUrl, 
+        mainCategory: "Men's Wear"
+      });
+      
+      setProducts(result.products);
+      setPagination(prev => ({
+        ...prev,
+        page: pageFromUrl,
+        total: result.pagination?.total || result.products.length,
+        totalPages: result.pagination?.totalPages || 1
+      }));
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadProducts();
+  
+}, [searchParams, pagination.limit]);
 
   const handleCategoryClick = (categoryId) => {
     const params = new URLSearchParams();

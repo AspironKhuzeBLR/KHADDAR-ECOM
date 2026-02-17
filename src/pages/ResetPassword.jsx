@@ -105,9 +105,7 @@ const ResetPassword = () => {
                       disabled={loading || tokenError}
                       minLength={6}
                     />
-                    <span className="password-hint">
-                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
-                    </span>
+                    
                     <button
                       type="button"
                       className="password-toggle"
@@ -128,6 +126,9 @@ const ResetPassword = () => {
                       )}
                     </button>
                   </div>
+                  <span className="password-hint">
+                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
+                    </span>
                 </div>
 
                 <div className="form-group">

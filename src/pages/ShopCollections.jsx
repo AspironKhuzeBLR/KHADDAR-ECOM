@@ -112,33 +112,6 @@ const ShopCollections = () => {
 
   return (
     <div className="shop-page">
-      {/* Category Filter Sidebar */}
-      {categories.length > 0 && (
-        <aside className="shop-sidebar">
-          <h3 className="sidebar-title">Filter By</h3>
-          <ul className="category-list">
-            <li>
-              <button 
-                className={`category-btn ${!selectedCategory ? 'active' : ''}`}
-                onClick={() => handleCategoryClick(null)}
-              >
-                All Collections
-              </button>
-            </li>
-            {categories.map((category) => (
-              <li key={category.id}>
-                <button 
-                  className={`category-btn ${selectedCategory?.toString() === category.id?.toString() ? 'active' : ''}`}
-                  onClick={() => handleCategoryClick(category.id)}
-                >
-                  {category.name || category.sub_category}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      )}
-
       <div className="shop-products">
         <div className="container">
           {selectedCategoryData ? (

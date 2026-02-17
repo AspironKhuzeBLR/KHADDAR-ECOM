@@ -175,6 +175,7 @@
   font-weight: 500;
   text-decoration: none;
   display: inline-flex;
+  flex-direction: row;   /* Horizontal on desktop */
   align-items: center;
   justify-content: center;
   padding: 18px 20px;    /* Adjusted padding */
@@ -442,8 +443,12 @@
     height: 1px;
     background-color: rgba(161, 95, 34, 0.3);
     margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
     position: absolute;
     bottom: -30px; /* Position half way inside the gap */
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .contact-card {
@@ -455,12 +460,20 @@
   .info-link-large {
     width: 100%;
     max-width: 100%;
-    padding: 15px;
-    font-size: 0.9rem;
+    padding: 15px 10px;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;  /* Stack vertically on mobile */
+    gap: 8px;
+    align-items: center;
   }
   
   .phone-divider {
-    margin: 0 6px;
+    display: none;  /* Hide divider on mobile */
+  }
+  
+  .phone-number-link {
+    white-space: nowrap;  /* Keep individual numbers from breaking */
   }
   
   .phone-stack { width: 100%; }
@@ -490,6 +503,17 @@
   .info-subheading {
     margin-bottom: 15px;
     font-size: 0.8rem;
+  }
+  
+  .info-link-large {
+    font-size: 0.8rem;
+    padding: 12px 8px;
+    min-width: unset;
+    gap: 6px;  /* Smaller gap on very small screens */
+  }
+  
+  .phone-divider {
+    display: none;  /* Keep hidden on small screens */
   }
   
   .social-icon-btn {

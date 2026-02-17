@@ -11,7 +11,35 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
     <section className={`hero-video ${className}`}>
       <div className={`video-wrapper ${fullHeight ? 'full-height' : ''}`}>
         
-        {/* 1. THE BASE IMAGE (The Foundation) */}
+        {/* MOBILE VIDEO (Only visible on mobile) */}
+        <div className="hero-mobile-video-container">
+          <video
+            className="hero-mobile-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster="/logo_file_page-0001.png"
+            webkit-playsinline="true"
+            x5-playsinline="true"
+            onPlay={(e) => {
+              // Once video starts playing, switch to cover mode to fill screen
+              e.target.style.objectFit = 'cover';
+              e.target.style.width = '100%';
+              e.target.style.height = '100%';
+            }}
+            onLoadedData={(e) => {
+              // Backup: also switch when data loads
+              e.target.style.objectFit = 'cover';
+            }}
+          >
+            <source src="/KhaddarXSummersalt.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        {/* 1. THE BASE IMAGE (The Foundation - Desktop only) */}
         <div className="hero-img-container">
            <img 
             src={heroImg} 
