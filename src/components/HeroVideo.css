@@ -70,8 +70,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  /* Simulates a camera slowly breathing in and out */
+  display: block; 
   animation: breathingZoom 20s infinite alternate ease-in-out;
 }
 
@@ -315,25 +314,22 @@
 }
 
 @media (max-width: 768px) {
-  .hero-video { 
-    height: 100vh;
-    max-height: 100vh;
-    min-height: unset;
-  }
+  
   .hero-title { font-size: 2.2rem; letter-spacing: 0.12em; }
   .hero-subtitle { font-size: 1rem; margin-bottom: 30px; letter-spacing: 0.1em; }
   .hero-cta { padding: 12px 30px; font-size: 0.75rem; }
   
   /* Show mobile video, hide desktop image */
-  .hero-mobile-video-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #000;
-  }
+  
   
   .hero-img-container {
-    display: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-bg-img {
+    object-fit: cover;
   }
   
   /* Disable heavy effects on mobile for better video performance */

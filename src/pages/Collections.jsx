@@ -102,6 +102,7 @@ const Collections = () => {
         title='COLLECTIONS'
         subtitle='Crafting fashion that honors tradition'
         buttonText='SHOP BY CATEGORY'
+        buttonLink='/shop/mens-wear'
       />
 
       <div className="collections-hero">
