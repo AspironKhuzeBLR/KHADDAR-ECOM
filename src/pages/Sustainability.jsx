@@ -29,7 +29,7 @@ const Sustainability = () => {
       id: 4,
       title: 'Minimal Waste Approach',
       description: 'Every design is thoughtfully created to reduce waste and promote lasting value.',
-      image: '/Sustainibility_images/Minimal_waste.PNG'
+      image: '/Sustainibility_images/Minimal_Waste.PNG'
     },
     {
       id: 5,
