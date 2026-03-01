@@ -361,9 +361,7 @@ const Register = () => {
                       disabled={loading}
                       minLength={6}
                     />
-                    <span className="password-hint">
-                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
-                    </span>
+                   
                     <button
                       type="button"
                       className="password-toggle"
@@ -384,6 +382,9 @@ const Register = () => {
                       )}
                     </button>
                   </div>
+                   <span className="password-hint">
+                      Use 6+ characters with letters, numbers & symbols (e.g., @, #, $)
+                    </span>
                 </div>
                 <div className="form-group">
                   <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
