@@ -84,8 +84,23 @@ const Checkout = () => {
     }, 0);
   };
 
-  const calculateTotal = () => {
-    return calculateSubtotal();
+   const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      const price =
+        typeof item.price === "string"
+          ? parseFloat(item.price.replace(/[₹,]/g, ""))
+          : item.price;
+      return total + price * (item.quantity || 1);
+    }, 0);
+  };
+
+   const calculateTaxAmount = () => {
+    const total = calculateTotal();
+    return (total * 5) / 105; 
+  };
+
+  const calculateSubtotalExclTax = () => {
+    return calculateTotal() - calculateTaxAmount();
   };
 
   const validateForm = () => {
@@ -421,7 +436,12 @@ const Checkout = () => {
 
               <div className="summary-row">
                 <span>Subtotal</span>
-                <span>₹{calculateSubtotal().toLocaleString("en-IN")}</span>
+                <span>₹{calculateSubtotalExclTax().toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              </div>
+
+              <div className="summary-row">
+                <span>Tax (5%)</span>
+                <span>₹{calculateTaxAmount().toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
 
               <div className="summary-divider"></div>
