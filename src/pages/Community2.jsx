@@ -60,8 +60,8 @@ const Community2 = () => {
         <div className="container">
           <div className="artisan-story-wrapper">
             <div className="story-icon">❖</div>
-            <span className="story-label">Our Artisans</span>
-            <h2 className="story-heading">A Varun Nimbolkar edit</h2>
+            <span className="story-label">Artists & Allies</span>
+            <h2 className="story-heading">A Varun Nimbolkar editw</h2>
 
             <div className="story-content-grid">
               {/* Decorative Pattern Elements */}
