@@ -136,8 +136,7 @@ const Header = () => {
   };
 
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
-  const [mobileArtisanSubOpen, setMobileArtisanSubOpen] = useState(false);
-  // NEW: Handler for mobile accordion clicks
+
   const handleMobileClick = (e, type, id) => {
     if (window.innerWidth <= 1200) {
       e.preventDefault();
