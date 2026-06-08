@@ -110,8 +110,6 @@ const Header = () => {
     setIsMenuOpen(false);
     setHoveredMenu(null);
     setMobileCategoryOpen(false);
-    setMobileCommunityOpen(false);
-    setMobileArtisanSubOpen(false);
   };
 
   const handleMenuHover = (menu) => {
@@ -151,10 +149,6 @@ const Header = () => {
         setMobileCommunityOpen(!mobileCommunityOpen);
       } else if (type === "sub") {
         setMobileSubCategoryOpen(mobileSubCategoryOpen === id ? null : id);
-      }
-      // Add this condition:
-      else if (type === "artisan-sub") {
-        setMobileArtisanSubOpen(!mobileArtisanSubOpen);
       }
     } else {
       closeMenu();
@@ -393,8 +387,7 @@ const Header = () => {
                       </div>
                     )}
                   </div>
-
-                  {/* COMMUNITY WITH NESTED DROPDOWN */}
+                  {/* COMMUNITY SECTION */}
                   <div
                     className="nav-link-wrapper"
                     onMouseEnter={() => handleMenuHover("community")}
@@ -409,7 +402,7 @@ const Header = () => {
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
-                    {/* Level 1 Dropdown */}
+                    {/* Flat Dropdown (No nested Artisan level) */}
                     {(hoveredMenu === "community" || mobileCommunityOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCommunityOpen ? "mobile-visible" : ""}`}
@@ -417,37 +410,20 @@ const Header = () => {
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* ARTISANS SECTION (Heading) */}
-                        <div className="dropdown-item-wrapper">
-                          <Link
-                            to="/community"
-                            className="dropdown-item"
-                            onClick={(e) => handleMobileClick(e, "artisan-sub")}
-                          >
-                            ARTISANS
-                            <span className="mobile-arrow show-mobile">▾</span>
-                          </Link>
-
-                          {/* Level 2 Submenu (The Links) */}
-                          <div
-                            className={`dropdown-submenu ${mobileArtisanSubOpen ? "mobile-visible" : ""}`}
-                          >
-                            <Link
-                              to="/community"
-                              className="dropdown-subitem"
-                              onClick={closeMenu}
-                            >
-                              Artisan Heritage
-                            </Link>
-                            <Link
-                              to="/community2"
-                              className="dropdown-subitem"
-                              onClick={closeMenu}
-                            >
-                              Featured Collaborations
-                            </Link>
-                          </div>
-                        </div>
+                        <Link
+                          to="/community"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Artisan Heritage
+                        </Link>
+                        <Link
+                          to="/community2"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Featured Collaborations
+                        </Link>
                       </div>
                     )}
                   </div>
