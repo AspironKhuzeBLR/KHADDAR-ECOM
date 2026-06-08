@@ -32,6 +32,7 @@ import './context/Toast.css';
 import ShopCollections from './pages/ShopCollections';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
+import Community2 from './pages/Community2'
 
 function AppContent() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function AppContent() {
             <Route path="/shop/mens-wear" element={<ShopMen />} />
             <Route path="/shop/womens-wear" element={<ShopWomen />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/community2" element={<Community2 />} />
             <Route path="/sustainability" element={<Sustainability />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/faqs" element={<FAQs />} />
