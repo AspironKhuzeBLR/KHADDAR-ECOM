@@ -1,0 +1,308 @@
+/* ================================================
+   THREADS OF TRAVANCORE — Kerala Collection
+   Palette (matches Kolours of Kutch exactly):
+     --tot-burnt-sienna: #6F3132  (maroon - titles, buttons)
+     --tot-ivory-sand:   #F7F7F0  (cream - background)
+     --tot-stormy-sky:   #8C6C5F  (clay - labels)
+     --tot-sage-green:   #B38A6A  (tan - accents, borders)
+   ================================================ */
+
+.tot-page {
+  /* Same palette as Kolours of Kutch */
+  --tot-burnt-sienna: #6F3132;
+  --tot-ivory-sand: #F7F7F0;
+  --tot-stormy-sky: #8C6C5F;
+  --tot-sage-green: #B38A6A;
+
+  margin-top: 0;
+  padding-top: 0;
+  position: relative;
+  background-color: var(--tot-ivory-sand);
+  overflow-x: hidden;
+}
+
+.tot-page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 0L20 10L10 20L0 10z' fill='%238C6C5F' fill-opacity='0.1'/%3E%3C/svg%3E");
+  background-size: 20px 20px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Push the hero CTA button down a bit */
+.tot-hero .hero-cta {
+  margin-top: 24px;
+}
+
+/* --- ABOUT --- */
+.tot-intro-section {
+  padding: 60px 0 50px;
+  text-align: center;
+}
+
+.tot-intro-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.tot-icon {
+  font-size: 2rem;
+  color: var(--tot-burnt-sienna);
+  margin-bottom: 15px;
+  display: inline-block;
+  animation: totIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes totIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.tot-label {
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tot-stormy-sky);
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 18px;
+}
+
+.tot-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 3.2rem;
+  color: var(--tot-burnt-sienna);
+  margin-bottom: 20px;
+  letter-spacing: 0.01em;
+}
+
+.tot-divider {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.tot-divider-line {
+  width: 0;
+  height: 2px;
+  background: var(--tot-sage-green);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+.tot-intro-wrapper.animated .tot-divider-line {
+  width: 60px;
+}
+
+.tot-intro-text {
+  font-family: 'Lato', sans-serif;
+  color: #4a4a4a;
+  font-size: 1.02rem;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+/* --- STORY --- */
+.tot-story-section {
+  padding: 30px 40px 70px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tot-story-list {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.tot-story-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  perspective: 1200px;
+}
+
+.tot-story-reverse {
+  flex-direction: row-reverse;
+}
+
+/* Row itself just needs the class markers - actual flip lives on the image */
+.tot-reveal-left,
+.tot-reveal-right {
+  /* marker classes, no direct visual styling here */
+}
+
+/* --- CARD FLIP: image rotates in on its Y axis like a turning page --- */
+.tot-reveal-left .tot-story-image-wrap {
+  opacity: 0;
+  transform: perspective(1400px) rotateY(-100deg);
+  backface-visibility: hidden;
+  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.4, 1), opacity 0.5s ease;
+}
+
+.tot-reveal-right .tot-story-image-wrap {
+  opacity: 0;
+  transform: perspective(1400px) rotateY(100deg);
+  backface-visibility: hidden;
+  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.4, 1), opacity 0.5s ease;
+}
+
+.tot-reveal-left.animated .tot-story-image-wrap,
+.tot-reveal-right.animated .tot-story-image-wrap {
+  opacity: 1;
+  transform: perspective(1400px) rotateY(0deg);
+}
+
+.tot-story-image-wrap {
+  flex: 0 0 auto;
+  width: 55%;
+  max-width: 420px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 3px solid var(--tot-sage-green);
+  box-shadow: 0 16px 36px rgba(111, 49, 50, 0.18);
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+.tot-story-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tot-story-line {
+  flex: 1;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--tot-stormy-sky);
+  text-align: center;
+  letter-spacing: 0.01em;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.8s ease 0.35s, transform 0.8s ease 0.35s;
+}
+
+.tot-reveal-left.animated .tot-story-line,
+.tot-reveal-right.animated .tot-story-line {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 800px) {
+  .tot-story-row,
+  .tot-story-reverse {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tot-story-image-wrap {
+    width: 85%;
+    max-width: 340px;
+  }
+  .tot-story-list {
+    gap: 40px;
+  }
+  .tot-story-line {
+    font-size: 1.1rem;
+  }
+}
+
+/* --- MARQUEE STRIP --- */
+.tot-marquee-strip {
+  background: var(--tot-burnt-sienna);
+  color: var(--tot-ivory-sand);
+  padding: 18px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.tot-marquee-content {
+  display: flex;
+  animation: totMarquee 15s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.tot-marquee-content span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 80px;
+}
+
+@keyframes totMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .tot-marquee-strip {
+    padding: 14px 0;
+  }
+  .tot-marquee-content span {
+    font-size: 0.85rem;
+    margin-right: 40px;
+  }
+  .tot-marquee-content {
+    animation-duration: 10s;
+  }
+}
+
+.tot-cta-section {
+  padding: 70px 40px;
+  text-align: center;
+  background: rgba(179, 138, 106, 0.18);
+}
+
+.tot-cta-heading {
+  font-family: 'Josefin Sans', sans-serif;
+  color: var(--tot-burnt-sienna);
+  font-size: 1.9rem;
+  margin: 0 0 12px;
+}
+
+.tot-cta-subtext {
+  font-family: 'Lato', sans-serif;
+  color: #5a5a5a;
+  margin-bottom: 28px;
+}
+
+.tot-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--tot-burnt-sienna);
+  color: #fff;
+  text-decoration: none;
+  padding: 15px 34px;
+  border-radius: 2px;
+  font-family: 'Josefin Sans', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.tot-cta-btn:hover {
+  background: #5a2527;
+  transform: translateY(-2px);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .tot-title {
+    font-size: 2.3rem;
+  }
+}

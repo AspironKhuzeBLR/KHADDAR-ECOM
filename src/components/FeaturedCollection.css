@@ -8,13 +8,90 @@
 .featured-collection-wrapper {
   width: 100%;
   position: relative;
+  height: 90vh;
+  min-height: 500px;
+}
+
+/* --- SLIDESHOW: stack slides, fade between them --- */
+.featured-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out;
+  z-index: 1;
+}
+
+.featured-slide-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+.featured-dots-container {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+}
+
+.featured-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1.5px solid #ffffff;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.featured-dot.active {
+  background: #ffffff;
+  transform: scale(1.25);
+}
+
+/* Fix zoomed/cropped look on the Travancore slide's image */
+.featured-slide-travancore img {
+  object-position: center center;
+  animation: none;
+  transform: none;
+}
+
+/* Lighter overlay for slides whose image already has good built-in contrast */
+.featured-overlay-light {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0) 100%
+  ) !important;
+  animation: none !important;
+  align-items: flex-end !important;
+  padding-bottom: 60px;
+}
+
+/* Button-only content: anchor to bottom instead of vertical center */
+.featured-content-btn-only {
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .featured-overlay-light {
+    padding-bottom: 40px;
+  }
 }
 
 .featured-collection-image {
   width: 100%;
-  height: 90vh;
-  min-height: 500px;
-  position: relative;
+  height: 100%;
+  min-height: unset;
   overflow: hidden;
 }
 
@@ -23,7 +100,7 @@
   height: 100%;
   min-height: 100%;
   object-fit: cover;
-  object-position: center center;
+  object-position: center 20%;
   transition: transform 8s ease-out;
   display: block;
   /* Aggressive iOS fixes */
@@ -42,7 +119,7 @@
 
 @keyframes slowZoom {
   0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
+  100% { transform: scale(1.04); }
 }
 
 .featured-overlay {
@@ -81,10 +158,9 @@
   padding: 0 40px;
   animation: fadeInUp 1s ease-out;
   position: relative;
-  z-index: 2; /* Ensure content stays above overlay */
+  z-index: 2;
 }
 
-/* Decorative icon */
 .featured-icon {
   font-size: 2rem;
   color: #B38A6A;
@@ -97,7 +173,6 @@
   50% { transform: translateY(-8px); }
 }
 
-/* Label above title */
 .featured-label {
   display: block;
   font-family: 'Lato', sans-serif;
@@ -110,7 +185,6 @@
   animation: fadeIn 1s ease 0.3s forwards;
 }
 
-/* Legacy tagline support (if needed) */
 .featured-tagline {
   display: block;
   font-family: 'Lato', sans-serif;
@@ -158,12 +232,10 @@
   animation: fadeInUp 1s ease-out 0.4s both;
 }
 
-/* Hover effect on image wrapper */
 .featured-collection-image:hover img {
   transform: scale(1.05);
 }
 
-/* CTA Button Styling */
 .featured-link {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 0.875rem;
@@ -181,7 +253,7 @@
   animation: scaleIn 0.8s ease-out 0.6s both;
   position: relative;
   overflow: hidden;
-  text-decoration: none; /* Ensure no underline */
+  text-decoration: none;
 }
 
 .link-arrow {
@@ -214,7 +286,6 @@
   box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
 }
 
-/* Animation Keyframes */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -248,7 +319,6 @@
   }
 }
 
-/* Shine effect on section */
 .featured-collection-section::before {
   content: '';
   position: absolute;
@@ -275,8 +345,8 @@
 /* --- Responsive Design Updates --- */
 
 @media (max-width: 1200px) {
-  .featured-collection-image {
-    height: 80vh; /* Reduced height slightly */
+  .featured-collection-wrapper {
+    height: 80vh;
   }
   
   .featured-title {
@@ -289,8 +359,8 @@
 }
 
 @media (max-width: 992px) {
-  .featured-collection-image {
-    height: 70vh; /* More compact for tablets */
+  .featured-collection-wrapper {
+    height: 70vh;
   }
   
   .featured-title {
@@ -305,12 +375,12 @@
 }
 
 @media (max-width: 768px) {
-  .featured-collection-image {
+  .featured-collection-wrapper {
     height: 65vh;
   }
   
   .featured-content {
-    padding: 0 30px; /* Tighter padding */
+    padding: 0 30px;
     width: 100%;
   }
   
@@ -337,9 +407,9 @@
 }
 
 @media (max-width: 576px) {
-  .featured-collection-image {
+  .featured-collection-wrapper {
     height: 65vh;
-    min-height: 450px; /* Ensure content fits and no cropping on iOS */
+    min-height: 450px;
   }
   
   .featured-collection-image img {
@@ -358,7 +428,7 @@
   }
   
   .featured-title {
-    font-size: 2rem; /* Matches your other mobile headers */
+    font-size: 2rem;
     margin-bottom: 15px;
   }
   
@@ -366,7 +436,6 @@
     font-size: 0.95rem;
     line-height: 1.5;
     margin-bottom: 25px;
-    /* Optional: limit lines if long */
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
@@ -377,7 +446,7 @@
     padding: 12px 25px;
     font-size: 0.75rem;
     width: auto;
-    min-width: 160px; /* Consistent button width */
+    min-width: 160px;
     justify-content: center;
   }
 }

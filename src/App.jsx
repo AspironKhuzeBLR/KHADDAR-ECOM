@@ -7,7 +7,8 @@ import ScrollToTop from './components/ScrollToTop';
 import ScrollUpButton from './components/ScrollUpButton';
 import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
-import Collections from './pages/Collections';
+import KolorsOfKutch from './pages/KolorsOfKutch';
+import ThreadsOfTravancore from './pages/ThreadsOfTravancore';
 import ShopMen from './pages/ShopMen';
 import ShopWomen from './pages/ShopWomen';
 import Community from './pages/Community';
@@ -33,6 +34,7 @@ import ShopCollections from './pages/ShopCollections';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import Community2 from './pages/Community2'
+import ThreadsOfTravancoreShop from './pages/ThreadsOfTravancoreShop';
 
 function AppContent() {
   const location = useLocation();
@@ -46,7 +48,10 @@ function AppContent() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/collections" element={<Collections />} />
+            <Route path="/collections" element={<KolorsOfKutch />} />
+            <Route path="/collections/kolors-of-kutch" element={<KolorsOfKutch />} />
+            <Route path="/collections/threads-of-travancore" element={<ThreadsOfTravancore />} />
+            <Route path="/collections/threads-of-travancore/shop" element={<ThreadsOfTravancoreShop />} />
             <Route path="/shop/mens-wear" element={<ShopMen />} />
             <Route path="/shop/womens-wear" element={<ShopWomen />} />
             <Route path="/community" element={<Community />} />

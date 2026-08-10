@@ -25,6 +25,7 @@ const Header = () => {
   // NEW: Mobile Accordion State
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
   const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null); // 'mens' or 'womens'
+  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
 
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
@@ -78,6 +79,8 @@ const Header = () => {
     const transparentPages = [
       "/",
       "/collections",
+      "/collections/kolors-of-kutch",
+      "/collections/threads-of-travancore",
       "/community",
       "/community2",
       "/sustainability",
@@ -146,6 +149,8 @@ const Header = () => {
         setMobileCategoryOpen(!mobileCategoryOpen);
       } else if (type === "community") {
         setMobileCommunityOpen(!mobileCommunityOpen);
+      } else if (type === "collections") {
+        setMobileCollectionsOpen(!mobileCollectionsOpen);
       } else if (type === "sub") {
         setMobileSubCategoryOpen(mobileSubCategoryOpen === id ? null : id);
       }
@@ -300,10 +305,36 @@ const Header = () => {
                     <Link
                       to="/collections"
                       className="nav-link"
-                      onClick={closeMenu}
+                      onClick={(e) => handleMobileClick(e, "collections")}
                     >
                       COLLECTIONS
+                      <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
+
+                    {/* Flat Dropdown - Kolors of Kutch / Threads of Travancore */}
+                    {(hoveredMenu === "collections" || mobileCollectionsOpen) && (
+                      <div
+                        className={`dropdown-menu ${mobileCollectionsOpen ? "mobile-visible" : ""}`}
+                        onMouseEnter={() => handleMenuHover("collections")}
+                        onMouseLeave={handleMenuLeave}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Link
+                          to="/collections"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Kolors of Kutch
+                        </Link>
+                        <Link
+                          to="/collections/threads-of-travancore"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Threads of Travancore
+                        </Link>
+                      </div>
+                    )}
                   </div>
 
                   {/* SHOP BY CATEGORY - MODIFIED FOR MOBILE ACCORDION */}

@@ -1,0 +1,40 @@
+/* Re-theme the shared shop grid with the same palette as Kolours of Kutch */
+.tot-shop-page {
+  --tot-burnt-sienna: #6F3132;
+  --tot-ivory-sand: #F7F7F0;
+  --tot-stormy-sky: #8C6C5F;
+  --tot-sage-green: #B38A6A;
+  background-color: var(--tot-ivory-sand);
+}
+
+.tot-shop-page .products-category-title {
+  font-family: 'Josefin Sans', sans-serif;
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .category-description {
+  color: var(--tot-stormy-sky);
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 30px;
+}
+
+.tot-shop-page .product-card {
+  background: #ffffff;
+  border: 1px solid rgba(140, 108, 95, 0.2);
+}
+
+.tot-shop-page .product-name {
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .price-value {
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .product-choose-btn {
+  background: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .product-choose-btn:hover {
+  background: #5a2527;
+}

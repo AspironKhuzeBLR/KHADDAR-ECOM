@@ -5,7 +5,7 @@ import './HeroVideo.css';
 // Your specific image
 import heroImg from '../images/Summer Salt KHADDAR1990.png'; 
 
-const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainability</>, buttonText = 'EXPLORE COLLECTIONS',   buttonLink = '/collections', fullHeight, className = '' }) => {  
+const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainability</>, buttonText = 'EXPLORE COLLECTIONS',   buttonLink = '/collections', fullHeight, className = '', bgImage, hideText = false }) => {  
   
   return (
     <section className={`hero-video ${className}`}>
@@ -14,7 +14,7 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
         
         <div className="hero-img-container">
            <img 
-            src={heroImg} 
+            src={bgImage || heroImg} 
             alt="Khaddar Luxury Collection" 
             className="hero-bg-img"
           />
@@ -29,9 +29,13 @@ const HeroVideo = ({ title = '', subtitle = <>Wear a story<br />Wear sustainabil
         {/* 4. CONTENT OVERLAY */}
         <div className="video-overlay">
           <div className="hero-content">
-            <span className="hero-tagline">Heritage • Sustainability • Craftsmanship</span>
-            <h1 className="hero-title">{title}</h1>
-            <p className="hero-subtitle">{subtitle}</p>
+            {!hideText && (
+              <>
+                <span className="hero-tagline">Heritage • Sustainability • Craftsmanship</span>
+                <h1 className="hero-title">{title}</h1>
+                {subtitle && <p className="hero-subtitle">{subtitle}</p>}
+              </>
+            )}
             <Link
               to={buttonLink}
               className="hero-cta hero-cta-fullwidth"
