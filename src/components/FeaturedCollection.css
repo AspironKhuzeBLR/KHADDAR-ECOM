@@ -65,7 +65,7 @@
 }
 
 /* Lighter overlay for slides whose image already has good built-in contrast */
-.featured-overlay-light {
+.featured-overlay-eyebrow {
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.45) 0%,
@@ -77,13 +77,13 @@
   padding-bottom: 60px;
 }
 
-/* Button-only content: anchor to bottom instead of vertical center */
-.featured-content-btn-only {
+/* Eyebrow-only content: anchor to bottom instead of vertical center */
+.featured-content-eyebrow-only {
   padding: 0;
 }
 
 @media (max-width: 768px) {
-  .featured-overlay-light {
+  .featured-overlay-eyebrow {
     padding-bottom: 40px;
   }
 }

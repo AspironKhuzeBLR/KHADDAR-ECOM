@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './FeaturedCollection.css';
-
 import kutchBg from '../images/Summer Salt KHADDAR3495.png';
 import travancoreBg from '../images/tot5.png';
 
@@ -18,12 +17,12 @@ const slides = [
   {
     id: 'travancore',
     image: travancoreBg,
-    label: 'A Kerala Collection',
+    label: 'Discover The Collection',
     title: 'Threads of Travancore',
     description:
       "Drawn from Kerala's backwaters and the quiet ceremony of draped white and gold. Hand-finished in Khaddar cotton, honoring a slower, coastal way of dressing.",
     link: '/collections/threads-of-travancore',
-    hideText: true
+    eyebrowOnly: true
   }
 ];
 
@@ -50,9 +49,9 @@ const FeaturedCollection = () => {
             }`}
           >
             <img src={slide.image} alt={slide.title} />
-            <div className={`featured-overlay ${slide.hideText ? 'featured-overlay-light' : ''}`}>
-              <div className={`featured-content ${slide.hideText ? 'featured-content-btn-only' : ''}`}>
-                {!slide.hideText && (
+            <div className={`featured-overlay ${slide.eyebrowOnly ? 'featured-overlay-eyebrow' : ''}`}>
+              <div className={`featured-content ${slide.eyebrowOnly ? 'featured-content-eyebrow-only' : ''}`}>
+                {!slide.eyebrowOnly && (
                   <>
                     <div className="featured-icon">❖</div>
                     <span className="featured-label">{slide.label}</span>
@@ -68,7 +67,6 @@ const FeaturedCollection = () => {
             </div>
           </div>
         ))}
-
         {/* Slide indicator dots */}
         <div className="featured-dots-container">
           {slides.map((slide, index) => (

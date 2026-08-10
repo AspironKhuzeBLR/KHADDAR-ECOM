@@ -1,173 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import { fetchProducts } from '../services/productService';
-import '../pages/Shop.css';
-import './ThreadsOfTravancoreShop.css';
-import { useToast } from '../context/ToastContext';
-import { useAuth } from '../context/AuthContext';
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import './ThreadsOfTravancore.css';
+import HeroVideo from '../components/HeroVideo';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
-// Threads of Travancore products are tagged as sub_category
-// "Threads of Travancore" under the "Women's Wear" main category in the admin panel.
-const ThreadsOfTravancoreShop = () => {
-  const toast = useToast();
-  const { isAuthenticated } = useAuth();
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
+// Story images (curated narrative)
+import tot6 from '../images/tot6.png';
+import tot7 from '../images/tot7.png';
+import tot8 from '../images/tot8.png';
+import tot10 from '../images/tot10.png';
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const result = await fetchProducts({
-          page: pagination.page,
-          limit: pagination.limit,
-          mainCategory: "Women's Wear",
-          category: 'Threads of Travancore'
-        });
+const storyImages = [
+  { id: 6, src: tot6, line: 'Where the loom begins' },
+  { id: 7, src: tot7, line: 'Threads of gold, spun by hand' },
+  { id: 8, src: tot8, line: 'Draped in quiet ceremony' },
+  { id: 10, src: tot10, line: 'The coast, the calm, the cotton' }
+];
 
-        setProducts(result.products);
-        setPagination((prev) => ({
-          ...prev,
-          total: result.pagination?.total || result.products.length,
-          totalPages: result.pagination?.totalPages || 1
-        }));
-      } catch (error) {
-        console.error('Error loading Threads of Travancore products:', error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, [pagination.page, pagination.limit]);
-
-  const handleAddToCart = (product) => {
-    if (!isAuthenticated) {
-      toast.error('Please login to add items to cart');
-      return;
-    }
-
-    const existingCart = JSON.parse(sessionStorage.getItem('cartItems') || '[]');
-    const existingItemIndex = existingCart.findIndex(
-      (item) => item.id === product.id && item.size === 'Free Size'
-    );
-
-    if (existingItemIndex > -1) {
-      existingCart[existingItemIndex].quantity += 1;
-    } else {
-      existingCart.push({
-        id: product.id,
-        name: product.name,
-        price: product.priceRaw,
-        priceRaw: product.priceRaw,
-        image: product.image,
-        size: 'Free Size',
-        color: 'Natural',
-        quantity: 1
-      });
-    }
-
-    sessionStorage.setItem('cartItems', JSON.stringify(existingCart));
-    toast.success(`${product.name} added to cart!`);
-  };
-
-  const handlePageChange = (newPage) => {
-    setPagination((prev) => ({ ...prev, page: newPage }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+const ThreadsOfTravancore = () => {
+  const [introRef, introVisible] = useScrollAnimation();
+  const [ctaRef, ctaVisible] = useScrollAnimation();
 
   return (
-    <div className="shop-page tot-shop-page">
-      <div className="shop-products">
-        <div className="container">
-          <h2 className="products-category-title">Threads of Travancore</h2>
-          <p className="category-description">
-            A Kerala collection in handloom cotton and Kasavu.
+    <div className="tot-page">
+      <HeroVideo
+        title="THREADS OF TRAVANCORE"
+        subtitle="Crafting fashion that honors tradition"
+        buttonText="EXPLORE THE COLLECTION"
+        buttonLink="#tot-story"
+        className="tot-hero"
+      />
+
+      {/* --- ABOUT --- */}
+      <div className="tot-intro-section">
+        <div
+          ref={introRef}
+          className={`tot-intro-wrapper animate-on-scroll ${introVisible ? 'animated' : ''}`}
+        >
+          <div className="tot-icon">❖</div>
+          <span className="tot-label">About</span>
+          <h1 className="tot-title">Threads of Travancore</h1>
+          <div className="tot-divider"><span className="tot-divider-line"></span></div>
+          <p className="tot-intro-text">
+            Threads of Travancore celebrates the timeless beauty of Kerala's handloom heritage
+            through handcrafted collections in handloom cotton and Kasavu. Woven on traditional
+            pit looms by skilled artisans, each fabric reflects generations of craftsmanship,
+            blending comfort, elegance, and authenticity.
           </p>
-
-          {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading collection...</p>
-            </div>
-          ) : products.length > 0 ? (
-            <>
-              <p className="products-count">
-                Showing {products.length} of {pagination.total} products
-              </p>
-
-              <div className="products-grid">
-                {products.map((product, index) => (
-                  <div key={product.id} className="product-card">
-                    <div className="product-image-wrapper">
-                      <img src={product.image} alt={product.name} className="product-image" />
-                      {index < 2 && <span className="product-badge">New</span>}
-                      {!product.inStock && (
-                        <span className="product-badge out-of-stock">Out of Stock</span>
-                      )}
-                      <button
-                        className="product-choose-btn"
-                        onClick={() => handleAddToCart(product)}
-                        disabled={!product.inStock}
-                      >
-                        {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-                      </button>
-                    </div>
-                    <div className="product-info">
-                      <h3 className="product-name">{product.name}</h3>
-                      <div className="product-price">
-                        <span className="price-label">Regular price</span>
-                        <span className="price-value">{product.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {pagination.totalPages > 1 && (
-                <div className="pagination">
-                  <button
-                    className="pagination-btn"
-                    disabled={pagination.page <= 1}
-                    onClick={() => handlePageChange(pagination.page - 1)}
-                  >
-                    ← Previous
-                  </button>
-
-                  <div className="pagination-numbers">
-                    {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
-                      <button
-                        key={pageNum}
-                        className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
-                        onClick={() => handlePageChange(pageNum)}
-                      >
-                        {pageNum}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    className="pagination-btn"
-                    disabled={pagination.page >= pagination.totalPages}
-                    onClick={() => handlePageChange(pagination.page + 1)}
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="no-products">
-              <p>
-                No Threads of Travancore products found yet. Add products in the admin panel
-                with Main Category "Women's Wear" and Sub Category "Threads of Travancore".
-              </p>
-            </div>
-          )}
+          <p className="tot-intro-text">
+            Inspired by Kerala's serene landscapes and vibrant cultural traditions, the collection
+            features soft, breathable fabrics with graceful drapes and the signature golden charm
+            of Kasavu. Threads of Travancore brings together heritage and contemporary design,
+            where every piece tells a story of artistry, tradition, and the enduring beauty of
+            handcrafted textiles.
+          </p>
         </div>
       </div>
+
+      {/* --- STORY --- */}
+      <section id="tot-story" className="tot-story-section">
+        <div className="tot-story-list">
+          {storyImages.map((image, index) => (
+            <ToTStoryRow key={image.id} image={image} reverse={index % 2 !== 0} />
+          ))}
+        </div>
+      </section>
+
+      {/* --- MARQUEE STRIP --- */}
+      <div className="tot-marquee-strip">
+        <div className="tot-marquee-content">
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+          <span>🚚 FREE DELIVERY ON ALL ORDERS</span>
+          <span>✨ HANDCRAFTED WITH LOVE</span>
+        </div>
+      </div>
+
+      {/* --- CTA --- */}
+      <section className="tot-cta-section">
+        <div
+          ref={ctaRef}
+          className={`tot-cta-wrapper animate-on-scroll ${ctaVisible ? 'animated' : ''}`}
+        >
+          <h2 className="tot-cta-heading">Ready to Experience Threads of Travancore?</h2>
+          <p className="tot-cta-subtext">Discover the full collection, available now</p>
+          <Link to="/collections/threads-of-travancore/shop" className="tot-cta-btn">
+            <span>Explore Collection</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default ThreadsOfTravancoreShop;
+// Each story row gets its own scroll-observer + a live 3D mouse-tilt effect.
+const ToTStoryRow = ({ image, reverse }) => {
+  const [ref, isVisible] = useScrollAnimation({ threshold: 0.2, triggerOnce: false });
+  const imgWrapRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const el = imgWrapRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rotateX = ((y / rect.height) - 0.5) * -8;
+    const rotateY = ((x / rect.width) - 0.5) * 8;
+    el.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+  };
+
+  const handleMouseLeave = () => {
+    const el = imgWrapRef.current;
+    if (!el) return;
+    el.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={`tot-story-row ${reverse ? 'tot-story-reverse' : ''} animate-on-scroll ${
+        isVisible ? (reverse ? 'tot-reveal-right animated' : 'tot-reveal-left animated') : (reverse ? 'tot-reveal-right' : 'tot-reveal-left')
+      }`}
+    >
+      <div
+        className="tot-story-image-wrap"
+        ref={imgWrapRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <img src={image.src} alt="Threads of Travancore collection" className="tot-story-img" />
+      </div>
+      <p className="tot-story-line">{image.line}</p>
+    </div>
+  );
+};
+
+export default ThreadsOfTravancore;
