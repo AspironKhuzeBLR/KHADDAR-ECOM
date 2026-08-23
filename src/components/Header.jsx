@@ -19,28 +19,23 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTransparent, setIsTransparent] = useState(false);
-  // State for dynamic categories
   const [navCategories, setNavCategories] = useState([]);
 
-  // NEW: Mobile Accordion State
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
-  const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null); // 'mens' or 'womens'
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
+  const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null);
 
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Check admin authentication separately for admin routes
   const isAdminAuthenticated = isAdminRoute
     ? !!sessionStorage.getItem("adminToken")
     : false;
 
-  // Show icons if either regular auth or admin auth
   const showAuthIcons = isAuthenticated || isAdminAuthenticated;
 
-  // Get admin user info for display
   const adminUser =
     isAdminRoute && isAdminAuthenticated
       ? JSON.parse(sessionStorage.getItem("adminUser") || "{}")
@@ -56,7 +51,6 @@ const Header = () => {
     return "Account";
   }, [user]);
 
-  // Fetch Categories for the Dropdown
   useEffect(() => {
     const getNavData = async () => {
       try {
@@ -75,7 +69,6 @@ const Header = () => {
   }, [isAdminRoute]);
 
   useEffect(() => {
-    // Pages that should have transparent header initially (have hero images/videos)
     const transparentPages = [
       "/",
       "/collections",
@@ -93,10 +86,7 @@ const Header = () => {
       setIsScrolled(scrollPosition > 50);
     };
 
-    // Set initial transparent state based on page
     setIsTransparent(isTransparentPage);
-
-    // Initial scroll check
     handleScroll();
 
     window.addEventListener("scroll", handleScroll);
@@ -116,7 +106,6 @@ const Header = () => {
   };
 
   const handleMenuHover = (menu) => {
-    // Only allow hover on desktop (> 1200px)
     if (window.innerWidth > 1200) {
       setHoveredMenu(menu);
     }
@@ -158,7 +147,7 @@ const Header = () => {
       closeMenu();
     }
   };
-  // Filter logic for dropdown links
+
   const menLinks = navCategories.filter(
     (cat) => cat.parent_id === 1 || cat.id === 29,
   );
@@ -311,7 +300,6 @@ const Header = () => {
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
-                    {/* Flat Dropdown - Kolors of Kutch / Threads of Travancore */}
                     {(hoveredMenu === "collections" || mobileCollectionsOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCollectionsOpen ? "mobile-visible" : ""}`}
@@ -319,18 +307,10 @@ const Header = () => {
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <Link
-                          to="/collections"
-                          className="dropdown-item"
-                          onClick={closeMenu}
-                        >
+                        <Link to="/collections" className="dropdown-item" onClick={closeMenu}>
                           Kolors of Kutch
                         </Link>
-                        <Link
-                          to="/collections/threads-of-travancore"
-                          className="dropdown-item"
-                          onClick={closeMenu}
-                        >
+                        <Link to="/collections/threads-of-travancore" className="dropdown-item" onClick={closeMenu}>
                           Threads of Travancore
                         </Link>
                       </div>
@@ -349,11 +329,9 @@ const Header = () => {
                       onClick={(e) => handleMobileClick(e, "main")}
                     >
                       SHOP BY CATEGORY
-                      {/* Arrow visible only on mobile */}
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
-                    {/* Show if Hovered (Desktop) OR Open (Mobile) */}
                     {(hoveredMenu === "shop" || mobileCategoryOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCategoryOpen ? "mobile-visible" : ""}`}
@@ -361,7 +339,6 @@ const Header = () => {
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* MEN'S WEAR SECTION */}
                         <div className="dropdown-item-wrapper">
                           <Link
                             to="/shop/mens-wear"
@@ -387,7 +364,6 @@ const Header = () => {
                           </div>
                         </div>
 
-                        {/* WOMEN'S WEAR SECTION */}
                         <div className="dropdown-item-wrapper">
                           <Link
                             to="/shop/womens-wear"
@@ -432,7 +408,6 @@ const Header = () => {
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
-                    {/* Flat Dropdown (No nested Artisan level) */}
                     {(hoveredMenu === "community" || mobileCommunityOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCommunityOpen ? "mobile-visible" : ""}`}

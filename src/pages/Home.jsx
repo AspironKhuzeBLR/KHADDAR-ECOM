@@ -40,7 +40,7 @@ const Home = () => {
   return (
     <div className="home-page-container page-loaded">
       {/* Hero with Image */}
-      <HeroVideo />
+      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector />
       
       
       

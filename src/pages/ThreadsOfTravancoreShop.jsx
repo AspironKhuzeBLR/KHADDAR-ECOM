@@ -1,31 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchProducts } from '../services/productService';
 import '../pages/Shop.css';
-import './ThreadsOfTravancoreShop.css';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 
-// Placeholder product images — using tot9 for all products for now
-// (swap individual images per product whenever real photography is ready)
-import tot9 from '../images/tot9.png';
-
-// PLACEHOLDER PRODUCTS — update image/name/price here when real catalog is ready.
-// id is prefixed "tot-" to keep it distinct from real Kutch product IDs in the cart.
-const totProducts = [
-  { id: 'tot-2', name: 'Kasavu Drape Saree', price: 4200, image: tot9 },
-  { id: 'tot-4', name: 'Ivory Handloom Kurta', price: 2800, image: tot9 },
-  { id: 'tot-6', name: 'Golden Border Dupatta', price: 1600, image: tot9 },
-  { id: 'tot-7', name: 'Travancore Cotton Blouse', price: 1900, image: tot9 },
-  { id: 'tot-8', name: 'Coastal Weave Dress', price: 3400, image: tot9 },
-  { id: 'tot-9', name: 'Kasavu Trim Shawl', price: 2100, image: tot9 },
-  { id: 'tot-10', name: 'Backwater Linen Set', price: 3800, image: tot9 },
-  { id: 'tot-11', name: 'Ceremonial White Drape', price: 4600, image: tot9 },
-  { id: 'tot-12', name: 'Handspun Cotton Stole', price: 1400, image: tot9 },
-  { id: 'tot-13', name: 'Kerala Kasavu Skirt', price: 3100, image: tot9 }
-];
-
+// Threads of Travancore products are tagged as sub_category
+// "Threads of Travancore" under the "Women's Wear" main category in the admin panel.
 const ThreadsOfTravancoreShop = () => {
   const toast = useToast();
   const { isAuthenticated } = useAuth();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchProducts({
+          page: pagination.page,
+          limit: pagination.limit,
+          mainCategory: "Women's Wear",
+          category: 'Threads of Travancore'
+        });
+
+        setProducts(result.products);
+        setPagination((prev) => ({
+          ...prev,
+          total: result.pagination?.total || result.products.length,
+          totalPages: result.pagination?.totalPages || 1
+        }));
+      } catch (error) {
+        console.error('Error loading Threads of Travancore products:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, [pagination.page, pagination.limit]);
 
   const handleAddToCart = (product) => {
     if (!isAuthenticated) {
@@ -44,8 +57,8 @@ const ThreadsOfTravancoreShop = () => {
       existingCart.push({
         id: product.id,
         name: product.name,
-        price: product.price,
-        priceRaw: product.price,
+        price: product.priceRaw,
+        priceRaw: product.priceRaw,
         image: product.image,
         size: 'Free Size',
         color: 'Natural',
@@ -57,38 +70,99 @@ const ThreadsOfTravancoreShop = () => {
     toast.success(`${product.name} added to cart!`);
   };
 
+  const handlePageChange = (newPage) => {
+    setPagination((prev) => ({ ...prev, page: newPage }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="shop-page tot-shop-page">
+    <div className="shop-page">
       <div className="shop-products">
         <div className="container">
           <h2 className="products-category-title">Threads of Travancore</h2>
           <p className="category-description">
             A Kerala collection in handloom cotton and Kasavu.
           </p>
-          <p className="products-count">Showing {totProducts.length} of {totProducts.length} products</p>
 
-          <div className="products-grid">
-            {totProducts.map((product) => (
-              <div key={product.id} className="product-card">
-                <div className="product-image-wrapper">
-                  <img src={product.image} alt={product.name} className="product-image" />
+          {loading ? (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading collection...</p>
+            </div>
+          ) : products.length > 0 ? (
+            <>
+              <p className="products-count">
+                Showing {products.length} of {pagination.total} products
+              </p>
+
+              <div className="products-grid">
+                {products.map((product, index) => (
+                  <div key={product.id} className="product-card">
+                    <div className="product-image-wrapper">
+                      <img src={product.image} alt={product.name} className="product-image" />
+                      {index < 2 && <span className="product-badge">New</span>}
+                      {!product.inStock && (
+                        <span className="product-badge out-of-stock">Out of Stock</span>
+                      )}
+                      <button
+                        className="product-choose-btn"
+                        onClick={() => handleAddToCart(product)}
+                        disabled={!product.inStock}
+                      >
+                        {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                      </button>
+                    </div>
+                    <div className="product-info">
+                      <h3 className="product-name">{product.name}</h3>
+                      <div className="product-price">
+                        <span className="price-label">Regular price</span>
+                        <span className="price-value">{product.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {pagination.totalPages > 1 && (
+                <div className="pagination">
                   <button
-                    className="product-choose-btn"
-                    onClick={() => handleAddToCart(product)}
+                    className="pagination-btn"
+                    disabled={pagination.page <= 1}
+                    onClick={() => handlePageChange(pagination.page - 1)}
                   >
-                    Add to Cart
+                    ← Previous
+                  </button>
+
+                  <div className="pagination-numbers">
+                    {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
+                      <button
+                        key={pageNum}
+                        className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
+                        onClick={() => handlePageChange(pageNum)}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    className="pagination-btn"
+                    disabled={pagination.page >= pagination.totalPages}
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                  >
+                    Next →
                   </button>
                 </div>
-                <div className="product-info">
-                  <h3 className="product-name">{product.name}</h3>
-                  <div className="product-price">
-                    <span className="price-label">Regular price</span>
-                    <span className="price-value">₹{product.price.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+              )}
+            </>
+          ) : (
+            <div className="no-products">
+              <p>
+                No Threads of Travancore products found yet. Add products in the admin panel
+                with Main Category "Women's Wear" and Sub Category "Threads of Travancore".
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

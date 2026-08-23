@@ -9,6 +9,7 @@ import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
 import KolorsOfKutch from './pages/KolorsOfKutch';
 import ThreadsOfTravancore from './pages/ThreadsOfTravancore';
+import ThreadsOfTravancoreShop from './pages/ThreadsOfTravancoreShop';
 import ShopMen from './pages/ShopMen';
 import ShopWomen from './pages/ShopWomen';
 import Community from './pages/Community';
@@ -34,7 +35,6 @@ import ShopCollections from './pages/ShopCollections';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import Community2 from './pages/Community2'
-import ThreadsOfTravancoreShop from './pages/ThreadsOfTravancoreShop';
 
 function AppContent() {
   const location = useLocation();

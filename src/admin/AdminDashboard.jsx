@@ -22,9 +22,10 @@ import './AdminDashboard.css'
 const logo = '/logo_file_page-0001.png';
 
 // 1. EXACT CATEGORY MAPPING
+
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
-  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
+  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas", "Threads of Travancore"]
 };
 
 const AdminDashboard = () => {

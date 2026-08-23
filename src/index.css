@@ -3,12 +3,9 @@
 @import './styles/patterns.css';
 
 :root, html, body {
-  /* "only light" is a stronger enforcement for supported browsers */
   color-scheme: light;
   color-scheme: only light; 
   
-  /* Ensure the canvas itself is white, preventing the browser 
-     from painting the over-scroll area black */
   background-color: #ffffff !important;
   color: #1a1a1a !important;
 }
@@ -234,4 +231,3 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(111, 49, 50, 0.35) transparent;
 }
-

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './FeaturedCollection.css';
+
 import kutchBg from '../images/Summer Salt KHADDAR3495.png';
 import travancoreBg from '../images/tot5.png';
 
@@ -48,10 +49,16 @@ const FeaturedCollection = () => {
               index === current ? 'featured-slide-active' : ''
             }`}
           >
+           
             <img src={slide.image} alt={slide.title} />
             <div className={`featured-overlay ${slide.eyebrowOnly ? 'featured-overlay-eyebrow' : ''}`}>
               <div className={`featured-content ${slide.eyebrowOnly ? 'featured-content-eyebrow-only' : ''}`}>
-                {!slide.eyebrowOnly && (
+                {slide.eyebrowOnly ? (
+                  <div className="featured-eyebrow-top">
+                    <div className="featured-icon">❖</div>
+                    <span className="featured-label">{slide.label}</span>
+                  </div>
+                ) : (
                   <>
                     <div className="featured-icon">❖</div>
                     <span className="featured-label">{slide.label}</span>
@@ -67,6 +74,7 @@ const FeaturedCollection = () => {
             </div>
           </div>
         ))}
+
         {/* Slide indicator dots */}
         <div className="featured-dots-container">
           {slides.map((slide, index) => (

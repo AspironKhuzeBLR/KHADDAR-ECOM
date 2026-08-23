@@ -55,6 +55,72 @@ const Community = () => {
         fullHeight={true}
       />
 
+      {/* Threads of Travancore Artisan Blog - appears first, same pattern as Kutch section below */}
+      <section className="artisan-story-section">
+        <div className="container">
+          <div className="artisan-story-wrapper">
+            <div className="story-icon">❖</div>
+            <span className="story-label">Threads of Travancore</span>
+            <h2 className="story-heading">The Hands Behind Every Thread</h2>
+
+            <div className="story-content-grid">
+              <div className="story-pattern story-pattern-left">
+                <div className="pattern-diamond"></div>
+                <div className="pattern-dots"></div>
+              </div>
+              <div className="story-pattern story-pattern-right">
+                <div className="pattern-diamond"></div>
+                <div className="pattern-dots"></div>
+              </div>
+
+              <div className="story-photo-section">
+                <div className="story-photo-wrapper">
+                  <div className="carousel-container">
+                    <div className="carousel-slide active">
+                      <img
+                        src={tot1}
+                        alt="Threads of Travancore artisans"
+                        className="story-collage-image"
+                      />
+                      <div className="glow-sweep"></div>
+                    </div>
+                  </div>
+                  <div className="image-outline-glow"></div>
+                </div>
+              </div>
+
+              <div className="story-text-content">
+                <div className="text-decorative-accent"></div>
+                <p className="story-paragraph">
+                  At the heart of Threads of Travancore is a community of remarkable women artisans
+                  whose resilience and craftsmanship bring every creation to life. Many of these
+                  women are the sole providers for their families, including widows and mothers who
+                  have transformed weaving into a source of strength, dignity, and independence.
+                </p>
+                <p className="story-paragraph">
+                  With over 15 years of experience, they carry forward Kerala's rich handloom
+                  traditions, preserving techniques that have been passed down through generations.
+                  Every thread they weave reflects patience, precision, and a deep connection to
+                  their heritage.
+                </p>
+                <p className="story-paragraph">
+                  By choosing Threads of Travancore, you are not only embracing authentic Kerala
+                  handloom but also supporting the livelihoods of these talented women. Each
+                  purchase helps sustain traditional craftsmanship, empowers artisan communities,
+                  and ensures that the legacy of handloom weaving continues to thrive for
+                  generations to come.
+                </p>
+                <p className="story-paragraph">
+                  Together, we celebrate craftsmanship, preserve culture, and weave opportunities.
+                  One thread at a time.
+                </p>
+                <div className="text-decorative-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Artisan Story Section */}
       <section className="artisan-story-section">
         <div className="container">
@@ -108,74 +174,6 @@ const Community = () => {
                 </p>
                 <p className="story-paragraph">
                   At Khaddar, we engage with these artisans through shared values and mutual respect, supporting the continuation of practices that honour India's living cultural legacy - quietly, thoughtfully, and with integrity.
-                </p>
-                <div className="text-decorative-line"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Threads of Travancore Artisan Blog - same pattern as above */}
-      <section className="artisan-story-section">
-        <div className="container">
-          <div className="artisan-story-wrapper">
-            <div className="story-icon">❖</div>
-            <span className="story-label">Threads of Travancore</span>
-            <h2 className="story-heading">The Hands Behind Every Thread</h2>
-
-            <div className="story-content-grid">
-              <div className="story-pattern story-pattern-left">
-                <div className="pattern-diamond"></div>
-                <div className="pattern-dots"></div>
-              </div>
-              <div className="story-pattern story-pattern-right">
-                <div className="pattern-diamond"></div>
-                <div className="pattern-dots"></div>
-              </div>
-
-              {/* Single photo, styled the same as the carousel wrapper above */}
-              <div className="story-photo-section">
-                <div className="story-photo-wrapper">
-                  <div className="carousel-container">
-                    <div className="carousel-slide active">
-                      <img
-                        src={tot1}
-                        alt="Threads of Travancore artisans"
-                        className="story-collage-image"
-                      />
-                      <div className="glow-sweep"></div>
-                    </div>
-                  </div>
-                  <div className="image-outline-glow"></div>
-                </div>
-              </div>
-
-              {/* Text Content */}
-              <div className="story-text-content">
-                <div className="text-decorative-accent"></div>
-                <p className="story-paragraph">
-                  At the heart of Threads of Travancore is a community of remarkable women artisans
-                  whose resilience and craftsmanship bring every creation to life. Many of these
-                  women are the sole providers for their families, including widows and mothers who
-                  have transformed weaving into a source of strength, dignity, and independence.
-                </p>
-                <p className="story-paragraph">
-                  With over 15 years of experience, they carry forward Kerala's rich handloom
-                  traditions, preserving techniques that have been passed down through generations.
-                  Every thread they weave reflects patience, precision, and a deep connection to
-                  their heritage.
-                </p>
-                <p className="story-paragraph">
-                  By choosing Threads of Travancore, you are not only embracing authentic Kerala
-                  handloom but also supporting the livelihoods of these talented women. Each
-                  purchase helps sustain traditional craftsmanship, empowers artisan communities,
-                  and ensures that the legacy of handloom weaving continues to thrive for
-                  generations to come.
-                </p>
-                <p className="story-paragraph">
-                  Together, we celebrate craftsmanship, preserve culture, and weave opportunities.
-                  One thread at a time.
                 </p>
                 <div className="text-decorative-line"></div>
               </div>
