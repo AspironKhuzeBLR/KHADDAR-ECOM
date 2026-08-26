@@ -25,7 +25,7 @@ const logo = '/logo_file_page-0001.png';
 
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
-  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas", "Threads of Travancore"]
+  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
 };
 
 const AdminDashboard = () => {
@@ -65,6 +65,7 @@ const AdminDashboard = () => {
     sub_category: '',
     description: '',
     is_featured: false,
+    collection: 'kok', // 'kok' or 'tot' - controls the ToT naming convention behind the scenes
     sizes: [
       { size: 'S', stock: '' },
       { size: 'M', stock: '' },
@@ -227,8 +228,12 @@ const AdminDashboard = () => {
 
       const totalStock = currentProduct.sizes.reduce((sum, s) => sum + Number(s.stock || 0), 0);
 
+      // Strip any existing "ToT - " prefix first, then re-apply it if Collection = Threads of Travancore
+      const cleanName = currentProduct.name.replace(/^tot\s*-\s*/i, '').trim();
+      const finalName = currentProduct.collection === 'tot' ? `ToT - ${cleanName}` : cleanName;
+
       const payload = {
-        name: currentProduct.name,
+        name: finalName,
         description: currentProduct.description || "",
         price: Math.round(Number(currentProduct.price)),
         stock: totalStock,
@@ -336,14 +341,18 @@ const AdminDashboard = () => {
     }
     // --- END FIX ---
 
+    const totProductPrefix = /^tot\s*-\s*/i;
+    const isTotProduct = totProductPrefix.test(product.name || '');
+
     setCurrentProduct({
       id: product.id,
-      name: product.name,
+      name: (product.name || '').replace(totProductPrefix, '').trim(),
       price: product.price,
       main_category: product.category || product.mainCategory || "Men's Wear",
       sub_category: product.subCategory || "",
       description: product.description || "",
       is_featured: product.isFeatured || false,
+      collection: isTotProduct ? 'tot' : 'kok',
       sizes: productSizes,
       existingImages: initialImages,
       newFiles: []
@@ -742,6 +751,17 @@ const AdminDashboard = () => {
               <div className="form-group">
                 <label>Product Name</label>
                 <input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} required />
+              </div>
+
+              <div className="form-group">
+                <label>Collection</label>
+                <select
+                  value={currentProduct.collection}
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, collection: e.target.value })}
+                >
+                  <option value="kok">Kolours of Kutch</option>
+                  <option value="tot">Threads of Travancore</option>
+                </select>
               </div>
 
               <div className="form-row">

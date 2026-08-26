@@ -53,6 +53,7 @@ const Community2 = () => {
         title="Community"
         subtitle="Building bridges between tradition and innovation, one collaboration at a time."
         fullHeight={true}
+        collectionSelector
       />
 
       {/* Artisan Story Section */}

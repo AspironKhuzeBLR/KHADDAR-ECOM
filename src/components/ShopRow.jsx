@@ -8,7 +8,7 @@ import './ShopRow.css';
  * Used on both the Kolours of Kutch page and the Threads of Travancore page
  * in place of the old "Ready to Experience..." CTA sections.
  */
-const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '' }) => {
+const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', filterFn, mapFn }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +18,10 @@ const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '' }
       setLoading(true);
       try {
         const result = await fetchProducts(fetchOptions);
-        if (isMounted) setProducts(result.products || []);
+        let list = result.products || [];
+        if (filterFn) list = list.filter(filterFn);
+        if (mapFn) list = list.map(mapFn);
+        if (isMounted) setProducts(list);
       } catch (error) {
         console.error('ShopRow fetch error:', error);
         if (isMounted) setProducts([]);

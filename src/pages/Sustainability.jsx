@@ -45,6 +45,7 @@ const Sustainability = () => {
         title='Sustainability' 
         subtitle="At Khaddar, sustainability isn't a trend — it's our foundation."
         fullHeight={true}
+        collectionSelector
       />
 
       <section className="sustainability-intro">

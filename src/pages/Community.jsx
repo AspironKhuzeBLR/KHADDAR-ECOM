@@ -18,14 +18,14 @@ const Community = () => {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.75;
+      videoRef.current.playbackRate = 0.75; // 0.75x speed (slower)
     }
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % artisanImages.length);
-    }, 4000);
+    }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [artisanImages.length]);
@@ -42,6 +42,7 @@ const Community = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // TODO: Integrate with backend API
     console.log('Email submitted:', email);
     alert('Thank you for joining our community! We\'ll be in touch soon.');
     handleCloseModal();
@@ -53,6 +54,7 @@ const Community = () => {
         title='Community' 
         subtitle='Building bridges between tradition and innovation, one collaboration at a time.'
         fullHeight={true}
+        collectionSelector
       />
 
       {/* Threads of Travancore Artisan Blog - appears first, same pattern as Kutch section below */}
@@ -61,7 +63,7 @@ const Community = () => {
           <div className="artisan-story-wrapper">
             <div className="story-icon">❖</div>
             <span className="story-label">Threads of Travancore</span>
-            <h2 className="story-heading">The Hands Behind Every Thread</h2>
+            <h2 className="story-heading">The Women of the Loom</h2>
 
             <div className="story-content-grid">
               <div className="story-pattern story-pattern-left">
@@ -92,27 +94,24 @@ const Community = () => {
               <div className="story-text-content">
                 <div className="text-decorative-accent"></div>
                 <p className="story-paragraph">
-                  At the heart of Threads of Travancore is a community of remarkable women artisans
-                  whose resilience and craftsmanship bring every creation to life. Many of these
-                  women are the sole providers for their families, including widows and mothers who
-                  have transformed weaving into a source of strength, dignity, and independence.
+                  From the weaving communities of Thiruvananthapuram and the former Travancore
+                  region, these women carry forward a tradition that has endured through
+                  generations. For many, weaving is more than a livelihood—it is a skill inherited
+                  through family, shaped by experience, and deeply intertwined with everyday life.
                 </p>
                 <p className="story-paragraph">
-                  With over 15 years of experience, they carry forward Kerala's rich handloom
-                  traditions, preserving techniques that have been passed down through generations.
-                  Every thread they weave reflects patience, precision, and a deep connection to
-                  their heritage.
+                  Some found their way to this craft while rebuilding their lives after the
+                  devastating floods of 2018, while others have spent decades at the loom,
+                  following a path laid down by their mothers, grandmothers and ancestors. Many
+                  began learning as young as fifteen, and have since devoted 25 to 30 years to
+                  refining their craft.
                 </p>
                 <p className="story-paragraph">
-                  By choosing Threads of Travancore, you are not only embracing authentic Kerala
-                  handloom but also supporting the livelihoods of these talented women. Each
-                  purchase helps sustain traditional craftsmanship, empowers artisan communities,
-                  and ensures that the legacy of handloom weaving continues to thrive for
-                  generations to come.
-                </p>
-                <p className="story-paragraph">
-                  Together, we celebrate craftsmanship, preserve culture, and weave opportunities.
-                  One thread at a time.
+                  Their knowledge lives not in manuals, but in practice—in the rhythm of the pit
+                  loom, the handling of each thread and the patience required to create something
+                  by hand. At Khaddar, we engage with these artisans through shared values and
+                  mutual respect, supporting the continuation of a craft that reflects Kerala's
+                  rich textile heritage while creating space for it within a contemporary world.
                 </p>
                 <div className="text-decorative-line"></div>
               </div>
@@ -130,6 +129,7 @@ const Community = () => {
             <h2 className="story-heading">Artisans from Kutch & Ajrakhpur</h2>
             
             <div className="story-content-grid">
+              {/* Decorative Pattern Elements */}
               <div className="story-pattern story-pattern-left">
                 <div className="pattern-diamond"></div>
                 <div className="pattern-dots"></div>
@@ -139,6 +139,7 @@ const Community = () => {
                 <div className="pattern-dots"></div>
               </div>
 
+              {/* Photo Carousel */}
               <div className="story-photo-section">
                 <div className="story-photo-wrapper">
                   <div className="carousel-container">
@@ -164,6 +165,7 @@ const Community = () => {
                 </div>
               </div>
 
+              {/* Text Content */}
               <div className="story-text-content">
                 <div className="text-decorative-accent"></div>
                 <p className="story-paragraph">

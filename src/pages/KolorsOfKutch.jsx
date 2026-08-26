@@ -46,8 +46,7 @@ const KolorsOfKutch = () => {
         className='kok-hero'
         hideButton
       />
-    
-     
+
       <div className="collections-hero">
         <div className="hero-content-wrapper">
           <div className="collections-hero">
@@ -126,7 +125,8 @@ const KolorsOfKutch = () => {
       <ShopRow
         title="Shop Kolours of Kutch"
         subtitle="Handloom weaving, bandhani tie-dye, and mirror work"
-        fetchOptions={{ limit: 6 }}
+        fetchOptions={{ limit: 20 }}
+        filterFn={(p) => !/^tot\s*-\s*/i.test(p.name)}
         viewAllLink="/shop-collections"
         themeClass="kok-theme"
       />

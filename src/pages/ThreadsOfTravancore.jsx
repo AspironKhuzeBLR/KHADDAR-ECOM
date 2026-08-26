@@ -65,15 +65,38 @@ const ThreadsOfTravancore = () => {
               </div>
               <div className="collections-intro">
                 <p className="body-text intro-text intro-bold">
-                  Threads of Travancore celebrates the timeless beauty of Kerala's handloom heritage
-                  through handcrafted collections in handloom cotton and Kasavu. Woven on traditional
-                  pit looms by skilled artisans, each fabric reflects generations of craftsmanship,
-                  blending comfort, elegance, and authenticity.
+                  Threads of Travancore is an exploration of what happens when contemporary design
+                  becomes a means of preserving heritage. Rooted in the handloom traditions of Kerala,
+                  the collection brings together pure handloom cotton, the quiet elegance of Kerala's
+                  whites and Kasavu, and contemporary silhouettes with a subtle Indian sensibility.
+                  Woven on traditional pit looms, the cotton is exceptionally light, soft and
+                  breathable, naturally suited to Kerala's climate. The distinctive Kasavu borders
+                  are created with fine copper strings coated in silver and gold, giving the zari its
+                  characteristic depth and lustre. Every garment carries not only the material, but
+                  the accumulated knowledge of generations who have worked with it.
                 </p>
                 <p className="body-text intro-text intro-bold">
-                  Inspired by Kerala's serene landscapes and vibrant cultural traditions, the collection
-                  features soft, breathable fabrics with graceful drapes and the signature golden charm
-                  of Kasavu, bringing together heritage and contemporary design.
+                  Threads of Travancore is not simply about preserving the past; it is about creating
+                  a future for it. Handloom is a living craft, sustained by people whose livelihoods
+                  and identities are deeply connected to it. Years of skill cannot be replicated
+                  overnight, nor can a heritage survive if there is no reason for the craft to
+                  continue. We chose to bring this craft into contemporary fashion because tradition
+                  does not have to remain in the past to be preserved. It can evolve, be worn,
+                  desired and made relevant again. In doing so, we hope to create a meeting point
+                  between design and sustainability, modernity and tradition, and commerce and
+                  community.
+                </p>
+                <p className="body-text intro-text intro-bold">
+                  Threads of Travancore is for those who recognise that beauty is rarely merely
+                  aesthetic; that behind every considered piece lies the labour, knowledge and
+                  cultural memory of those who made it possible. It is for those who value the human
+                  hand in an age increasingly defined by the mechanised and the immediate; who
+                  understand that craftsmanship is not an antiquarian indulgence, but a living
+                  repository of knowledge, identity and history. We see this community not as an
+                  audience, but as fellow custodians of that appreciation. In bringing these textiles
+                  into contemporary design, we hope to participate in something larger than fashion:
+                  the continued relevance, dignity and survival of a craft—and of the people whose
+                  hands have carried it this far.
                 </p>
               </div>
             </div>
@@ -136,7 +159,9 @@ const ThreadsOfTravancore = () => {
       <ShopRow
         title="Shop Threads of Travancore"
         subtitle="Handloom cotton and Kasavu, made in Kerala"
-        fetchOptions={{ mainCategory: "Women's Wear", category: 'Threads of Travancore', limit: 6 }}
+        fetchOptions={{ mainCategory: "Women's Wear", limit: 100 }}
+        filterFn={(p) => /^tot\s*-\s*/i.test(p.name)}
+        mapFn={(p) => ({ ...p, name: p.name.replace(/^tot\s*-\s*/i, '').trim() })}
         viewAllLink="/collections/threads-of-travancore/shop"
         themeClass="tot-theme"
       />

@@ -4,41 +4,42 @@ import '../pages/Shop.css';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 
-// Threads of Travancore products are tagged as sub_category
-// "Threads of Travancore" under the "Women's Wear" main category in the admin panel.
+// Threads of Travancore products are identified by a naming convention:
+// name it "ToT - <Product Name>" in the admin panel (e.g. "ToT - Vennila").
+// Real garment type (Dresses, Kurtas, etc.) still goes in Sub Category as normal -
+// this only distinguishes which COLLECTION the product belongs to.
+const TOT_PREFIX = /^tot\s*-\s*/i;
+
 const ThreadsOfTravancoreShop = () => {
   const toast = useToast();
   const { isAuthenticated } = useAuth();
-  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, totalPages: 1 });
 
   useEffect(() => {
     const loadProducts = async () => {
       setLoading(true);
       try {
+        // Fetch a broad set of Women's Wear products, then filter by name prefix client-side
         const result = await fetchProducts({
-          page: pagination.page,
-          limit: pagination.limit,
-          mainCategory: "Women's Wear",
-          category: 'Threads of Travancore'
+          limit: 200
         });
-
-        setProducts(result.products);
-        setPagination((prev) => ({
-          ...prev,
-          total: result.pagination?.total || result.products.length,
-          totalPages: result.pagination?.totalPages || 1
-        }));
+        setAllProducts(result.products || []);
       } catch (error) {
         console.error('Error loading Threads of Travancore products:', error);
-        setProducts([]);
+        setAllProducts([]);
       } finally {
         setLoading(false);
       }
     };
     loadProducts();
-  }, [pagination.page, pagination.limit]);
+  }, []);
+
+  // Only products named "ToT - ..." belong to this collection.
+  // Strip the prefix so the displayed name is clean.
+  const products = allProducts
+    .filter((p) => TOT_PREFIX.test(p.name))
+    .map((p) => ({ ...p, name: p.name.replace(TOT_PREFIX, '').trim() }));
 
   const handleAddToCart = (product) => {
     if (!isAuthenticated) {
@@ -70,11 +71,6 @@ const ThreadsOfTravancoreShop = () => {
     toast.success(`${product.name} added to cart!`);
   };
 
-  const handlePageChange = (newPage) => {
-    setPagination((prev) => ({ ...prev, page: newPage }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <div className="shop-page">
       <div className="shop-products">
@@ -92,7 +88,7 @@ const ThreadsOfTravancoreShop = () => {
           ) : products.length > 0 ? (
             <>
               <p className="products-count">
-                Showing {products.length} of {pagination.total} products
+                Showing {products.length} products
               </p>
 
               <div className="products-grid">
@@ -122,44 +118,12 @@ const ThreadsOfTravancoreShop = () => {
                   </div>
                 ))}
               </div>
-
-              {pagination.totalPages > 1 && (
-                <div className="pagination">
-                  <button
-                    className="pagination-btn"
-                    disabled={pagination.page <= 1}
-                    onClick={() => handlePageChange(pagination.page - 1)}
-                  >
-                    ← Previous
-                  </button>
-
-                  <div className="pagination-numbers">
-                    {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((pageNum) => (
-                      <button
-                        key={pageNum}
-                        className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
-                        onClick={() => handlePageChange(pageNum)}
-                      >
-                        {pageNum}
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    className="pagination-btn"
-                    disabled={pagination.page >= pagination.totalPages}
-                    onClick={() => handlePageChange(pagination.page + 1)}
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
             </>
           ) : (
             <div className="no-products">
               <p>
-                No Threads of Travancore products found yet. Add products in the admin panel
-                with Main Category "Women's Wear" and Sub Category "Threads of Travancore".
+                No Threads of Travancore products found yet. In the admin panel, name products
+                starting with "ToT - " (e.g. "ToT - Vennila") and set Main Category to "Women's Wear".
               </p>
             </div>
           )}

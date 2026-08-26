@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../context/AuthContext";
@@ -19,23 +19,31 @@ const Header = () => {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTransparent, setIsTransparent] = useState(false);
+  // State for dynamic categories
   const [navCategories, setNavCategories] = useState([]);
 
+  // NEW: Mobile Accordion State
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
-  const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null);
+  const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null); // 'mens' or 'womens'
 
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // Collections nav dropdown - just needs a ref for the wrapper, hover state comes from hoveredMenu
+  const collectionsRef = useRef(null);
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Check admin authentication separately for admin routes
   const isAdminAuthenticated = isAdminRoute
     ? !!sessionStorage.getItem("adminToken")
     : false;
 
+  // Show icons if either regular auth or admin auth
   const showAuthIcons = isAuthenticated || isAdminAuthenticated;
 
+  // Get admin user info for display
   const adminUser =
     isAdminRoute && isAdminAuthenticated
       ? JSON.parse(sessionStorage.getItem("adminUser") || "{}")
@@ -51,6 +59,7 @@ const Header = () => {
     return "Account";
   }, [user]);
 
+  // Fetch Categories for the Dropdown
   useEffect(() => {
     const getNavData = async () => {
       try {
@@ -69,6 +78,7 @@ const Header = () => {
   }, [isAdminRoute]);
 
   useEffect(() => {
+    // Pages that should have transparent header initially (have hero images/videos)
     const transparentPages = [
       "/",
       "/collections",
@@ -86,7 +96,10 @@ const Header = () => {
       setIsScrolled(scrollPosition > 50);
     };
 
+    // Set initial transparent state based on page
     setIsTransparent(isTransparentPage);
+
+    // Initial scroll check
     handleScroll();
 
     window.addEventListener("scroll", handleScroll);
@@ -106,6 +119,7 @@ const Header = () => {
   };
 
   const handleMenuHover = (menu) => {
+    // Only allow hover on desktop (> 1200px)
     if (window.innerWidth > 1200) {
       setHoveredMenu(menu);
     }
@@ -147,7 +161,7 @@ const Header = () => {
       closeMenu();
     }
   };
-
+  // Filter logic for dropdown links
   const menLinks = navCategories.filter(
     (cat) => cat.parent_id === 1 || cat.id === 29,
   );
@@ -288,29 +302,57 @@ const Header = () => {
 
                   <div
                     className="nav-link-wrapper"
+                    ref={collectionsRef}
                     onMouseEnter={() => handleMenuHover("collections")}
                     onMouseLeave={handleMenuLeave}
                   >
-                    <Link
-                      to="/collections"
+                    <span
                       className="nav-link"
+                      role="button"
+                      tabIndex={0}
                       onClick={(e) => handleMobileClick(e, "collections")}
+                      style={{ cursor: 'pointer' }}
                     >
                       COLLECTIONS
                       <span className="mobile-arrow show-mobile">▾</span>
-                    </Link>
+                    </span>
 
                     {(hoveredMenu === "collections" || mobileCollectionsOpen) && (
                       <div
-                        className={`dropdown-menu ${mobileCollectionsOpen ? "mobile-visible" : ""}`}
                         onMouseEnter={() => handleMenuHover("collections")}
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 0px)',
+                          left: 0,
+                          transform: 'translateX(-80px)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          background: '#F7F7F0',
+                          padding: '20px 24px',
+                          borderRadius: '2px',
+                          boxShadow: '0 10px 26px rgba(0,0,0,0.2)',
+                          zIndex: 2000,
+                          whiteSpace: 'nowrap',
+                          width: 'max-content',
+                          maxWidth: 'none',
+                          gap: '16px'
+                        }}
                       >
-                        <Link to="/collections" className="dropdown-item" onClick={closeMenu}>
+                        <Link
+                          to="/collections"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
                           Kolors of Kutch
                         </Link>
-                        <Link to="/collections/threads-of-travancore" className="dropdown-item" onClick={closeMenu}>
+                        <Link
+                          to="/collections/threads-of-travancore"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
                           Threads of Travancore
                         </Link>
                       </div>
@@ -329,9 +371,11 @@ const Header = () => {
                       onClick={(e) => handleMobileClick(e, "main")}
                     >
                       SHOP BY CATEGORY
+                      {/* Arrow visible only on mobile */}
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
+                    {/* Show if Hovered (Desktop) OR Open (Mobile) */}
                     {(hoveredMenu === "shop" || mobileCategoryOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCategoryOpen ? "mobile-visible" : ""}`}
@@ -339,6 +383,7 @@ const Header = () => {
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}
                       >
+                        {/* MEN'S WEAR SECTION */}
                         <div className="dropdown-item-wrapper">
                           <Link
                             to="/shop/mens-wear"
@@ -364,6 +409,7 @@ const Header = () => {
                           </div>
                         </div>
 
+                        {/* WOMEN'S WEAR SECTION */}
                         <div className="dropdown-item-wrapper">
                           <Link
                             to="/shop/womens-wear"
@@ -408,6 +454,7 @@ const Header = () => {
                       <span className="mobile-arrow show-mobile">▾</span>
                     </Link>
 
+                    {/* Flat Dropdown (No nested Artisan level) */}
                     {(hoveredMenu === "community" || mobileCommunityOpen) && (
                       <div
                         className={`dropdown-menu ${mobileCommunityOpen ? "mobile-visible" : ""}`}
