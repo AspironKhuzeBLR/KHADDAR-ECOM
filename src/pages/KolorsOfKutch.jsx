@@ -126,7 +126,7 @@ const KolorsOfKutch = () => {
         title="Shop Kolours of Kutch"
         subtitle="Handloom weaving, bandhani tie-dye, and mirror work"
         fetchOptions={{ limit: 20 }}
-        filterFn={(p) => !/^tot\s*-\s*/i.test(p.name)}
+        filterFn={(p) => p.collection !== 'tot'}
         viewAllLink="/shop-collections"
         themeClass="kok-theme"
       />

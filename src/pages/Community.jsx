@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Community.css';
 import HeroVideo from '../components/HeroVideo';
+import heroImage from '../images/HeroImage.jpg';
 import tot1 from '../images/tot1.jpg';
 
 const Community = () => {
@@ -54,6 +55,7 @@ const Community = () => {
         title='Community' 
         subtitle='Building bridges between tradition and innovation, one collaboration at a time.'
         fullHeight={true}
+        bgImage={heroImage}
         collectionSelector
       />
 

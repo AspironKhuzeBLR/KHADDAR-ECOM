@@ -3,9 +3,18 @@ import { Link } from 'react-router-dom';
 import './FeaturedCollection.css';
 
 import kutchBg from '../images/Summer Salt KHADDAR3495.png';
-import travancoreBg from '../images/tot5.png';
+import travancoreBg from '../images/ToT-Ft-5.jpg';
 
 const slides = [
+  {
+    id: 'travancore',
+    image: travancoreBg,
+    label: 'Discover The Collection',
+    title: 'Threads of Travancore',
+    description:
+      "Drawn from Kerala's backwaters and the quiet ceremony of draped white and gold. Hand-finished in Khaddar cotton, honoring a slower, coastal way of dressing.",
+    link: '/collections/threads-of-travancore'
+  },
   {
     id: 'kutch',
     image: kutchBg,
@@ -14,16 +23,6 @@ const slides = [
     description:
       'Introducing exceptional fabric creations which showcase the rich heritage and artistic prowess of Kutch. Experience the blend of vibrant culture and woven mastery.',
     link: '/collections'
-  },
-  {
-    id: 'travancore',
-    image: travancoreBg,
-    label: 'Discover The Collection',
-    title: 'Threads of Travancore',
-    description:
-      "Drawn from Kerala's backwaters and the quiet ceremony of draped white and gold. Hand-finished in Khaddar cotton, honoring a slower, coastal way of dressing.",
-    link: '/collections/threads-of-travancore',
-    eyebrowOnly: true
   }
 ];
 
@@ -51,21 +50,12 @@ const FeaturedCollection = () => {
           >
            
             <img src={slide.image} alt={slide.title} />
-            <div className={`featured-overlay ${slide.eyebrowOnly ? 'featured-overlay-eyebrow' : ''}`}>
-              <div className={`featured-content ${slide.eyebrowOnly ? 'featured-content-eyebrow-only' : ''}`}>
-                {slide.eyebrowOnly ? (
-                  <div className="featured-eyebrow-top">
-                    <div className="featured-icon">❖</div>
-                    <span className="featured-label">{slide.label}</span>
-                  </div>
-                ) : (
-                  <>
-                    <div className="featured-icon">❖</div>
-                    <span className="featured-label">{slide.label}</span>
-                    <h2 className="featured-title">{slide.title}</h2>
-                    <p className="featured-description">{slide.description}</p>
-                  </>
-                )}
+            <div className="featured-overlay">
+              <div className="featured-content">
+                <div className="featured-icon">❖</div>
+                <span className="featured-label">{slide.label}</span>
+                <h2 className="featured-title">{slide.title}</h2>
+                <p className="featured-description">{slide.description}</p>
                 <Link to={slide.link} className="featured-link">
                   <span>Explore Collection</span>
                   <span className="link-arrow">→</span>

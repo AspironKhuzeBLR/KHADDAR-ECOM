@@ -21,23 +21,29 @@ import './AdminDashboard.css'
 
 const logo = '/logo_file_page-0001.png';
 
-// 1. EXACT CATEGORY MAPPING
-
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
   "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
 };
+
+// Flat list of individual piece names for the "Individual Pieces" dropdown,
+// derived from CATEGORY_MAP but with combined entries (e.g. "Skirts/Trousers")
+// split into their own separate options.
+const PIECE_OPTIONS = Array.from(
+  new Set(
+    Object.values(CATEGORY_MAP)
+      .flat()
+      .flatMap(cat => cat.split('/'))
+  )
+);
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
-  
-  // Sidebar Toggle State for Mobile
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Dashboard Data State
   const [stats, setStats] = useState({
     totalSales: 0,
     totalOrders: 0,
@@ -47,7 +53,6 @@ const AdminDashboard = () => {
   const [recentOrders, setRecentOrders] = useState([]);
   const [revenueData, setRevenueData] = useState(null);
 
-  // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
   const PRODUCTS_PER_PAGE = 10;
@@ -57,7 +62,6 @@ const AdminDashboard = () => {
   const [orderSearchTerm, setOrderSearchTerm] = useState('');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
 
-  // 2. PRODUCT FORM STATE
   const initialProductState = {
     name: '',
     price: '',
@@ -65,24 +69,23 @@ const AdminDashboard = () => {
     sub_category: '',
     description: '',
     is_featured: false,
-    collection: 'kok', // 'kok' or 'tot' - controls the ToT naming convention behind the scenes
+    collection: 'kok',
+    hasPieces: false,
+    pieces: [{ label: '', price: '' }],
     sizes: [
       { size: 'S', stock: '' },
       { size: 'M', stock: '' },
       { size: 'L', stock: '' },
       { size: 'XL', stock: '' }
     ],
-    existingImages: [], // URLs already in DB
-    newFiles: []        // File objects waiting to be uploaded
+    existingImages: [],
+    newFiles: []
   };
   
   const [currentProduct, setCurrentProduct] = useState(initialProductState);
 
-  // Orders State
   const [allOrders, setAllOrders] = useState([]);
   const [ordersPage, setOrdersPage] = useState(1);
-
-  // --- Data Fetching Logic ---
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -146,8 +149,6 @@ const AdminDashboard = () => {
     setIsSidebarOpen(false);
   };
 
-  // --- Product Handlers ---
-
   const handleSizeChange = (index, field, value) => {
     const updatedSizes = [...currentProduct.sizes];
     if (field === 'stock') {
@@ -177,7 +178,7 @@ const AdminDashboard = () => {
       const newFileObjects = files.map(file => ({
         file: file,
         preview: URL.createObjectURL(file),
-        id: Date.now() + Math.random() // Temp ID for UI
+        id: Date.now() + Math.random()
       }));
 
       setCurrentProduct(prev => ({
@@ -206,13 +207,11 @@ const AdminDashboard = () => {
     setLoading(true);
 
     try {
-      // 1. Upload ALL new images concurrently
       const uploadPromises = currentProduct.newFiles.map(item => 
         uploadImageToSupabase(item.file)
       );
       const newUploadedUrls = await Promise.all(uploadPromises);
 
-      // 2. Combine Existing URLs + New URLs
       const allImages = [
         ...currentProduct.existingImages.map((img, i) => ({
           image_url: img.image_url || img, 
@@ -228,13 +227,26 @@ const AdminDashboard = () => {
 
       const totalStock = currentProduct.sizes.reduce((sum, s) => sum + Number(s.stock || 0), 0);
 
-      // Strip any existing "ToT - " prefix first, then re-apply it if Collection = Threads of Travancore
       const cleanName = currentProduct.name.replace(/^tot\s*-\s*/i, '').trim();
       const finalName = currentProduct.collection === 'tot' ? `ToT - ${cleanName}` : cleanName;
 
+            const cleanDescription = (currentProduct.description || '').replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+      let finalDescription = cleanDescription;
+      if (currentProduct.hasPieces) {
+        const validPieces = currentProduct.pieces.filter(p => p.label && p.price);
+        if (validPieces.length > 0) {
+          const piecesData = {
+            fullSet: Number(currentProduct.price),
+            pieces: validPieces.map(p => ({ label: p.label, price: Number(p.price) }))
+          };
+                    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(piecesData))));
+                    finalDescription = `${cleanDescription}\n\n[[PIECES_DATA:${encoded}]]`;
+        }
+      }
+
       const payload = {
         name: finalName,
-        description: currentProduct.description || "",
+        description: finalDescription,
         price: Math.round(Number(currentProduct.price)),
         stock: totalStock,
         main_category: currentProduct.main_category,
@@ -244,7 +256,7 @@ const AdminDashboard = () => {
           stock: s.stock === '' ? 0 : Number(s.stock) 
         })),
         is_featured: Boolean(currentProduct.is_featured),
-        images: allImages // Send array of images
+        images: allImages
       };
 
       console.log("Sending data to backend:", payload);
@@ -287,11 +299,9 @@ const AdminDashboard = () => {
     }
   };
 
-  // --- UPDATED LOGIC HERE ---
   const openEditModal = (product, e) => {
     if (e) e.stopPropagation();
     
-    // Debugging: Check console to see exactly what 'product.images' is
     console.log("Opening product:", product.name);
     console.log("Raw images:", product.images);
 
@@ -304,45 +314,59 @@ const AdminDashboard = () => {
       ? product.sizes 
       : defaultSizes;
 
-    // --- FIX: Handle Stringified JSON & Normalize Keys ---
     let initialImages = [];
     let rawImages = product.images;
 
-    // 1. If it's a string that looks like JSON, parse it
     if (typeof rawImages === 'string') {
       try {
         if (rawImages.trim().startsWith('[') || rawImages.trim().startsWith('{')) {
            rawImages = JSON.parse(rawImages);
         } else {
-           // Treat as single string URL
            rawImages = [{ image_url: rawImages }];
         }
       } catch (err) {
         console.warn("Failed to parse image JSON:", err);
-        // Fallback: treat as single string
         rawImages = [{ image_url: rawImages }];
       }
     }
 
-    // 2. Now process it as an array
     if (Array.isArray(rawImages) && rawImages.length > 0) {
       initialImages = rawImages.map(img => {
         if (typeof img === 'string') return { image_url: img };
-        // Handle "url" vs "image_url" mismatch
         return { 
           image_url: img.image_url || img.url || img.src || '', 
           ...img 
         };
-      }).filter(img => img.image_url); // Filter out any empty/bad objects
+      }).filter(img => img.image_url);
     } 
-    // 3. Fallback: Legacy single image
     else if (product.image) {
       initialImages = [{ image_url: product.image }];
     }
-    // --- END FIX ---
 
     const totProductPrefix = /^tot\s*-\s*/i;
-    const isTotProduct = totProductPrefix.test(product.name || '');
+    const isTotProduct = totProductPrefix.test(product.rawName || product.name || '');
+
+    const rawDescription = product.rawDescription || product.description || '';
+    const piecesMatch = rawDescription.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
+    let parsedPieces = { hasPieces: false, pieces: [{ label: '', price: '' }] };
+    let cleanDescription = rawDescription;
+    if (piecesMatch) {
+      try {
+        let data;
+        try {
+          data = JSON.parse(decodeURIComponent(escape(atob(piecesMatch[1]))));
+        } catch (e) {
+          data = JSON.parse(piecesMatch[1]); // fallback for older plain-JSON format
+        }
+        parsedPieces = {
+          hasPieces: true,
+          pieces: data.pieces?.length > 0 ? data.pieces : [{ label: '', price: '' }]
+        };
+      } catch (e) {
+        console.error('Failed to parse pieces data', e);
+      }
+      cleanDescription = rawDescription.replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+    }
 
     setCurrentProduct({
       id: product.id,
@@ -350,9 +374,11 @@ const AdminDashboard = () => {
       price: product.price,
       main_category: product.category || product.mainCategory || "Men's Wear",
       sub_category: product.subCategory || "",
-      description: product.description || "",
+      description: cleanDescription,
       is_featured: product.isFeatured || false,
       collection: isTotProduct ? 'tot' : 'kok',
+      hasPieces: parsedPieces.hasPieces,
+      pieces: parsedPieces.pieces,
       sizes: productSizes,
       existingImages: initialImages,
       newFiles: []
@@ -371,8 +397,6 @@ const AdminDashboard = () => {
   const handleProductRowClick = (product) => {
     setSelectedProduct(product);
   };
-
-  // --- Order Handlers ---
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     const previousOrders = [...allOrders];
@@ -398,8 +422,6 @@ const AdminDashboard = () => {
       alert(`❌ Error: ${error.message || 'Could not update status'}`);
     }
   };
-
-  // --- Helpers ---
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
@@ -441,14 +463,12 @@ const AdminDashboard = () => {
   }
 
   const filteredOrders = allOrders.filter(order => {
-    // 1. Search Logic (Checks Name or ID)
     const searchTerm = orderSearchTerm.toLowerCase();
     const matchesSearch = 
       (order.customer_name?.toLowerCase() || '').includes(searchTerm) ||
       (order.order_number?.toLowerCase() || '').includes(searchTerm) ||
       (order.order_id?.toLowerCase() || '').includes(searchTerm);
 
-    // 2. Filter Logic (Checks Status)
     const matchesStatus = orderStatusFilter === 'all' || 
       order.order_status?.toLowerCase() === orderStatusFilter.toLowerCase();
 
@@ -457,7 +477,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {/* Mobile Header */}
       <div className="mobile-header">
         <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           ☰
@@ -466,7 +485,6 @@ const AdminDashboard = () => {
         <div style={{ width: '30px' }}></div> 
       </div>
 
-      {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="admin-logo">
           <img src={logo} alt="Khaddar" />
@@ -497,13 +515,11 @@ const AdminDashboard = () => {
         </nav>
       </aside>
       
-      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
       )}
 
       <main className="admin-content">
-        {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="dashboard-content fade-in">
             <header className="page-header">
@@ -572,7 +588,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* PRODUCTS TAB */}
         {activeTab === 'products' && (
           <div className="products-content fade-in">
             <header className="page-header">
@@ -607,7 +622,6 @@ const AdminDashboard = () => {
                     >
                       <td>{(productsPage - 1) * PRODUCTS_PER_PAGE + (index + 1)}</td>
                       <td>
-                         {/* Display first image from array, or legacy string */}
                          <img 
                             src={Array.isArray(product.images) && product.images.length > 0 ? (product.images[0].image_url || product.images[0].url || product.images[0]) : product.image} 
                             alt={product.name} 
@@ -645,7 +659,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* ORDERS TAB */}
         {activeTab === 'orders' && (
           <div className="orders-content fade-in">
             <header className="page-header">
@@ -655,7 +668,7 @@ const AdminDashboard = () => {
                   alignItems: 'center', 
                   marginBottom: '10px',
                   width: '100%',
-                  flexWrap: 'wrap' // This ensures it looks good on smaller screens too
+                  flexWrap: 'wrap'
                 }}>
                   <h1 style={{ margin: 0 }}>Manage Orders</h1>
 
@@ -687,7 +700,6 @@ const AdminDashboard = () => {
                     >
                       <option value="all">All Statuses</option>
                       <option value="pending">Pending</option>
-                      {/* <option value="confirmed">Confirmed</option> */}
                       <option value="paid">Paid</option>
                       <option value="completed">Completed</option>
                       <option value="cancelled">Cancelled</option>
@@ -721,7 +733,6 @@ const AdminDashboard = () => {
                           className="status-select"
                         >
                           <option value="pending">Pending</option>
-                          {/* <option value="confirmed">Confirmed (COD)</option> */}
                           <option value="paid">Paid</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
@@ -742,7 +753,6 @@ const AdminDashboard = () => {
         )}
       </main>
 
-      {/* Product Edit/Add Modal */}
       {isProductModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content admin-modal">
@@ -777,6 +787,76 @@ const AdminDashboard = () => {
                   </select>
                 </div>
               </div>
+
+              <div className="form-group set-toggle-group">
+                <label className="set-toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.hasPieces}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, hasPieces: e.target.checked })}
+                  />
+                  <span>This product is a set <em>(customers can buy the full set OR individual pieces)</em></span>
+                </label>
+              </div>
+
+              {currentProduct.hasPieces && (
+                <div className="pieces-panel">
+                  <p className="pieces-panel-hint">
+                    The full set price uses the main Price field above. Just add prices for the individual pieces below.
+                  </p>
+
+                  <label className="pieces-list-label">Individual Pieces</label>
+                  <div className="pieces-list">
+                    {currentProduct.pieces.map((piece, idx) => (
+                      <div key={idx} className="piece-row">
+                        <select
+                          value={piece.label}
+                          onChange={(e) => {
+                            const updated = [...currentProduct.pieces];
+                            updated[idx].label = e.target.value;
+                            setCurrentProduct({ ...currentProduct, pieces: updated });
+                          }}
+                          className="piece-name-input"
+                        >
+                          <option value="">Select piece</option>
+                          {PIECE_OPTIONS.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          placeholder="Price (₹)"
+                          value={piece.price}
+                          onChange={(e) => {
+                            const updated = [...currentProduct.pieces];
+                            updated[idx].price = e.target.value;
+                            setCurrentProduct({ ...currentProduct, pieces: updated });
+                          }}
+                          className="piece-price-input"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = currentProduct.pieces.filter((_, i) => i !== idx);
+                            setCurrentProduct({ ...currentProduct, pieces: updated.length > 0 ? updated : [{ label: '', price: '' }] });
+                          }}
+                          className="piece-remove-btn"
+                          title="Remove piece"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentProduct({ ...currentProduct, pieces: [...currentProduct.pieces, { label: '', price: '' }] })}
+                    className="add-piece-btn"
+                  >
+                    + Add Piece
+                  </button>
+                </div>
+              )}
 
               <div className="form-row">
                 <div className="form-group">
@@ -829,7 +909,6 @@ const AdminDashboard = () => {
                   <div className="image-preview-grid">
                     {currentProduct.existingImages.map((img, idx) => (
                       <div key={`exist-${idx}`} className="preview-item">
-                        {/* SAFE RENDER: Ensure we access the right property */}
                         <img src={img.image_url || img} alt="Existing" />
                         <button type="button" className="remove-image-btn" onClick={() => handleRemoveImage('existing', idx)}>&times;</button>
                       </div>
@@ -851,7 +930,6 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Product Details Modal (VIEW ONLY) - UPDATED TO SHOW GALLERY */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
           <div className="modal-content product-details-modal" onClick={e => e.stopPropagation()}>
@@ -861,10 +939,8 @@ const AdminDashboard = () => {
             </div>
 
             <div className="product-details-body">
-              {/* Left Side: Image Gallery */}
               <div className="product-details-image">
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '10px', overflowY: 'auto', maxHeight: '400px' }}>
-                  {/* Reuse logic for View Mode */}
                   {(() => {
                     let images = selectedProduct.images;
                     if (typeof images === 'string') {

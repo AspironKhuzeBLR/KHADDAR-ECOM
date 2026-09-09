@@ -6,6 +6,7 @@ import MissionSection from '../components/MissionSection';
 import BrandStory from '../components/BrandStory';
 import FeaturedCollection from '../components/FeaturedCollection';
 import './Home.css';
+import heroImage from '../images/HeroImage.jpg';
 
 // Elegant heritage divider component
 const HeritageDivider = ({ variant = 'default' }) => (
@@ -40,7 +41,25 @@ const Home = () => {
   return (
     <div className="home-page-container page-loaded">
       {/* Hero with Image */}
-      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector />
+      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector bgImage={heroImage} />
+
+      <a
+        href="https://youtu.be/oYmU8Av_e84?si=vMB5z56VjCc73z_j"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="watch-ad-marquee"
+      >
+        <div className="watch-ad-marquee-content">
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+          <span>✦ WATCH THE FILM</span>
+        </div>
+      </a>
       
       
       

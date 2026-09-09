@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchProducts } from '../services/productService';
 import '../pages/Shop.css';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 
-// Threads of Travancore products are identified by a naming convention:
-// name it "ToT - <Product Name>" in the admin panel (e.g. "ToT - Vennila").
-// Real garment type (Dresses, Kurtas, etc.) still goes in Sub Category as normal -
-// this only distinguishes which COLLECTION the product belongs to.
-const TOT_PREFIX = /^tot\s*-\s*/i;
+// Threads of Travancore products are identified in the admin panel via the
+// "Collection" dropdown, exposed here as product.collection === 'tot'.
+// Fisher-Yates shuffle - returns a new shuffled array without mutating the original
+const shuffleArray = (arr) => {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+};
 
 const ThreadsOfTravancoreShop = () => {
   const toast = useToast();
@@ -20,11 +27,8 @@ const ThreadsOfTravancoreShop = () => {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        // Fetch a broad set of Women's Wear products, then filter by name prefix client-side
-        const result = await fetchProducts({
-          limit: 200
-        });
-        setAllProducts(result.products || []);
+        const result = await fetchProducts({ limit: 200 });
+        setAllProducts(shuffleArray(result.products || []));
       } catch (error) {
         console.error('Error loading Threads of Travancore products:', error);
         setAllProducts([]);
@@ -35,13 +39,12 @@ const ThreadsOfTravancoreShop = () => {
     loadProducts();
   }, []);
 
-  // Only products named "ToT - ..." belong to this collection.
-  // Strip the prefix so the displayed name is clean.
-  const products = allProducts
-    .filter((p) => TOT_PREFIX.test(p.name))
-    .map((p) => ({ ...p, name: p.name.replace(TOT_PREFIX, '').trim() }));
+  const products = allProducts.filter((p) => p.collection === 'tot');
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (e, product) => {
+    e.preventDefault(); // don't navigate when the quick Add to Cart button is used
+    e.stopPropagation();
+
     if (!isAuthenticated) {
       toast.error('Please login to add items to cart');
       return;
@@ -93,7 +96,12 @@ const ThreadsOfTravancoreShop = () => {
 
               <div className="products-grid">
                 {products.map((product, index) => (
-                  <div key={product.id} className="product-card">
+                  <Link
+                    to={`/product/${product.id}`}
+                    key={product.id}
+                    className="product-card"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
                     <div className="product-image-wrapper">
                       <img src={product.image} alt={product.name} className="product-image" />
                       {index < 2 && <span className="product-badge">New</span>}
@@ -102,7 +110,7 @@ const ThreadsOfTravancoreShop = () => {
                       )}
                       <button
                         className="product-choose-btn"
-                        onClick={() => handleAddToCart(product)}
+                        onClick={(e) => handleAddToCart(e, product)}
                         disabled={!product.inStock}
                       >
                         {product.inStock ? 'Add to Cart' : 'Out of Stock'}
@@ -115,15 +123,15 @@ const ThreadsOfTravancoreShop = () => {
                         <span className="price-value">{product.price}</span>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </>
           ) : (
             <div className="no-products">
               <p>
-                No Threads of Travancore products found yet. In the admin panel, name products
-                starting with "ToT - " (e.g. "ToT - Vennila") and set Main Category to "Women's Wear".
+                No Threads of Travancore products found yet. In the admin panel, set the
+                Collection dropdown to "Threads of Travancore" when adding a product.
               </p>
             </div>
           )}

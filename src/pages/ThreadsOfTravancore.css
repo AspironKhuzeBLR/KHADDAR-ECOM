@@ -1,27 +1,13 @@
-/* ================================================
-   THREADS OF TRAVANCORE — Kerala Collection
-   Palette (matches Kolours of Kutch exactly):
-     --tot-burnt-sienna: #6F3132  (maroon - titles, buttons)
-     --tot-ivory-sand:   #F7F7F0  (cream - background)
-     --tot-stormy-sky:   #8C6C5F  (clay - labels)
-     --tot-sage-green:   #B38A6A  (tan - accents, borders)
-   ================================================ */
-
-.tot-page {
-  /* Same palette as Kolours of Kutch */
-  --tot-burnt-sienna: #6F3132;
-  --tot-ivory-sand: #F7F7F0;
-  --tot-stormy-sky: #8C6C5F;
-  --tot-sage-green: #B38A6A;
-
+/* --- PAGE LAYOUT --- */
+.tot-collections-page {
   margin-top: 0;
   padding-top: 0;
   position: relative;
-  background-color: var(--tot-ivory-sand);
+  background-color: #F7F7F0;
   overflow-x: hidden;
 }
 
-.tot-page::before {
+.tot-collections-page::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -32,277 +18,451 @@
   z-index: 0;
 }
 
-/* Push the hero CTA button down a bit */
-.tot-hero .hero-cta {
-  margin-top: 24px;
-}
-
-/* --- ABOUT --- */
-.tot-intro-section {
+.tot-collections-hero {
   padding: 60px 0 50px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-.tot-intro-wrapper {
-  max-width: 780px;
+.tot-hero-content-wrapper {
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 40px;
 }
 
-.tot-icon {
+.tot-collections-icon {
   font-size: 2rem;
-  color: var(--tot-burnt-sienna);
+  color: #D4B483;
   margin-bottom: 15px;
-  display: inline-block;
-  animation: totIconFloat 3s ease-in-out infinite;
+  animation: iconFloat 3s ease-in-out infinite;
 }
 
-@keyframes totIconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.tot-label {
+.tot-collections-label {
   font-family: 'Josefin Sans', sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--tot-stormy-sky);
+  color: #A6875C;
   font-size: 0.8rem;
   display: block;
-  margin-bottom: 18px;
-}
-
-.tot-title {
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 3.2rem;
-  color: var(--tot-burnt-sienna);
   margin-bottom: 20px;
-  letter-spacing: 0.01em;
 }
 
-.tot-divider {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
+.tot-collections-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 3.4rem;
+  color: #9C7A2E;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-.tot-divider-line {
-  width: 0;
-  height: 2px;
-  background: var(--tot-sage-green);
-  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
-}
-
-.tot-intro-wrapper.animated .tot-divider-line {
+.tot-heading-underline {
   width: 60px;
+  height: 2px;
+  background: #D4B483;
+  margin: 0 auto 30px;
+}
+
+.tot-collections-intro {
+  margin-top: 20px;
 }
 
 .tot-intro-text {
   font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.9;
   color: #4a4a4a;
-  font-size: 1.02rem;
-  line-height: 1.8;
-  margin-bottom: 14px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
-/* --- STORY --- */
-.tot-story-section {
-  padding: 30px 40px 70px;
-  max-width: 1000px;
-  margin: 0 auto;
+.tot-intro-text.intro-bold {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #5C4A36;
+  margin-bottom: 20px;
+  font-style: 'Lato', sans-serif;
 }
 
-.tot-story-list {
+/* --- Read More toggle for About section --- */
+.about-read-more-btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #9C7A2E;
+  color: #9C7A2E;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.2s ease;
+}
+
+.about-read-more-btn:hover {
+  opacity: 0.7;
+}
+
+/* --- CAROUSEL SECTION --- */
+.tot-carousel-section {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  background: #000;
+}
+
+.tot-full-screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 110vh; 
+}
+
+.tot-carousel-track {
   display: flex;
-  flex-direction: column;
-  gap: 60px;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tot-story-row {
+.tot-carousel-slide-item {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.tot-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.tot-optimized-carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  object-position: center 20%;
+  /* iOS fixes */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* --- OVERLAY CONTENT --- */
+.tot-carousel-overlay-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 80px 50px 50px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  color: #F7F7F0;
+  text-align: left;
+}
+
+.tot-carousel-item-title {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 300;
+}
+
+.tot-carousel-item-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  max-width: 600px;
+  opacity: 0.9;
+}
+
+/* --- NAVIGATION ARROWS --- */
+.tot-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  perspective: 1200px;
 }
 
-.tot-story-reverse {
-  flex-direction: row-reverse;
+.tot-nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #9C7A2E;
 }
 
-/* Row itself just needs the class markers - actual flip lives on the image */
-.tot-reveal-left,
-.tot-reveal-right {
-  /* marker classes, no direct visual styling here */
+.tot-nav-arrow.prev { left: 30px; }
+.tot-nav-arrow.next { right: 30px; }
+
+/* --- THE DOTS (FIXED FOR ROUNDNESS) --- */
+.tot-carousel-dots-container {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px;
+  z-index: 10;
+  width: auto;
 }
 
-/* --- CARD FLIP: image rotates in on its Y axis like a turning page --- */
-.tot-reveal-left .tot-story-image-wrap {
-  opacity: 0;
-  transform: perspective(1400px) rotateY(-100deg);
-  backface-visibility: hidden;
-  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.4, 1), opacity 0.5s ease;
+.tot-dot-indicator {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  min-height: 12px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: 1.5px solid white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+  flex-shrink: 0 !important;
+  transition: all 0.3s ease;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  outline: none !important;
+  line-height: 0 !important;
 }
 
-.tot-reveal-right .tot-story-image-wrap {
-  opacity: 0;
-  transform: perspective(1400px) rotateY(100deg);
-  backface-visibility: hidden;
-  transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.4, 1), opacity 0.5s ease;
-}
-
-.tot-reveal-left.animated .tot-story-image-wrap,
-.tot-reveal-right.animated .tot-story-image-wrap {
-  opacity: 1;
-  transform: perspective(1400px) rotateY(0deg);
-}
-
-.tot-story-image-wrap {
-  flex: 0 0 auto;
-  width: 55%;
-  max-width: 420px;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
-  border-radius: 4px;
-  border: 3px solid var(--tot-sage-green);
-  box-shadow: 0 16px 36px rgba(111, 49, 50, 0.18);
-  transform-style: preserve-3d;
-  transition: transform 0.2s ease-out;
-  will-change: transform;
-}
-
-.tot-story-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.tot-story-line {
-  flex: 1;
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 1.3rem;
-  font-style: italic;
-  color: var(--tot-stormy-sky);
-  text-align: center;
-  letter-spacing: 0.01em;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.8s ease 0.35s, transform 0.8s ease 0.35s;
-}
-
-.tot-reveal-left.animated .tot-story-line,
-.tot-reveal-right.animated .tot-story-line {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (max-width: 800px) {
-  .tot-story-row,
-  .tot-story-reverse {
-    flex-direction: column;
-    gap: 16px;
-  }
-  .tot-story-image-wrap {
-    width: 85%;
-    max-width: 340px;
-  }
-  .tot-story-list {
-    gap: 40px;
-  }
-  .tot-story-line {
-    font-size: 1.1rem;
-  }
+.tot-dot-indicator.active {
+  background: white !important;
+  transform: scale(1.2);
 }
 
 /* --- MARQUEE STRIP --- */
 .tot-marquee-strip {
-  background: var(--tot-burnt-sienna);
-  color: var(--tot-ivory-sand);
-  padding: 18px 0;
+  background: #9C7A2E;
+  color: #F7F7F0;
+  padding: 20px 0;
   overflow: hidden;
   position: relative;
+  z-index: 1;
 }
 
 .tot-marquee-content {
   display: flex;
-  animation: totMarquee 15s linear infinite;
+  animation: marquee 15s linear infinite;
   white-space: nowrap;
   width: max-content;
 }
 
 .tot-marquee-content span {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;
-  margin-right: 80px;
+  gap: 10px;
+  margin-right: 80px; 
 }
 
-@keyframes totMarquee {
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* --- SHOP BUTTON SECTION --- */
+.tot-shop-action {
+  padding: 80px 0 100px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.tot-shop-action-heading {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 2.5rem;
+  color: #9C7A2E;
+  margin-bottom: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.tot-shop-action-subtext {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  color: #A6875C;
+  margin-bottom: 35px;
+  font-weight: 300;
+}
+
+.tot-collections-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  padding: 20px 45px;
+  background: #9C7A2E;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(156, 122, 46, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.tot-collections-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.tot-collections-btn:hover::before {
+  left: 100%;
+}
+
+.tot-collections-btn:hover { 
+  background: #7A5D1F;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(156, 122, 46, 0.4);
+}
+
+.tot-collections-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.tot-collections-btn:hover svg {
+  transform: translateX(5px);
+}
+
+/* --- ToT hero button spacing --- */
+.tot-hero .hero-cta {
+  margin-top: 24px;
+}
+
+/* --- ToT closing video section --- */
+.tot-video-section {
+  width: 100%;
+  height: 70vh;
+  max-height: 700px;
+  overflow: hidden;
+}
+
+.tot-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- RESPONSIVE FIXES --- */
+@media (max-width: 1024px) {
+  .tot-full-screen-wrapper { height: 60vh; }
+  .tot-collections-title { font-size: 3.5rem; }
+  .tot-marquee-content { animation-duration: 10s; }
+}
+
+@media (max-width: 768px) {
+  .tot-collections-hero { padding: 50px 0 40px; }
+  .tot-hero-content-wrapper { padding: 0 20px; }
+  .tot-collections-title { font-size: 2rem; white-space: normal; }
+  .tot-intro-text { font-size: 1rem; }
+  .tot-intro-text.intro-bold { font-size: 1.15rem; margin-bottom: 18px; }
+  .tot-full-screen-wrapper { height: 50vh; }
+  .tot-carousel-item-title { font-size: 1.8rem; }
+  .tot-nav-arrow { width: 40px; height: 40px; }
+  .tot-nav-arrow.prev { left: 10px; }
+  .tot-nav-arrow.next { right: 10px; }
+  .tot-carousel-dots-container { bottom: 20px; gap: 10px; }
+  .tot-dot-indicator {
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 10px !important;
+    min-height: 10px !important;
+  }
+  .tot-marquee-strip { padding: 15px 0; }
+  .tot-marquee-content {
+    gap: 0 !important; 
+    will-change: transform;
+    animation-duration: 9s; 
+  }
+  .tot-marquee-content span {
+    font-size: 0.9rem;
+    gap: 8px; 
+    margin-right: 30px; 
+  }
+  .tot-shop-action { padding: 60px 0 80px; }
+  .tot-shop-action-heading { font-size: 1.8rem; padding: 0 20px; }
+  .tot-shop-action-subtext { font-size: 1rem; padding: 0 20px; }
+  .tot-collections-btn { padding: 16px 35px; font-size: 0.9rem; }
+  .tot-video-section { height: 45vh; }
+}
+
+/* --- Watch Ad marquee (links to promo video) --- */
+.tot-watch-ad-marquee {
+  display: block;
+  background: #9C7A2E;
+  color: #F7F7F0;
+  padding: 16px 0;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tot-watch-ad-marquee:hover {
+  background: #7A5D1F;
+}
+
+.tot-watch-ad-marquee-content {
+  display: flex;
+  animation: totWatchAdMarquee 18s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.tot-watch-ad-marquee-content span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-right: 60px;
+}
+
+@keyframes totWatchAdMarquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
-  .tot-marquee-strip {
-    padding: 14px 0;
-  }
-  .tot-marquee-content span {
+  .tot-watch-ad-marquee-content span {
     font-size: 0.85rem;
-    margin-right: 40px;
+    margin-right: 35px;
   }
-  .tot-marquee-content {
-    animation-duration: 10s;
-  }
-}
-
-.tot-cta-section {
-  padding: 70px 40px;
-  text-align: center;
-  background: rgba(179, 138, 106, 0.18);
-}
-
-.tot-cta-heading {
-  font-family: 'Josefin Sans', sans-serif;
-  color: var(--tot-burnt-sienna);
-  font-size: 1.9rem;
-  margin: 0 0 12px;
-}
-
-.tot-cta-subtext {
-  font-family: 'Lato', sans-serif;
-  color: #5a5a5a;
-  margin-bottom: 28px;
-}
-
-.tot-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--tot-burnt-sienna);
-  color: #fff;
-  text-decoration: none;
-  padding: 15px 34px;
-  border-radius: 2px;
-  font-family: 'Josefin Sans', sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.tot-cta-btn:hover {
-  background: #5a2527;
-  transform: translateY(-2px);
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 900px) {
-  .tot-title {
-    font-size: 2.3rem;
+  .tot-watch-ad-marquee-content {
+    animation-duration: 12s;
   }
 }

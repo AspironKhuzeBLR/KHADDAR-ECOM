@@ -3,12 +3,17 @@ import { Link } from 'react-router-dom';
 import { fetchProducts } from '../services/productService';
 import './ShopRow.css';
 
-/**
- * Horizontal single-row product preview.
- * Used on both the Kolours of Kutch page and the Threads of Travancore page
- * in place of the old "Ready to Experience..." CTA sections.
- */
-const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', filterFn, mapFn }) => {
+// Fisher-Yates shuffle - returns a new shuffled array without mutating the original
+const shuffleArray = (arr) => {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+};
+
+const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', filterFn, mapFn, maxItems = 7 }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +26,7 @@ const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', 
         let list = result.products || [];
         if (filterFn) list = list.filter(filterFn);
         if (mapFn) list = list.map(mapFn);
-        if (isMounted) setProducts(list);
+        if (isMounted) setProducts(shuffleArray(list).slice(0, maxItems));
       } catch (error) {
         console.error('ShopRow fetch error:', error);
         if (isMounted) setProducts([]);
@@ -32,7 +37,7 @@ const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', 
     load();
     return () => { isMounted = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(fetchOptions)]);
+    }, [JSON.stringify(fetchOptions), maxItems]);
 
   return (
     <section className={`shop-row-section ${themeClass}`}>
@@ -49,14 +54,14 @@ const ShopRow = ({ title, subtitle, fetchOptions, viewAllLink, themeClass = '', 
         <>
           <div className="shop-row-track">
             {products.map((product) => (
-              <div key={product.id} className="shop-row-card">
+              <Link to={`/product/${product.id}`} key={product.id} className="shop-row-card">
                 <div className="shop-row-image-wrap">
                   <img src={product.image} alt={product.name} className="shop-row-image" />
                 </div>
                 <h3 className="shop-row-name">{product.name}</h3>
                 <p className="shop-row-desc">{product.description || product.category}</p>
                 <span className="shop-row-price">{product.price}</span>
-              </div>
+              </Link>
             ))}
           </div>
           {viewAllLink && (

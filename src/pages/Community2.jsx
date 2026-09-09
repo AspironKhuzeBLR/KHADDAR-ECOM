@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Community.css";
 import HeroVideo from "../components/HeroVideo";
+import heroImage from '../images/HeroImage.jpg';
 
 const Community2 = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,6 +54,7 @@ const Community2 = () => {
         title="Community"
         subtitle="Building bridges between tradition and innovation, one collaboration at a time."
         fullHeight={true}
+        bgImage={heroImage}
         collectionSelector
       />
 

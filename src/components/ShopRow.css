@@ -47,6 +47,10 @@
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
 }
 
 .shop-row-card:hover {
@@ -152,15 +156,15 @@
 .shop-row-section.kok-theme .shop-row-btn { background: #6F3132; color: #fff; }
 .shop-row-section.kok-theme .shop-row-btn:hover { background: #5a2527; }
 
-/* --- ToT theme (same palette as KOK) --- */
+/* --- ToT theme (gold/Kasavu palette, distinct from KOK) --- */
 .shop-row-section.tot-theme {
   background: #F7F7F0;
 }
-.shop-row-section.tot-theme .shop-row-title { color: #6F3132; }
-.shop-row-section.tot-theme .shop-row-subtitle { color: #8C6C5F; }
-.shop-row-section.tot-theme .shop-row-price { color: #6F3132; }
-.shop-row-section.tot-theme .shop-row-btn { background: #6F3132; color: #fff; }
-.shop-row-section.tot-theme .shop-row-btn:hover { background: #5a2527; }
+.shop-row-section.tot-theme .shop-row-title { color: #9C7A2E; }
+.shop-row-section.tot-theme .shop-row-subtitle { color: #A6875C; }
+.shop-row-section.tot-theme .shop-row-price { color: #9C7A2E; }
+.shop-row-section.tot-theme .shop-row-btn { background: #9C7A2E; color: #fff; }
+.shop-row-section.tot-theme .shop-row-btn:hover { background: #7A5D1F; }
 
 @media (max-width: 700px) {
   .shop-row-section {

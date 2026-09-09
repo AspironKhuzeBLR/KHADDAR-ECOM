@@ -1,6 +1,7 @@
 import React from 'react';
 import './Sustainability.css';
 import HeroVideo from '../components/HeroVideo';
+import heroImage from '../images/HeroImage.jpg';
 import organicFabricImg from '../images/IMG_1735.PNG';
 import ecoimg from '../images/IMG_1734.PNG'
 
@@ -45,6 +46,7 @@ const Sustainability = () => {
         title='Sustainability' 
         subtitle="At Khaddar, sustainability isn't a trend — it's our foundation."
         fullHeight={true}
+        bgImage={heroImage}
         collectionSelector
       />
 

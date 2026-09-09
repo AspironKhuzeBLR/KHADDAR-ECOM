@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { fetchProducts, fetchCategories } from '../services/productService';
+import { fetchProducts, fetchCategories, expandProductsWithPieces } from '../services/productService';
 import './Shop.css';
 
 const ShopMen = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]); // full unfiltered, expanded (includes piece cards)
   const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 12,
-    total: 0,
-    totalPages: 1
-  });
+  const PAGE_SIZE = 12;
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
-  // Get category from URL params
+  // Get category/page from URL params
   useEffect(() => {
     const category = searchParams.get('category');
-    const page = parseInt(searchParams.get('page')) || 1;
+    const pageFromUrl = parseInt(searchParams.get('page')) || 1;
     setSelectedCategory(category);
-    setPagination(prev => ({ ...prev, page }));
+    setPage(pageFromUrl);
   }, [searchParams]);
 
   // Fetch categories on component mount
@@ -45,41 +41,45 @@ const ShopMen = () => {
     loadCategories();
   }, []);
 
-  // Fetch products when category or page changes
-   // FETCH PRODUCTS & SYNC PARAMS (Consolidated to fix Nav Bar race condition)
-useEffect(() => {
-  const loadProducts = async () => {
-    // 1. Extract values directly from URL immediately
-    const categoryFromUrl = searchParams.get('category');
-    const pageFromUrl = parseInt(searchParams.get('page')) || 1;
-    setSelectedCategory(categoryFromUrl);
-    setLoading(true);
-    try {
-      const result = await fetchProducts({
-        page: pageFromUrl,
-        limit: pagination.limit,
-        category: categoryFromUrl, 
-        mainCategory: "Men's Wear"
-      });
-      
-      setProducts(result.products);
-      setPagination(prev => ({
-        ...prev,
-        page: pageFromUrl,
-        total: result.pagination?.total || result.products.length,
-        totalPages: result.pagination?.totalPages || 1
-      }));
-    } catch (error) {
-      console.error('Error loading products:', error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch ALL Men's Wear products once (unfiltered by sub-category), expanded with
+  // piece cards. Category filtering and pagination both happen client-side below,
+  // since a piece's effective category (e.g. "Trousers") can differ from its
+  // parent product's own category (e.g. "Co-ords"), so the backend alone can't
+  // filter correctly once pieces are involved.
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        const result = await fetchProducts({
+          page: 1,
+          limit: 200,
+          mainCategory: "Men's Wear"
+        });
+        setAllProducts(expandProductsWithPieces(result.products));
+      } catch (error) {
+        console.error('Error loading products:', error);
+        setAllProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
-  loadProducts();
-  
-}, [searchParams, pagination.limit]);
+  const selectedCategoryData = categories.find(c => 
+    c.id?.toString() === selectedCategory?.toString() || 
+    c.name === selectedCategory
+  );
+
+  // Client-side filter: match by category name (works for both real products,
+  // whose `category` is their real sub-category, and virtual piece cards,
+  // whose `category` was set to the piece's own label)
+  const filteredProducts = selectedCategoryData
+    ? allProducts.filter(p => p.category === (selectedCategoryData.name || selectedCategoryData.sub_category))
+    : allProducts;
+
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
+  const products = filteredProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handleCategoryClick = (categoryId) => {
     const params = new URLSearchParams();
@@ -96,11 +96,6 @@ useEffect(() => {
     setSearchParams(params);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const selectedCategoryData = categories.find(c => 
-    c.id?.toString() === selectedCategory?.toString() || 
-    c.name === selectedCategory
-  );
 
   if (loading) {
     return (
@@ -188,7 +183,7 @@ useEffect(() => {
               )}
 
               <p className="products-count">
-                Showing {products.length} of {pagination.total} products
+                Showing {products.length} of {filteredProducts.length} products
               </p>
 
               {products.length > 0 ? (
@@ -196,9 +191,9 @@ useEffect(() => {
                   <div className="products-grid">
                     {products.map((product, index) => (
                       <div 
-                        key={product.id} 
+                        key={product.virtualId || product.id} 
                         className="product-card"
-                        onClick={() => navigate(`/product/${product.id}`)}
+                        onClick={() => navigate(product.isPieceVariant ? `/product/${product.id}?piece=${encodeURIComponent(product.pieceLabel)}` : `/product/${product.id}`)}
                         style={{ cursor: 'pointer' }}
                       >
                         <div className="product-image-wrapper">
@@ -216,7 +211,7 @@ useEffect(() => {
                             className="product-choose-btn"
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/product/${product.id}`);
+                              navigate(product.isPieceVariant ? `/product/${product.id}?piece=${encodeURIComponent(product.pieceLabel)}` : `/product/${product.id}`);
                             }}
                           >
                             Choose options
@@ -233,21 +228,21 @@ useEffect(() => {
                     ))}
                   </div>
 
-                  {pagination.totalPages > 1 && (
+                  {totalPages > 1 && (
                     <div className="pagination">
                       <button 
                         className="pagination-btn"
-                        disabled={pagination.page <= 1}
-                        onClick={() => handlePageChange(pagination.page - 1)}
+                        disabled={page <= 1}
+                        onClick={() => handlePageChange(page - 1)}
                       >
                         ← Previous
                       </button>
                       
                       <div className="pagination-numbers">
-                        {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(pageNum => (
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
                           <button
                             key={pageNum}
-                            className={`pagination-num ${pagination.page === pageNum ? 'active' : ''}`}
+                            className={`pagination-num ${page === pageNum ? 'active' : ''}`}
                             onClick={() => handlePageChange(pageNum)}
                           >
                             {pageNum}
@@ -257,8 +252,8 @@ useEffect(() => {
 
                       <button 
                         className="pagination-btn"
-                        disabled={pagination.page >= pagination.totalPages}
-                        onClick={() => handlePageChange(pagination.page + 1)}
+                        disabled={page >= totalPages}
+                        onClick={() => handlePageChange(page + 1)}
                       >
                         Next →
                       </button>

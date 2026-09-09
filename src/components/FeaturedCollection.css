@@ -259,6 +259,24 @@
   animation: fadeInUp 1s ease-out 0.4s both;
 }
 
+/* Threads of Travancore slide uses a lighter/sandier photo, so the tan
+   label/icon color doesn't have enough contrast - use white instead */
+.featured-slide-travancore .featured-icon,
+.featured-slide-travancore .featured-label,
+.featured-slide-travancore .featured-title::after {
+  color: #ffffff;
+}
+
+.featured-slide-travancore .featured-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  background-size: 200% 200%;
+}
+
 /* Hover effect on image wrapper */
 .featured-collection-image:hover img {
   transform: scale(1.05);

@@ -231,3 +231,20 @@ html {
   scrollbar-width: thin;
   scrollbar-color: rgba(111, 49, 50, 0.35) transparent;
 }
+
+/* Custom scrollbar - thin maroon thumb, fully transparent track */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(111, 49, 50, 0.35);
+  border-radius: 10px;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 49, 50, 0.35) transparent;
+}

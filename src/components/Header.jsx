@@ -319,6 +319,7 @@ const Header = () => {
 
                     {(hoveredMenu === "collections" || mobileCollectionsOpen) && (
                       <div
+                        className="collections-nav-dropdown"
                         onMouseEnter={() => handleMenuHover("collections")}
                         onMouseLeave={handleMenuLeave}
                         onClick={(e) => e.stopPropagation()}

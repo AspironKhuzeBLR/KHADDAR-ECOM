@@ -319,6 +319,9 @@
   position: relative;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   z-index: 1;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link::after {
@@ -353,7 +356,8 @@
 
 .nav-link-wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link-wrapper::after {
@@ -900,5 +904,25 @@
   }
   .nav-collections-dropdown a {
     color: inherit;
+  }
+}
+
+/* Fix the Collections nav dropdown on mobile - the desktop -80px offset
+   pushes it off-screen on narrow viewports, so reset it back to a normal
+   in-flow block matching the other mobile dropdown menus */
+@media (max-width: 1200px) {
+  .collections-nav-dropdown {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border-left: 2px solid #8C6C5F;
+    border-radius: 0 !important;
+    padding: 5px 0 5px 20px !important;
+    background: transparent !important;
+    white-space: normal !important;
   }
 }
