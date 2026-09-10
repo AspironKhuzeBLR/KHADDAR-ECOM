@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../services/supabaseClient';
 import {
   getDashboardSummary,
   getRecentOrders,
@@ -23,7 +24,7 @@ const logo = '/logo_file_page-0001.png';
 
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
-  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
+  "Women's Wear": ["Dresses", "Corsets", "Tops/Tunics", "Shirts/Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
 };
 
 // Flat list of individual piece names for the "Individual Pieces" dropdown,
@@ -202,6 +203,45 @@ const AdminDashboard = () => {
     });
   };
 
+  // WORKAROUND for a backend bug: editing a product's category through the
+  // normal update API doesn't actually update the product_categories join
+  // table (it only gets set correctly when a product is first created).
+  // This writes the correct category links directly to Supabase instead,
+  // looking up the right category IDs live so it stays correct even as
+  // new categories get added later.
+  const fixProductCategoryLink = async (productId, mainCategoryName, subCategoryName) => {
+    if (!supabase || !productId) return;
+    try {
+      const { data: mainCat, error: mainErr } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('name', mainCategoryName)
+        .eq('type', 'main')
+        .maybeSingle();
+      if (mainErr) throw mainErr;
+
+      const { data: subCat, error: subErr } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('name', subCategoryName)
+        .eq('type', 'sub')
+        .eq('parent_id', mainCat?.id)
+        .maybeSingle();
+      if (subErr) throw subErr;
+
+      const categoryIds = [mainCat?.id, subCat?.id].filter(Boolean);
+      if (categoryIds.length === 0) return;
+
+      // Remove old links, then insert the correct current ones
+      await supabase.from('product_categories').delete().eq('product_id', productId);
+      await supabase.from('product_categories').insert(
+        categoryIds.map((category_id) => ({ product_id: productId, category_id }))
+      );
+    } catch (err) {
+      console.error('Failed to fix product category link in Supabase:', err);
+    }
+  };
+
   const handleProductSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -230,7 +270,7 @@ const AdminDashboard = () => {
       const cleanName = currentProduct.name.replace(/^tot\s*-\s*/i, '').trim();
       const finalName = currentProduct.collection === 'tot' ? `ToT - ${cleanName}` : cleanName;
 
-            const cleanDescription = (currentProduct.description || '').replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+      const cleanDescription = (currentProduct.description || '').replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
       let finalDescription = cleanDescription;
       if (currentProduct.hasPieces) {
         const validPieces = currentProduct.pieces.filter(p => p.label && p.price);
@@ -239,8 +279,8 @@ const AdminDashboard = () => {
             fullSet: Number(currentProduct.price),
             pieces: validPieces.map(p => ({ label: p.label, price: Number(p.price) }))
           };
-                    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(piecesData))));
-                    finalDescription = `${cleanDescription}\n\n[[PIECES_DATA:${encoded}]]`;
+          const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(piecesData))));
+          finalDescription = `${cleanDescription}\n\n[[PIECES_DATA:${encoded}]]`;
         }
       }
 
@@ -261,11 +301,17 @@ const AdminDashboard = () => {
 
       console.log("Sending data to backend:", payload);
 
+      let savedProductId = currentProduct.id;
       if (isEditingProduct) {
         await updateProduct(currentProduct.id, payload);
       } else {
-        await addProduct(payload);
+        const created = await addProduct(payload);
+        savedProductId = created?.id || created?.product?.id || created?.data?.id;
       }
+
+      // Directly fix the category link in Supabase (see comment on the
+      // helper above for why this is needed)
+      await fixProductCategoryLink(savedProductId, currentProduct.main_category, currentProduct.sub_category);
 
       setIsProductModalOpen(false);
       resetProductForm();

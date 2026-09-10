@@ -51,14 +51,14 @@ const ThreadsOfTravancore = () => {
         className="tot-watch-ad-marquee"
       >
         <div className="tot-watch-ad-marquee-content">
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
+          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
         </div>
       </a>
 

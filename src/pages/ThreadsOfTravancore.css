@@ -33,7 +33,7 @@
 
 .tot-collections-icon {
   font-size: 2rem;
-  color: #D4B483;
+  color: #D49E54;
   margin-bottom: 15px;
   animation: iconFloat 3s ease-in-out infinite;
 }
@@ -42,7 +42,7 @@
   font-family: 'Josefin Sans', sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #A6875C;
+  color: #D49E54;
   font-size: 0.8rem;
   display: block;
   margin-bottom: 20px;
@@ -51,7 +51,7 @@
 .tot-collections-title {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 3.4rem;
-  color: #9C7A2E;
+  color: #D49E54;
   margin-bottom: 20px;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -60,7 +60,7 @@
 .tot-heading-underline {
   width: 60px;
   height: 2px;
-  background: #D4B483;
+  background: #D49E54;
   margin: 0 auto 30px;
 }
 
@@ -91,8 +91,8 @@
   margin-top: 10px;
   background: none;
   border: none;
-  border-bottom: 1px solid #9C7A2E;
-  color: #9C7A2E;
+  border-bottom: 1px solid #D49E54;
+  color: #D49E54;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
@@ -204,7 +204,7 @@
 
 .tot-nav-arrow:hover {
   background: rgba(255, 255, 255, 0.9);
-  color: #9C7A2E;
+  color: #D49E54;
 }
 
 .tot-nav-arrow.prev { left: 30px; }
@@ -251,7 +251,7 @@
 
 /* --- MARQUEE STRIP --- */
 .tot-marquee-strip {
-  background: #9C7A2E;
+  background: #6F3132;
   color: #F7F7F0;
   padding: 20px 0;
   overflow: hidden;
@@ -294,7 +294,7 @@
 .tot-shop-action-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.5rem;
-  color: #9C7A2E;
+  color: #D49E54;
   margin-bottom: 15px;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -303,7 +303,7 @@
 .tot-shop-action-subtext {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
-  color: #A6875C;
+  color: #D49E54;
   margin-bottom: 35px;
   font-weight: 300;
 }
@@ -311,7 +311,7 @@
 .tot-collections-btn {
   font-family: 'Josefin Sans', sans-serif;
   padding: 20px 45px;
-  background: #9C7A2E;
+  background: #D49E54;
   color: white;
   text-decoration: none;
   letter-spacing: 0.1em;
@@ -323,7 +323,7 @@
   gap: 12px;
   font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 4px 15px rgba(156, 122, 46, 0.3);
+  box-shadow: 0 4px 15px rgba(212, 158, 84, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -344,9 +344,9 @@
 }
 
 .tot-collections-btn:hover { 
-  background: #7A5D1F;
+  background: #A97E43;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(156, 122, 46, 0.4);
+  box-shadow: 0 6px 20px rgba(212, 158, 84, 0.4);
 }
 
 .tot-collections-btn svg {
@@ -423,7 +423,7 @@
 /* --- Watch Ad marquee (links to promo video) --- */
 .tot-watch-ad-marquee {
   display: block;
-  background: #9C7A2E;
+  background: #6F3132;
   color: #F7F7F0;
   padding: 16px 0;
   overflow: hidden;
@@ -433,7 +433,7 @@
 }
 
 .tot-watch-ad-marquee:hover {
-  background: #7A5D1F;
+  background: #5a2527;
 }
 
 .tot-watch-ad-marquee-content {
@@ -445,11 +445,17 @@
 
 .tot-watch-ad-marquee-content span {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-right: 60px;
+  margin-right: 70px;
+}
+
+.tot-watch-ad-marquee-content span em {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.18em;
 }
 
 @keyframes totWatchAdMarquee {
