@@ -6,7 +6,6 @@
   z-index: 1000;
   transition: all 0.3s ease;
   background-color: #F7F7F0;
-  border-bottom: 1px solid #8C6C5F;
 }
 
 /* =========================================
@@ -16,7 +15,6 @@
 /* Transparent background */
 .header.transparent-page:not(.scrolled) {
   background-color: transparent;
-  border-bottom: 1px solid transparent;
   box-shadow: none;
 }
 
@@ -54,7 +52,6 @@
    ========================================= */
 .header.scrolled {
   background-color: #F7F7F0;
-  border-bottom: 1px solid #8C6C5F;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
 }
 
@@ -606,7 +603,6 @@
   .header,
   .header.transparent-page:not(.scrolled) {
     background-color: #F7F7F0 !important;
-    border-bottom: 1px solid #8C6C5F !important;
   }
 
   /* Force Dark Icons */

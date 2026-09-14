@@ -57,8 +57,11 @@ const ShopCollections = () => {
           limit: pagination.limit,
           category: selectedCategory
         });
-        
-        setProducts(result.products);
+
+        // This page is reached only via Kolours of Kutch's "View Full
+        // Collection" link, so it should show KOK products only.
+        const kokProducts = (result.products || []).filter((p) => p.collection !== 'tot');
+        setProducts(kokProducts);
         setPagination(prev => ({
           ...prev,
           total: result.pagination?.total || result.products.length,

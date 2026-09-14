@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import HeroVideo from '../components/HeroVideo';
+import WatchFilmMarquee from '../components/WatchFilmMarquee';
 import VisionSection from '../components/VisionSection';
 import AboutSection from '../components/AboutSection';
 import MissionSection from '../components/MissionSection';
@@ -43,23 +44,11 @@ const Home = () => {
       {/* Hero with Image */}
       <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector bgImage={heroImage} />
 
-      <a
-        href="https://youtu.be/oYmU8Av_e84?si=vMB5z56VjCc73z_j"
-        target="_blank"
-        rel="noopener noreferrer"
+      <WatchFilmMarquee
+        href="https://youtu.be/5G_e2IazRRw?si=voVvooyCnurQQg43"
         className="watch-ad-marquee"
-      >
-        <div className="watch-ad-marquee-content">
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-          <span>✦ WATCH THE FILM</span>
-        </div>
-      </a>
+        contentClassName="watch-ad-marquee-content"
+      />
       
       
       

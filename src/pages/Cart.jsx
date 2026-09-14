@@ -147,11 +147,6 @@ const Cart = () => {
                         Color: {item.color}
                       </p>
                     )}
-                    {item.note && (
-                      <p style={{ fontSize: '0.8rem', color: '#8C6C5F', fontStyle: 'italic', marginBottom: '8px' }}>
-                        Note: "{item.note}"
-                      </p>
-                    )}
                     {item.measurements && Object.entries(item.measurements).some(([k, v]) => k !== 'unit' && v) && (
                       <p style={{ fontSize: '0.8rem', color: '#8C6C5F', marginBottom: '15px' }}>
                         Custom fit ({item.measurements.unit === 'cm' ? 'cm' : 'in'}):
@@ -160,6 +155,11 @@ const Cart = () => {
                         {item.measurements.hips && ` Hips ${item.measurements.hips}`}
                         {item.measurements.shoulder && ` Shoulder ${item.measurements.shoulder}`}
                         {item.measurements.chest && ` Chest ${item.measurements.chest}`}
+                      </p>
+                    )}
+                    {item.note && (
+                      <p style={{ fontSize: '0.8rem', color: '#8C6C5F', fontStyle: 'italic', marginBottom: '8px' }}>
+                        Note: "{item.note}"
                       </p>
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '15px' }}>

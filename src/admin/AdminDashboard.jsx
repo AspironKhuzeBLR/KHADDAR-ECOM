@@ -70,6 +70,7 @@ const AdminDashboard = () => {
     sub_category: '',
     description: '',
     is_featured: false,
+    is_live: true,
     collection: 'kok',
     hasPieces: false,
     pieces: [{ label: '', price: '' }],
@@ -283,6 +284,9 @@ const AdminDashboard = () => {
           finalDescription = `${cleanDescription}\n\n[[PIECES_DATA:${encoded}]]`;
         }
       }
+      if (!currentProduct.is_live) {
+        finalDescription = `${finalDescription}\n\n[[HIDDEN]]`;
+      }
 
       const payload = {
         name: finalName,
@@ -322,6 +326,34 @@ const AdminDashboard = () => {
       alert(`Error: ${error.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleLive = async (product, e) => {
+    if (e) e.stopPropagation();
+    const nextIsLive = !product.isLive;
+    const previousProducts = [...products];
+    setProducts(prev => prev.map(p => (p.id === product.id ? { ...p, isLive: nextIsLive } : p)));
+
+    try {
+      const cleanDescription = (product.rawDescription || '').replace(/\n*\[\[HIDDEN\]\]/i, '').trim();
+      const finalDescription = nextIsLive ? cleanDescription : `${cleanDescription}\n\n[[HIDDEN]]`;
+
+      await updateProduct(product.id, {
+        name: product.rawName || product.name,
+        description: finalDescription,
+        price: Math.round(Number(product.price)),
+        stock: product.stock,
+        main_category: product.category,
+        sub_category: product.subCategory,
+        sizes: product.sizes,
+        is_featured: Boolean(product.isFeatured),
+        images: product.images
+      });
+    } catch (error) {
+      setProducts(previousProducts);
+      console.error('Visibility toggle failed:', error);
+      alert(`❌ Error: Could not update visibility - ${error.message}`);
     }
   };
 
@@ -393,9 +425,11 @@ const AdminDashboard = () => {
     const isTotProduct = totProductPrefix.test(product.rawName || product.name || '');
 
     const rawDescription = product.rawDescription || product.description || '';
-    const piecesMatch = rawDescription.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
+    const isHiddenProduct = /\[\[HIDDEN\]\]/i.test(rawDescription);
+    const descriptionWithoutHidden = rawDescription.replace(/\n*\[\[HIDDEN\]\]/i, '').trim();
+    const piecesMatch = descriptionWithoutHidden.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
     let parsedPieces = { hasPieces: false, pieces: [{ label: '', price: '' }] };
-    let cleanDescription = rawDescription;
+    let cleanDescription = descriptionWithoutHidden;
     if (piecesMatch) {
       try {
         let data;
@@ -411,7 +445,7 @@ const AdminDashboard = () => {
       } catch (e) {
         console.error('Failed to parse pieces data', e);
       }
-      cleanDescription = rawDescription.replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+      cleanDescription = descriptionWithoutHidden.replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
     }
 
     setCurrentProduct({
@@ -422,6 +456,7 @@ const AdminDashboard = () => {
       sub_category: product.subCategory || "",
       description: cleanDescription,
       is_featured: product.isFeatured || false,
+      is_live: !isHiddenProduct,
       collection: isTotProduct ? 'tot' : 'kok',
       hasPieces: parsedPieces.hasPieces,
       pieces: parsedPieces.pieces,
@@ -684,6 +719,14 @@ const AdminDashboard = () => {
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <div className="action-buttons">
+                          <label className="live-toggle-label" title={product.isLive ? 'Live on site - untick to hide' : 'Hidden from site - tick to make live'}>
+                            <input
+                              type="checkbox"
+                              checked={!!product.isLive}
+                              onChange={(e) => handleToggleLive(product, e)}
+                            />
+                            Live
+                          </label>
                           <button className="action-btn edit" onClick={(e) => openEditModal(product, e)}>Edit</button>
                           <button className="action-btn delete" onClick={(e) => handleDeleteProduct(product.id, e)}>Delete</button>
                         </div>
@@ -832,6 +875,17 @@ const AdminDashboard = () => {
                     <option value="true">Yes</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="form-group set-toggle-group">
+                <label className="set-toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.is_live}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, is_live: e.target.checked })}
+                  />
+                  <span>Show product live on site <em>(untick to keep it hidden from customers)</em></span>
+                </label>
               </div>
 
               <div className="form-group set-toggle-group">

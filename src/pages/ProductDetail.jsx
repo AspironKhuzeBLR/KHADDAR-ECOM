@@ -85,7 +85,7 @@ const ProductDetail = () => {
     );
   }
 
-  if (!product) {
+  if (!product || product.isLive === false) {
     return (
       <div className="product-detail-page">
         <div className="container">
@@ -487,18 +487,6 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <div className="option-group personalize-group">
-                <label className="option-label">Personalized Note (optional)</label>
-                <textarea
-                  className="personalize-note-input"
-                  placeholder="Any special instructions for this order? (e.g. gift message, styling request)"
-                  value={personalNote}
-                  onChange={(e) => setPersonalNote(e.target.value)}
-                  rows={3}
-                  maxLength={300}
-                />
-              </div>
-
               {sizeMode === 'custom' && (
                 <div className="option-group personalize-group">
                   <div className="measurements-header">
@@ -553,6 +541,18 @@ const ProductDetail = () => {
                   </div>
                 </div>
               )}
+
+              <div className="option-group personalize-group">
+                <label className="option-label">Personalized Note (optional)</label>
+                <textarea
+                  className="personalize-note-input"
+                  placeholder="Any special instructions for this order? (e.g. gift message, styling request)"
+                  value={personalNote}
+                  onChange={(e) => setPersonalNote(e.target.value)}
+                  rows={3}
+                  maxLength={300}
+                />
+              </div>
             </div>
 
             <div className="product-actions">

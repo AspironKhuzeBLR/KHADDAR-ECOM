@@ -517,14 +517,32 @@
 
 .action-buttons {
   display: flex;
+  align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   justify-content: flex-start;
+}
+
+.live-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #4a4a4a;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.live-toggle-label input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #6F3132;
 }
 
 .admin-table th:last-child,
 .admin-table td:last-child {
-  width: 240px;
-  min-width: 240px;
+  width: 300px;
+  min-width: 300px;
   padding-left: 12px;
   padding-right: 12px;
   box-sizing: border-box;

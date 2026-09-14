@@ -45,6 +45,7 @@ const KolorsOfKutch = () => {
         subtitle='Crafting fashion that honors tradition'
         className='kok-hero'
         hideButton
+        excludeMobilePhoneHero
       />
 
       <div className="collections-hero">

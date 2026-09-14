@@ -256,21 +256,29 @@
 
 @media (max-width: 768px) {
   .footer {
-    padding: 40px 0 20px;
+    padding: 32px 0 20px;
   }
-  
+
   .footer-container {
     padding: 0 20px;
   }
-  
+
   .footer-content {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 20px;
+    margin-bottom: 16px;
   }
-  
+
+  .footer-logo-link {
+    margin-bottom: 12px;
+  }
+
   .footer-logo {
-    height: 70px;
+    height: 60px;
+  }
+
+  .footer-links {
+    gap: 10px;
   }
   
   .footer-bottom {

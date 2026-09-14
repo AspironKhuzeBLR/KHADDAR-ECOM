@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ThreadsOfTravancore.css';
 import HeroVideo from '../components/HeroVideo';
 import ShopRow from '../components/ShopRow';
+import WatchFilmMarquee from '../components/WatchFilmMarquee';
 
 // Collection images
 import totFt1 from '../images/ToT-Ft-1.jpg';
@@ -44,23 +45,11 @@ const ThreadsOfTravancore = () => {
         bgImage={heroImage}
       />
 
-      <a
-        href="https://youtu.be/oYmU8Av_e84?si=vMB5z56VjCc73z_j"
-        target="_blank"
-        rel="noopener noreferrer"
+      <WatchFilmMarquee
+        href="https://youtu.be/5G_e2IazRRw?si=voVvooyCnurQQg43"
         className="tot-watch-ad-marquee"
-      >
-        <div className="tot-watch-ad-marquee-content">
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-          <span>THREADS OF TRAVANCORE — <em>WATCH THE FILM</em> ▶</span>
-        </div>
-      </a>
+        contentClassName="tot-watch-ad-marquee-content"
+      />
 
       <div className="tot-collections-hero">
         <div className="tot-hero-content-wrapper">

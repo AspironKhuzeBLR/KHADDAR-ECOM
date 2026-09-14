@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import './HeroVideo.css';
 
 // Your specific image
-import heroImg from '../images/Summer Salt KHADDAR1990.png'; 
+import heroImg from '../images/Summer Salt KHADDAR1990.png';
+import heroPhoneImg from '../images/HeroPhone.jpg';
 
 const HeroVideo = ({
   title = '',
@@ -15,7 +16,8 @@ const HeroVideo = ({
   bgImage,
   hideText = false,
   hideButton = false,
-  collectionSelector = false
+  collectionSelector = false,
+  excludeMobilePhoneHero = false
 }) => {
   const [selectorOpen, setSelectorOpen] = useState(false);
 
@@ -24,11 +26,16 @@ const HeroVideo = ({
       <div className={`video-wrapper ${fullHeight ? 'full-height' : ''}`}>
 
         <div className="hero-img-container">
-           <img 
-            src={bgImage || heroImg} 
-            alt="Khaddar Luxury Collection" 
-            className="hero-bg-img"
-          />
+          <picture>
+            {!excludeMobilePhoneHero && (
+              <source media="(max-width: 768px)" srcSet={heroPhoneImg} />
+            )}
+            <img
+              src={bgImage || heroImg}
+              alt="Khaddar Luxury Collection"
+              className="hero-bg-img"
+            />
+          </picture>
         </div>
 
         {/* 2. FILM GRAIN (Adds texture/movie feel) */}

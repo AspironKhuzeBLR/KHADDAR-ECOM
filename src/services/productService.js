@@ -135,8 +135,17 @@ export const fetchProducts = async (options = {}) => {
 
     const transformedProducts = products.map(transformProduct);
 
+    // Hide any product explicitly unpublished from the admin dashboard, and -
+    // as an extra safety net - keep ToT out of the live/production build
+    // while it stays visible during local development (npm start).
+    const visibleProducts = transformedProducts.filter((p) => {
+      if (!p.isLive) return false;
+      if (process.env.NODE_ENV === 'production' && p.collection === 'tot') return false;
+      return true;
+    });
+
     return {
-      products: transformedProducts,
+      products: visibleProducts,
       pagination
     };
     } catch (error) {
@@ -357,6 +366,7 @@ export const fetchAdminProducts = async (options = {}) => {
         rawDescription: product.description || '',
         slug: product.slug || '',
         isFeatured: product.is_featured || false,
+        isLive: !isMarkedHidden(product.description),
         sizes: product.sizes || [
           { size: 'S', stock: 0 },
           { size: 'M', stock: 0 },
@@ -407,11 +417,20 @@ const extractCategories = (categories) => {
 const TOT_PREFIX = /^tot\s*-\s*/i;
 
 /**
+ * A product can be hidden from customer-facing pages (while staying fully
+ * editable/manageable in the admin dashboard) via a "[[HIDDEN]]" marker
+ * appended to its description - toggled by the "Show product live on site"
+ * checkbox in the admin dashboard's product form and product list.
+ */
+const HIDDEN_MARKER = /\n*\[\[HIDDEN\]\]/i;
+const isMarkedHidden = (rawText) => /\[\[HIDDEN\]\]/i.test(rawText || '');
+
+/**
  * Set/piece pricing is encoded invisibly in the description field as
  * [[PIECES_DATA:{...}]]  This extracts it and returns a clean description.
  */
 const extractPiecesData = (rawDescription) => {
-  const description = rawDescription || '';
+  const description = (rawDescription || '').replace(HIDDEN_MARKER, '').trim();
   const match = description.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
   if (!match) {
     return { description, pieces: null, fullSetPrice: null };
@@ -445,6 +464,7 @@ const transformProduct = (product) => {
     id: product.id,
     name: rawName.replace(TOT_PREFIX, '').trim(),
     collection: isTot ? 'tot' : 'kok',
+    isLive: !isMarkedHidden(product.description),
     price: formatPrice(product.price),
     priceRaw: product.price,
     category: subCategory || product.sub_category || '',
@@ -493,6 +513,7 @@ const transformProductDetail = (product) => {
     id: product.id,
     name: (product.name || '').replace(TOT_PREFIX, '').trim(),
     collection: TOT_PREFIX.test(product.name || '') ? 'tot' : 'kok',
+    isLive: !isMarkedHidden(product.description),
     category: subCategory || product.sub_category || '',
     mainCategory: resolvedMainCategory,
     gender: resolvedMainCategory === "Men's Wear" ? 'men' : 'women',
