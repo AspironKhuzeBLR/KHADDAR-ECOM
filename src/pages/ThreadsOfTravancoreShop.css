@@ -1,9 +1,12 @@
-/* Re-theme the shared shop grid with the same palette as Kolours of Kutch */
+/* ToT's own premium ivory/gold/Kasavu palette, distinct from Kolours of Kutch */
 .tot-shop-page {
-  --tot-burnt-sienna: #6F3132;
-  --tot-ivory-sand: #F7F7F0;
-  --tot-stormy-sky: #8C6C5F;
-  --tot-sage-green: #B38A6A;
+  --tot-burnt-sienna: #6F3026;
+  --tot-ivory-sand: #F5F1E9;
+  --tot-stormy-sky: #59483D;
+  --tot-sage-green: #8D957E;
+  --tot-gold: #D6A04A;
+  --tot-card-white: #FFFCF6;
+  --tot-border: #E4D6C5;
   background-color: var(--tot-ivory-sand);
 }
 
@@ -19,8 +22,9 @@
 }
 
 .tot-shop-page .product-card {
-  background: #ffffff;
-  border: 1px solid rgba(140, 108, 95, 0.2);
+  background: var(--tot-card-white);
+  border: 1px solid var(--tot-border);
+  box-shadow: none;
 }
 
 .tot-shop-page .product-name {
@@ -36,5 +40,5 @@
 }
 
 .tot-shop-page .product-choose-btn:hover {
-  background: #5a2527;
+  background: var(--tot-gold);
 }

@@ -55,6 +55,21 @@
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
 }
 
+/* ToT-only header theme (scrolled/solid state only - the transparent
+   pre-scroll state over the hero stays white for readability, same as
+   every other hero page) */
+.header.header-tot-theme.scrolled {
+  background-color: #F5F1E9;
+}
+
+.header.header-tot-theme.scrolled .nav-link {
+  color: #59483D;
+}
+
+.header.header-tot-theme.scrolled .nav-link:hover {
+  color: #6F3026;
+}
+
 .header-icons {
   display: flex;
   align-items: center;

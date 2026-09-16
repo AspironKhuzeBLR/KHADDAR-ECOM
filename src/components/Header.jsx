@@ -169,10 +169,12 @@ const Header = () => {
     (cat) => cat.parent_id === 4 || cat.id === 17 || cat.name === "Kurtas",
   );
 
+  const isTotPage = location.pathname.startsWith("/collections/threads-of-travancore");
+
   return (
     <>
       <header
-        className={`header ${isScrolled || !isTransparent ? "scrolled" : ""} ${isTransparent ? "transparent-page" : ""}`}
+        className={`header ${isScrolled || !isTransparent ? "scrolled" : ""} ${isTransparent ? "transparent-page" : ""} ${isTotPage ? "header-tot-theme" : ""}`}
       >
         <div className="header-main">
           <div className="header-main-container">

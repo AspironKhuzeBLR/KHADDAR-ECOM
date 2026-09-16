@@ -2,19 +2,31 @@ import React, { useState, useRef, useEffect } from 'react';
 import './Community.css';
 import HeroVideo from '../components/HeroVideo';
 import heroImage from '../images/HeroImage.jpg';
-import tot1 from '../images/tot1.jpg';
 
 const Community = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [totSlide, setTotSlide] = useState(0);
+  const [insightSlide, setInsightSlide] = useState(0);
   const videoRef = useRef(null);
+
+  const totImages = [
+    '/blog-images/tot1.jpg',
+    '/blog-images/tot2.jpg'
+  ];
 
   const artisanImages = [
     '/blog-images/IMG_1625.PNG',
     '/blog-images/IMG_1626.PNG',
     '/blog-images/IMG_1627.PNG',
     '/blog-images/IMG_1628.PNG'
+  ];
+
+  const insightImages = [
+    '/community_insights/ftimg1.png',
+    '/community_insights/ftimg2.png',
+    '/community_insights/ftimg3.png'
   ];
 
   useEffect(() => {
@@ -25,11 +37,27 @@ const Community = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setTotSlide((prev) => (prev + 1) % totImages.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [totImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % artisanImages.length);
     }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [artisanImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setInsightSlide((prev) => (prev + 1) % insightImages.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [insightImages.length]);
 
   const handleOpenModal = (e) => {
     e.preventDefault();
@@ -64,7 +92,7 @@ const Community = () => {
         <div className="container">
           <div className="artisan-story-wrapper">
             <div className="story-icon">❖</div>
-            <span className="story-label">Threads of Travancore</span>
+            <span className="story-label">Our Weavers</span>
             <h2 className="story-heading">The Women of the Loom</h2>
 
             <div className="story-content-grid">
@@ -80,14 +108,23 @@ const Community = () => {
               <div className="story-photo-section">
                 <div className="story-photo-wrapper">
                   <div className="carousel-container">
-                    <div className="carousel-slide active">
-                      <img
-                        src={tot1}
-                        alt="Threads of Travancore artisans"
-                        className="story-collage-image"
-                      />
-                      <div className="glow-sweep"></div>
-                    </div>
+                    {totImages.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`carousel-slide ${index === totSlide ? 'active' : ''}`}
+                        style={{
+                          opacity: index === totSlide ? 1 : 0,
+                          transform: index === totSlide ? 'scale(1)' : 'scale(0.95)'
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt="Threads of Travancore artisans"
+                          className="story-collage-image"
+                        />
+                        <div className="glow-sweep"></div>
+                      </div>
+                    ))}
                   </div>
                   <div className="image-outline-glow"></div>
                 </div>
@@ -182,6 +219,37 @@ const Community = () => {
                 <div className="text-decorative-line"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="community-insights-section">
+        <div className="container insights-header">
+          <div className="section-icon">❖</div>
+          <span className="section-label">From Our Community</span>
+          <h2 className="section-heading">Insights</h2>
+        </div>
+
+        <div className="insights-slideshow">
+          {insightImages.map((image, index) => (
+            <div
+              key={image}
+              className={`insights-slide ${index === insightSlide ? 'insights-slide-active' : ''}`}
+            >
+              <img src={image} alt={`Community insight ${index + 1}`} />
+            </div>
+          ))}
+
+          <div className="insights-dots-container">
+            {insightImages.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`insights-dot ${index === insightSlide ? 'active' : ''}`}
+                onClick={() => setInsightSlide(index)}
+                aria-label={`Show insight ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </section>

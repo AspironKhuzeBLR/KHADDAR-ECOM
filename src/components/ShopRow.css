@@ -146,25 +146,40 @@
   padding: 30px 0;
 }
 
-/* --- KOK theme --- */
+/* --- KOK theme: Burnt Sienna / Ivory Sand / Stormy Sky / Sage Green --- */
 .shop-row-section.kok-theme {
   background: #F7F7F0;
 }
-.shop-row-section.kok-theme .shop-row-title { color: #6F3132; }
-.shop-row-section.kok-theme .shop-row-subtitle { color: #8C6C5F; }
-.shop-row-section.kok-theme .shop-row-price { color: #6F3132; }
-.shop-row-section.kok-theme .shop-row-btn { background: #6F3132; color: #fff; }
-.shop-row-section.kok-theme .shop-row-btn:hover { background: #5a2527; }
+.shop-row-section.kok-theme .shop-row-title { color: #984216; }
+.shop-row-section.kok-theme .shop-row-subtitle { color: #78898F; }
+.shop-row-section.kok-theme .shop-row-card {
+  background: #FFFCF6;
+  border: 1px solid rgba(152, 66, 22, 0.15);
+  box-shadow: none;
+}
+.shop-row-section.kok-theme .shop-row-name { color: #984216; }
+.shop-row-section.kok-theme .shop-row-desc { color: #78898F; }
+.shop-row-section.kok-theme .shop-row-price { color: #984216; }
+.shop-row-section.kok-theme .shop-row-btn { background: #984216; color: #fff; }
+.shop-row-section.kok-theme .shop-row-btn:hover { background: #D6A04A; }
 
-/* --- ToT theme (gold/Kasavu palette, distinct from KOK) --- */
+/* --- ToT theme: muted clay/terracotta backdrop so the white Kasavu
+   garments stay the visual focus, distinct from KOK's ivory theme --- */
 .shop-row-section.tot-theme {
   background: #F7F7F0;
 }
-.shop-row-section.tot-theme .shop-row-title { color: #D49E54; }
-.shop-row-section.tot-theme .shop-row-subtitle { color: #D49E54; }
-.shop-row-section.tot-theme .shop-row-price { color: #D49E54; }
-.shop-row-section.tot-theme .shop-row-btn { background: #6F3132; color: #fff; }
-.shop-row-section.tot-theme .shop-row-btn:hover { background: #5a2527; }
+.shop-row-section.tot-theme .shop-row-title { color: #D6A04A; }
+.shop-row-section.tot-theme .shop-row-subtitle { color: #59483D; }
+.shop-row-section.tot-theme .shop-row-card {
+  background: #FAF6EE;
+  border: 1px solid rgba(111, 48, 38, 0.15);
+  box-shadow: none;
+}
+.shop-row-section.tot-theme .shop-row-name { color: #4A342B; }
+.shop-row-section.tot-theme .shop-row-desc { color: #59483D; }
+.shop-row-section.tot-theme .shop-row-price { color: #D6A04A; }
+.shop-row-section.tot-theme .shop-row-btn { background: #6F3026; color: #fff; }
+.shop-row-section.tot-theme .shop-row-btn:hover { background: #D6A04A; }
 
 @media (max-width: 700px) {
   .shop-row-section {

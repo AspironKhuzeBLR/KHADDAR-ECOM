@@ -84,6 +84,42 @@
   font-style: 'Lato', sans-serif;
 }
 
+/* --- KOK's own palette. Scoped under .kok-page since the classes above
+   (.collections-hero, .collections-title, .marquee-strip, etc.) are shared
+   verbatim with the Collections hub page and Shop.css - these overrides
+   only take effect here, nowhere else. --- */
+.kok-page {
+  background-color: #F7F7F0;
+}
+
+.kok-page .collections-icon {
+  color: #984216;
+}
+
+.kok-page .collections-label {
+  color: #78898F;
+}
+
+.kok-page .collections-title {
+  color: #984216;
+  font-size: 3.4rem;
+  white-space: nowrap;
+}
+
+.kok-page .intro-text {
+  color: #78898F;
+}
+
+.kok-page .intro-text.intro-bold {
+  color: #984216;
+}
+
+.kok-page .marquee-strip {
+  background: #D6A04A;
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+}
+
 /* --- CAROUSEL SECTION --- */
 .collections-carousel-section {
   width: 100vw;
@@ -363,6 +399,7 @@
   .collections-hero { padding: 50px 0 40px; }
   .hero-content-wrapper { padding: 0 20px; }
   .collections-title { font-size: 2.5rem; }
+  .kok-page .collections-title { font-size: 2rem; white-space: normal; }
   .intro-text { font-size: 1rem; }
   .intro-text.intro-bold { font-size: 1.15rem; margin-bottom: 18px; }
   .full-screen-wrapper { height: 50vh; }

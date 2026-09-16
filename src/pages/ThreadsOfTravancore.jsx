@@ -63,12 +63,12 @@ const ThreadsOfTravancore = () => {
               </div>
               <div className="tot-collections-intro">
                 <p className="body-text tot-intro-text intro-bold">
-                  Threads of Travancore is an exploration of what happens when contemporary design
+                  <strong>Threads of Travancore</strong> is an exploration of what happens when contemporary design
                   becomes a means of preserving heritage. Rooted in the handloom traditions of Kerala,
-                  the collection brings together pure handloom cotton, the quiet elegance of Kerala's
-                  whites and Kasavu, and contemporary silhouettes with a subtle Indian sensibility.
-                  Woven on traditional pit looms, the cotton is exceptionally light, soft and
-                  breathable, naturally suited to Kerala's climate. The distinctive Kasavu borders
+                  the collection brings together pure <strong>handloom cotton</strong>, the quiet elegance of Kerala's
+                  whites and <strong>Kasavu</strong>, and contemporary silhouettes with a subtle Indian sensibility.
+                  Woven on traditional <strong>pit looms</strong>, the cotton is exceptionally light, soft and
+                  breathable, naturally suited to Kerala's climate. The distinctive <strong>Kasavu borders</strong>
                   are created with fine copper strings coated in silver and gold, giving the zari its
                   characteristic depth and lustre. Every garment carries not only the material, but
                   the accumulated knowledge of generations who have worked with it.
@@ -77,7 +77,7 @@ const ThreadsOfTravancore = () => {
                   <>
                     <p className="body-text tot-intro-text intro-bold">
                       Threads of Travancore is not simply about preserving the past; it is about creating
-                      a future for it. Handloom is a living craft, sustained by people whose livelihoods
+                      a future for it. <strong>Handloom is a living craft</strong>, sustained by people whose livelihoods
                       and identities are deeply connected to it. Years of skill cannot be replicated
                       overnight, nor can a heritage survive if there is no reason for the craft to
                       continue. We chose to bring this craft into contemporary fashion because tradition
@@ -88,10 +88,10 @@ const ThreadsOfTravancore = () => {
                     </p>
                     <p className="body-text tot-intro-text intro-bold">
                       Threads of Travancore is for those who recognise that beauty is rarely merely
-                      aesthetic; that behind every considered piece lies the labour, knowledge and
-                      cultural memory of those who made it possible. It is for those who value the human
+                      aesthetic; that behind every considered piece lies the <strong>labour, knowledge and
+                      cultural memory</strong> of those who made it possible. It is for those who value the human
                       hand in an age increasingly defined by the mechanised and the immediate; who
-                      understand that craftsmanship is not an antiquarian indulgence, but a living
+                      understand that <strong>craftsmanship</strong> is not an antiquarian indulgence, but a living
                       repository of knowledge, identity and history. We see this community not as an
                       audience, but as fellow custodians of that appreciation. In bringing these textiles
                       into contemporary design, we hope to participate in something larger than fashion:

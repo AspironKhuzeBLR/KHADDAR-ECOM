@@ -210,9 +210,10 @@
 /* --- Watch Ad marquee (links to promo video) --- */
 .watch-ad-marquee {
   display: block;
-  background: #6F3132;
-  color: #F7F7F0;
+  background: #D6A04A;
+  color: #ffffff;
   padding: 16px 0;
+  border-bottom: 1px solid #ffffff;
   overflow: hidden;
   text-decoration: none;
   cursor: pointer;
@@ -220,7 +221,7 @@
 }
 
 .watch-ad-marquee:hover {
-  background: #5a2527;
+  background: #D6A04A;
 }
 
 .watch-ad-marquee-content {

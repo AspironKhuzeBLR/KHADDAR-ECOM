@@ -1000,6 +1000,89 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* --- Insights (featured image slideshow, same crossfade mechanics as the
+   homepage's Featured Collection carousel) --- */
+.community-insights-section {
+  padding: 100px 0 0;
+  background: white;
+  position: relative;
+}
+
+.insights-header {
+  text-align: center;
+  padding: 0 40px 60px;
+}
+
+.insights-slideshow {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  min-height: 550px;
+  max-height: 900px;
+  overflow: hidden;
+}
+
+.insights-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.insights-slide-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.insights-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.insights-dots-container {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 5;
+}
+
+.insights-dot {
+  /* Forced square dimensions so flexbox can't squash these into ovals */
+  width: 8px !important;
+  height: 8px !important;
+  min-width: 8px !important;
+  min-height: 8px !important;
+  flex-shrink: 0 !important;
+
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: 1.5px solid #ffffff !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  outline: none !important;
+  line-height: 0 !important;
+}
+
+.insights-dot.active {
+  background: #ffffff !important;
+  transform: scale(1.25);
+}
+
 @media (max-width: 1200px) {
   .community-hero { padding: 80px 0; }
   .community-intro { padding: 80px 0; }
@@ -1044,6 +1127,9 @@
   .hero-content-container { padding: 0 20px; }
   .community-title { font-size: 2.5rem; }
   .community-subtitle { font-size: 1rem; }
+  .community-insights-section { padding-top: 60px; }
+  .insights-header { padding: 0 20px 40px; }
+  .insights-slideshow { height: 65vh; min-height: 420px; }
   .community-intro { padding: 60px 0; }
   .intro-text { font-size: 1rem; }
   .collaborations-section { padding: 60px 0; }

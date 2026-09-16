@@ -182,7 +182,7 @@
   font-weight: 400;
   letter-spacing: 0.4em;
   text-transform: uppercase;
-  color: #D6B77C;
+  color: #F7F7F0;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
   margin-bottom: 20px;
   opacity: 0;
@@ -252,9 +252,8 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 18px 45px;
-  border: none;
+  border: 1px solid #ffffff;
   background: transparent;
-  backdrop-filter: blur(6px);
   color: #ffffff;
   display: inline-block;
   cursor: pointer;
@@ -363,7 +362,7 @@
   .hero-cta { padding: 12px 30px; font-size: 0.75rem; }
   .hero-content > .hero-cta,
   .hero-collection-selector {
-    top: 50vh;
+    top: calc(50vh - 0.15cm);
   }
   
   .hero-img-container {
@@ -429,7 +428,7 @@
 @media (min-width: 993px) and (max-width: 1440px) {
   .hero-content > .hero-cta,
   .hero-collection-selector {
-    top: 63vh;
+    top: calc(63vh + 0.15cm);
   }
 }
 

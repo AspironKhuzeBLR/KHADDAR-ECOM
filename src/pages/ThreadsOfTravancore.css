@@ -33,7 +33,7 @@
 
 .tot-collections-icon {
   font-size: 2rem;
-  color: #D49E54;
+  color: #D6A04A;
   margin-bottom: 15px;
   animation: iconFloat 3s ease-in-out infinite;
 }
@@ -42,7 +42,7 @@
   font-family: 'Josefin Sans', sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #D49E54;
+  color: #D6A04A;
   font-size: 0.8rem;
   display: block;
   margin-bottom: 20px;
@@ -51,7 +51,7 @@
 .tot-collections-title {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 3.4rem;
-  color: #D49E54;
+  color: #D6A04A;
   margin-bottom: 20px;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -60,7 +60,7 @@
 .tot-heading-underline {
   width: 60px;
   height: 2px;
-  background: #D49E54;
+  background: #D6A04A;
   margin: 0 auto 30px;
 }
 
@@ -72,7 +72,7 @@
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
   line-height: 1.9;
-  color: #4a4a4a;
+  color: #59483D;
   margin-bottom: 15px;
   text-align: center;
 }
@@ -80,7 +80,7 @@
 .tot-intro-text.intro-bold {
   font-size: 1.3rem;
   font-weight: 400;
-  color: #5C4A36;
+  color: #59483D;
   margin-bottom: 20px;
   font-style: 'Lato', sans-serif;
 }
@@ -91,8 +91,8 @@
   margin-top: 10px;
   background: none;
   border: none;
-  border-bottom: 1px solid #D49E54;
-  color: #D49E54;
+  border-bottom: 1px solid #D6A04A;
+  color: #D6A04A;
   font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
@@ -204,7 +204,7 @@
 
 .tot-nav-arrow:hover {
   background: rgba(255, 255, 255, 0.9);
-  color: #D49E54;
+  color: #D6A04A;
 }
 
 .tot-nav-arrow.prev { left: 30px; }
@@ -251,12 +251,13 @@
 
 /* --- MARQUEE STRIP --- */
 .tot-marquee-strip {
-  background: #6F3132;
-  color: #F7F7F0;
+  background: #D6A04A;
+  color: #ffffff;
   padding: 20px 0;
   overflow: hidden;
   position: relative;
   z-index: 1;
+  border-bottom: 1px solid #ffffff;
 }
 
 .tot-marquee-content {
@@ -294,7 +295,7 @@
 .tot-shop-action-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.5rem;
-  color: #D49E54;
+  color: #6F3026;
   margin-bottom: 15px;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -303,7 +304,7 @@
 .tot-shop-action-subtext {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
-  color: #D49E54;
+  color: #59483D;
   margin-bottom: 35px;
   font-weight: 300;
 }
@@ -311,7 +312,7 @@
 .tot-collections-btn {
   font-family: 'Josefin Sans', sans-serif;
   padding: 20px 45px;
-  background: #D49E54;
+  background: #6F3026;
   color: white;
   text-decoration: none;
   letter-spacing: 0.1em;
@@ -323,7 +324,7 @@
   gap: 12px;
   font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 4px 15px rgba(212, 158, 84, 0.3);
+  box-shadow: 0 4px 15px rgba(111, 48, 38, 0.25);
   position: relative;
   overflow: hidden;
 }
@@ -343,10 +344,10 @@
   left: 100%;
 }
 
-.tot-collections-btn:hover { 
-  background: #A97E43;
+.tot-collections-btn:hover {
+  background: #D6A04A;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(212, 158, 84, 0.4);
+  box-shadow: 0 6px 20px rgba(214, 160, 74, 0.35);
 }
 
 .tot-collections-btn svg {
@@ -360,6 +361,12 @@
 /* --- ToT hero button spacing --- */
 .tot-hero .hero-cta {
   margin-top: 24px;
+}
+
+/* --- ToT hero tagline accent (gold, small text only - hero text/layout
+   itself is untouched and shared with every other hero page) --- */
+.tot-hero .hero-tagline {
+  color: #D6A04A;
 }
 
 /* --- ToT closing video section --- */
@@ -423,17 +430,18 @@
 /* --- Watch Ad marquee (links to promo video) --- */
 .tot-watch-ad-marquee {
   display: block;
-  background: #6F3132;
-  color: #F7F7F0;
+  background: #D6A04A;
+  color: #ffffff;
   padding: 16px 0;
   overflow: hidden;
   text-decoration: none;
   cursor: pointer;
   transition: background 0.2s ease;
+  border-bottom: 1px solid #ffffff;
 }
 
 .tot-watch-ad-marquee:hover {
-  background: #5a2527;
+  background: #D6A04A;
 }
 
 .tot-watch-ad-marquee-content {

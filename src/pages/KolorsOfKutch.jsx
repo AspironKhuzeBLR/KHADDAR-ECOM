@@ -39,7 +39,7 @@ const KolorsOfKutch = () => {
   const goToSlide = (index) => setCurrentSlide(index);
 
   return (
-    <div className="collections-page">
+    <div className="collections-page kok-page">
       <HeroVideo
         title='KOLOURS OF KUTCH'
         subtitle='Crafting fashion that honors tradition'
