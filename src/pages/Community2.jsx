@@ -56,6 +56,7 @@ const Community2 = () => {
         fullHeight={true}
         bgImage={heroImage}
         collectionSelector
+        className="subtitle-tagline-size"
       />
 
       {/* Artisan Story Section */}

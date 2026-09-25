@@ -42,7 +42,7 @@ const Home = () => {
   return (
     <div className="home-page-container page-loaded">
       {/* Hero with Image */}
-      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector bgImage={heroImage} />
+      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector bgImage={heroImage} className="home-hero-custom" />
 
       <WatchFilmMarquee
         href="https://youtu.be/5G_e2IazRRw?si=voVvooyCnurQQg43"

@@ -48,6 +48,7 @@ const Sustainability = () => {
         fullHeight={true}
         bgImage={heroImage}
         collectionSelector
+        className="subtitle-tagline-size"
       />
 
       <section className="sustainability-intro">

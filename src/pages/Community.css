@@ -529,6 +529,38 @@
   overflow: hidden;
 }
 
+/* --- Divider between Insights and Video sections --- */
+.community-section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 0;
+  background: white;
+}
+
+.community-section-divider .divider-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #B38A6A, transparent);
+}
+
+.community-section-divider .divider-motif {
+  color: #B38A6A;
+  font-size: 1.1rem;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .community-section-divider {
+    padding: 30px 0;
+    gap: 15px;
+  }
+  .community-section-divider .divider-line {
+    width: 50px;
+  }
+}
+
 @media (max-width: 992px) {
   .carousel-container {
     height: 500px;

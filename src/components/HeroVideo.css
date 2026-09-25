@@ -115,8 +115,16 @@
     transform: scale(1);
     object-fit: cover;
   }
-  .video-overlay {
-    padding-top: 3vh;
+
+  .hero-tagline {
+    margin-bottom: 4px;
+  }
+  .hero-subtitle {
+    margin-bottom: 15px;
+  }
+  .hero-content > .hero-cta,
+  .hero-collection-selector {
+    margin-top: 16px;
   }
 }
 
@@ -360,9 +368,19 @@
   .hero-title { font-size: 2.2rem; letter-spacing: 0.12em; }
   .hero-subtitle { font-size: 1rem; margin-bottom: 30px; letter-spacing: 0.1em; }
   .hero-cta { padding: 12px 30px; font-size: 0.75rem; }
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .hero-content > .hero-cta,
   .hero-collection-selector {
-    top: calc(50vh - 0.15cm);
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-top: 16px;
   }
   
   .hero-img-container {
@@ -400,6 +418,7 @@
   
   .video-overlay {
     background: rgba(0,0,0,0.3);
+    padding-top: 10vh;
   }
   
   .home-hero-custom .hero-subtitle { font-size: 1.5rem; line-height: 1.4; }
@@ -415,12 +434,14 @@
   .hero-title { font-size: 1.6rem; letter-spacing: 0.08em; }
 }
 /* Collection selector dropdown (homepage hero) */
-.hero-collection-selector {
-  position: absolute;
-  top: 58vh;
-  left: 50%;
-  transform: translateX(-50%);
-  display: inline-block;
+@media (min-width: 769px) {
+  .hero-collection-selector {
+    position: absolute;
+    top: 58vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-block;
+  }
 }
 
 /* Laptop screens only - nudge the Explore Collections button down a bit.
@@ -428,7 +449,7 @@
 @media (min-width: 993px) and (max-width: 1440px) {
   .hero-content > .hero-cta,
   .hero-collection-selector {
-    top: calc(63vh + 0.15cm);
+    top: calc(65vh + 0.15cm);
   }
 }
 
@@ -489,5 +510,45 @@
   }
   .hero-collection-dropdown .hero-dropdown-divider {
     display: none;
+  }
+}
+/* --- Home page hero: remove tagline, shrink subtitle to tagline-size, move content up --- */
+.home-hero-custom .hero-tagline {
+  display: none;
+}
+
+.home-hero-custom .hero-subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+}
+
+.home-hero-custom .video-overlay {
+  padding-top: 16vh;
+}
+
+.home-hero-custom .hero-content > .hero-cta,
+.home-hero-custom.hero-collection-selector,
+.home-hero-custom .hero-collection-selector {
+  top: 32vh;
+}
+
+@media (max-width: 768px) {
+  .home-hero-custom .video-overlay {
+    padding-top: 10vh;
+  }
+  .home-hero-custom .hero-content > .hero-cta,
+  .home-hero-custom .hero-collection-selector {
+    top: auto;
+  }
+}
+/* --- Shrink subtitle to match tagline size (Community, Community2, Sustainability) --- */
+.subtitle-tagline-size .hero-subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+}
+
+@media (max-width: 768px) {
+  .subtitle-tagline-size .hero-subtitle {
+    font-size: 0.75rem;
   }
 }

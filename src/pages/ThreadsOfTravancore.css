@@ -363,12 +363,6 @@
   margin-top: 24px;
 }
 
-/* --- ToT hero tagline accent (gold, small text only - hero text/layout
-   itself is untouched and shared with every other hero page) --- */
-.tot-hero .hero-tagline {
-  color: #D6A04A;
-}
-
 /* --- ToT closing video section --- */
 .tot-video-section {
   width: 100%;

@@ -538,3 +538,9 @@
     font-size: 0.7rem;
   }
 }
+@media (max-width: 768px) {
+  .featured-slide-travancore img {
+    animation: none;
+    transform: scale(2.8);
+  }
+}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './FeaturedCollection.css';
 
 import kutchBg from '../images/Summer Salt KHADDAR3495.png';
-import travancoreBg from '../images/ToT-Ft-5.jpg';
+import travancoreBg from '../images/ToT-Ft-6.jpg';
 
 const slides = [
   {

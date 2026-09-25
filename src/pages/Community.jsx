@@ -13,7 +13,10 @@ const Community = () => {
 
   const totImages = [
     '/blog-images/tot1.jpg',
-    '/blog-images/tot2.jpg'
+    '/blog-images/tot2.jpg',
+    '/blog-images/tot3.jpg',
+    '/blog-images/tot4.jpg',
+    '/blog-images/tot5.jpg'
   ];
 
   const artisanImages = [
@@ -85,6 +88,7 @@ const Community = () => {
         fullHeight={true}
         bgImage={heroImage}
         collectionSelector
+        className="subtitle-tagline-size"
       />
 
       {/* Threads of Travancore Artisan Blog - appears first, same pattern as Kutch section below */}
@@ -253,6 +257,12 @@ const Community = () => {
           </div>
         </div>
       </section>
+
+      <div className="community-section-divider">
+        <span className="divider-line"></span>
+        <span className="divider-motif">❖</span>
+        <span className="divider-line"></span>
+      </div>
 
       <section className="community-video">
         <div className="video-section-wrapper">

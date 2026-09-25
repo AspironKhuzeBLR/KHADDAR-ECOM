@@ -648,11 +648,11 @@
 /* --- MARQUEE STRIP STYLES --- */
 .marquee-strip {
   width: 100%;
-  background: #6F3132;
+  background: #D6A04A;
   color: #F7F7F0;
   padding: 12px 0;
   overflow: hidden;
-  border-bottom: 1px solid #8C6C5F; /* Optional: adds separation from products */
+  border-bottom: 1px solid #8C6C5F;
 }
 
 .marquee-content {

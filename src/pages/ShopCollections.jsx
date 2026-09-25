@@ -49,25 +49,26 @@ const ShopCollections = () => {
   // Fetch ALL products (No mainCategory filter)
   useEffect(() => {
     const loadProducts = async () => {
-      setLoading(true);
+      setLoading(true);                    // ← keep, unchanged
       try {
-        // We do NOT pass mainCategory here, so it fetches everything
         const result = await fetchProducts({
-          page: pagination.page,
-          limit: pagination.limit,
+          page: 1,
+          limit: 500,
           category: selectedCategory
         });
 
-        // This page is reached only via Kolours of Kutch's "View Full
-        // Collection" link, so it should show KOK products only.
         const kokProducts = (result.products || []).filter((p) => p.collection !== 'tot');
-        setProducts(kokProducts);
+
+        const startIdx = (pagination.page - 1) * pagination.limit;
+        const paginatedProducts = kokProducts.slice(startIdx, startIdx + pagination.limit);
+
+        setProducts(paginatedProducts);
         setPagination(prev => ({
           ...prev,
-          total: result.pagination?.total || result.products.length,
-          totalPages: result.pagination?.totalPages || 1
+          total: kokProducts.length,
+          totalPages: Math.ceil(kokProducts.length / prev.limit) || 1
         }));
-      } catch (error) {
+      } catch (error) {                    // ← keep, unchanged
         console.error('Error loading products:', error);
         setProducts([]);
       } finally {

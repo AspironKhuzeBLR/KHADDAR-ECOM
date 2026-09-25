@@ -178,8 +178,7 @@
 .shop-row-section.tot-theme .shop-row-name { color: #4A342B; }
 .shop-row-section.tot-theme .shop-row-desc { color: #59483D; }
 .shop-row-section.tot-theme .shop-row-price { color: #D6A04A; }
-.shop-row-section.tot-theme .shop-row-btn { background: #6F3026; color: #fff; }
-.shop-row-section.tot-theme .shop-row-btn:hover { background: #D6A04A; }
+.shop-row-section.tot-theme .shop-row-btn { background: #D6A04A; color: #fff; }
 
 @media (max-width: 700px) {
   .shop-row-section {
