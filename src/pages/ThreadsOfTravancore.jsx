@@ -175,16 +175,23 @@ const ThreadsOfTravancore = () => {
       />
 
       <section className="tot-video-section">
-        <video
-          className="tot-video"
-          autoPlay
-          loop
-          muted
-          playsInline
-        >
-          <source src="/ToT-Video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <div className="tot-video-wrapper">
+          <video
+            className="tot-video"
+            autoPlay
+            loop
+            muted
+            playsInline
+          >
+            <source src="/ToT-Video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="tot-video-overlay-content">
+            <p className="tot-video-quote">
+              "Khadi is not mere cloth, it is thought." — Mahatma Gandhi
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );

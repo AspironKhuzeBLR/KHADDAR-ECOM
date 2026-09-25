@@ -135,12 +135,9 @@ export const fetchProducts = async (options = {}) => {
 
     const transformedProducts = products.map(transformProduct);
 
-    // Hide any product explicitly unpublished from the admin dashboard, and -
-    // as an extra safety net - keep ToT out of the live/production build
-    // while it stays visible during local development (npm start).
+    // Hide any product explicitly unpublished from the admin dashboard.
     const visibleProducts = transformedProducts.filter((p) => {
       if (!p.isLive) return false;
-      if (process.env.NODE_ENV === 'production' && p.collection === 'tot') return false;
       return true;
     });
 
@@ -416,6 +413,13 @@ const extractCategories = (categories) => {
  */
 const TOT_PREFIX = /^tot\s*-\s*/i;
 
+const toTitleCase = (str) =>
+  str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
 /**
  * A product can be hidden from customer-facing pages (while staying fully
  * editable/manageable in the admin dashboard) via a "[[HIDDEN]]" marker
@@ -462,7 +466,7 @@ const transformProduct = (product) => {
 
   return {
     id: product.id,
-    name: rawName.replace(TOT_PREFIX, '').trim(),
+    name: toTitleCase(rawName.replace(TOT_PREFIX, '').trim()),
     collection: isTot ? 'tot' : 'kok',
     isLive: !isMarkedHidden(product.description),
     price: formatPrice(product.price),
