@@ -180,7 +180,6 @@
   }
 }
 
-/* --- TABLET & MOBILE FIX START --- */
 @media (max-width: 992px) {
   .brand-container {
     flex-direction: column-reverse; /* Image on top */
@@ -210,6 +209,8 @@
     padding: 40px 40px;
     padding-right: 50px; 
     padding-left: 40px; 
+    align-items: center;      /* NEW: center flex children */
+    text-align: center;       /* NEW: center text */
   }
   
   /* UPDATED: Strip visible on mobile, moved to RIGHT side */
@@ -221,12 +222,17 @@
     background-size: 25px 31px; 
   }
   
+  .brand-label {
+    justify-content: center;  /* NEW: center label + motif since it's a flex row */
+  }
+  
   .brand-heading {
     font-size: 2.2rem;
   }
   
   .brand-text {
     font-size: 1.05rem;
+    max-width: 100%;          /* NEW: remove the 90% cap so centered text isn't lopsided */
   }
 }
 
