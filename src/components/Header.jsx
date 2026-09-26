@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../context/AuthContext";
@@ -24,10 +24,14 @@ const Header = () => {
 
   // NEW: Mobile Accordion State
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
+  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
   const [mobileSubCategoryOpen, setMobileSubCategoryOpen] = useState(null); // 'mens' or 'womens'
 
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // Collections nav dropdown - just needs a ref for the wrapper, hover state comes from hoveredMenu
+  const collectionsRef = useRef(null);
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -78,6 +82,8 @@ const Header = () => {
     const transparentPages = [
       "/",
       "/collections",
+      "/collections/kolors-of-kutch",
+      "/collections/threads-of-travancore",
       "/community",
       "/community2",
       "/sustainability",
@@ -146,6 +152,8 @@ const Header = () => {
         setMobileCategoryOpen(!mobileCategoryOpen);
       } else if (type === "community") {
         setMobileCommunityOpen(!mobileCommunityOpen);
+      } else if (type === "collections") {
+        setMobileCollectionsOpen(!mobileCollectionsOpen);
       } else if (type === "sub") {
         setMobileSubCategoryOpen(mobileSubCategoryOpen === id ? null : id);
       }
@@ -161,10 +169,12 @@ const Header = () => {
     (cat) => cat.parent_id === 4 || cat.id === 17 || cat.name === "Kurtas",
   );
 
+  const isTotPage = location.pathname.startsWith("/collections/threads-of-travancore");
+
   return (
     <>
       <header
-        className={`header ${isScrolled || !isTransparent ? "scrolled" : ""} ${isTransparent ? "transparent-page" : ""}`}
+        className={`header ${isScrolled || !isTransparent ? "scrolled" : ""} ${isTransparent ? "transparent-page" : ""} ${isTotPage ? "header-tot-theme" : ""}`}
       >
         <div className="header-main">
           <div className="header-main-container">
@@ -294,16 +304,62 @@ const Header = () => {
 
                   <div
                     className="nav-link-wrapper"
+                    ref={collectionsRef}
                     onMouseEnter={() => handleMenuHover("collections")}
                     onMouseLeave={handleMenuLeave}
                   >
-                    <Link
-                      to="/collections"
+                    <span
                       className="nav-link"
-                      onClick={closeMenu}
+                      role="button"
+                      tabIndex={0}
+                      onClick={(e) => handleMobileClick(e, "collections")}
+                      style={{ cursor: 'pointer' }}
                     >
                       COLLECTIONS
-                    </Link>
+                      <span className="mobile-arrow show-mobile">▾</span>
+                    </span>
+
+                    {(hoveredMenu === "collections" || mobileCollectionsOpen) && (
+                      <div
+                        className="collections-nav-dropdown"
+                        onMouseEnter={() => handleMenuHover("collections")}
+                        onMouseLeave={handleMenuLeave}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 0px)',
+                          left: 0,
+                          transform: 'translateX(-80px)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          background: '#F7F7F0',
+                          padding: '20px 24px',
+                          borderRadius: '2px',
+                          boxShadow: '0 10px 26px rgba(0,0,0,0.2)',
+                          zIndex: 2000,
+                          whiteSpace: 'nowrap',
+                          width: 'max-content',
+                          maxWidth: 'none',
+                          gap: '16px'
+                        }}
+                      >
+                        <Link
+                          to="/collections"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Kolors of Kutch
+                        </Link>
+                        <Link
+                          to="/collections/threads-of-travancore"
+                          className="dropdown-item"
+                          onClick={closeMenu}
+                        >
+                          Threads of Travancore
+                        </Link>
+                      </div>
+                    )}
                   </div>
 
                   {/* SHOP BY CATEGORY - MODIFIED FOR MOBILE ACCORDION */}

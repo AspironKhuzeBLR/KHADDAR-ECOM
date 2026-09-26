@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ScrollUpButton.css';
 
 const ScrollUpButton = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
+    lastScrollY.current = window.scrollY;
+
     const toggleVisibility = () => {
-      // Show button when page is scrolled down 300px
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      const currentScrollY = window.scrollY;
+      const isScrollingUp = currentScrollY < lastScrollY.current;
+
+      // Only show once scrolled past 300px, and only while scrolling up
+      setIsVisible(currentScrollY > 300 && isScrollingUp);
+
+      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', toggleVisibility);

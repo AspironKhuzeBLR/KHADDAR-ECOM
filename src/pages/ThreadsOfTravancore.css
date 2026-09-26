@@ -1,5 +1,5 @@
 /* --- PAGE LAYOUT --- */
-.collections-page {
+.tot-collections-page {
   margin-top: 0;
   padding-top: 0;
   position: relative;
@@ -7,7 +7,7 @@
   overflow-x: hidden;
 }
 
-.collections-page::before {
+.tot-collections-page::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -18,74 +18,97 @@
   z-index: 0;
 }
 
-.collections-hero {
+.tot-collections-hero {
   padding: 60px 0 50px;
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-.hero-content-wrapper {
+.tot-hero-content-wrapper {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 40px;
 }
 
-.collections-icon {
+.tot-collections-icon {
   font-size: 2rem;
-  color: #B38A6A;
+  color: #D6A04A;
   margin-bottom: 15px;
   animation: iconFloat 3s ease-in-out infinite;
 }
 
-.collections-label {
+.tot-collections-label {
   font-family: 'Josefin Sans', sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #8C6C5F;
+  color: #D6A04A;
   font-size: 0.8rem;
   display: block;
   margin-bottom: 20px;
 }
 
-.collections-title {
+.tot-collections-title {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 5rem;
-  color: #6F3132;
+  font-size: 3.4rem;
+  color: #D6A04A;
   margin-bottom: 20px;
   letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-.heading-underline {
+.tot-heading-underline {
   width: 60px;
   height: 2px;
-  background: #B38A6A;
+  background: #D6A04A;
   margin: 0 auto 30px;
 }
 
-.collections-intro {
+.tot-collections-intro {
   margin-top: 20px;
 }
 
-.intro-text {
+.tot-intro-text {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
   line-height: 1.9;
-  color: #4a4a4a;
+  color: #59483D;
   margin-bottom: 15px;
   text-align: center;
 }
 
-.intro-text.intro-bold {
+.tot-intro-text.intro-bold {
   font-size: 1.3rem;
   font-weight: 400;
-  color: #6F3132;
+  color: #59483D;
   margin-bottom: 20px;
   font-style: 'Lato', sans-serif;
 }
 
+/* --- Read More toggle for About section --- */
+.about-read-more-btn {
+  display: inline-block;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #D6A04A;
+  color: #D6A04A;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: opacity 0.2s ease;
+}
+
+.about-read-more-btn:hover {
+  opacity: 0.7;
+}
+
 /* --- CAROUSEL SECTION --- */
-.collections-carousel-section {
+.tot-carousel-section {
   width: 100vw;
   position: relative;
   left: 50%;
@@ -96,31 +119,31 @@
   background: #000;
 }
 
-.full-screen-wrapper {
+.tot-full-screen-wrapper {
   position: relative;
   width: 100%;
   height: 110vh; 
 }
 
-.carousel-track {
+.tot-carousel-track {
   display: flex;
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.carousel-slide-item {
+.tot-carousel-slide-item {
   min-width: 100%;
   height: 100%;
   position: relative;
 }
 
-.image-container {
+.tot-image-container {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-.optimized-carousel-img {
+.tot-optimized-carousel-img {
   width: 100%;
   height: 100%;
   object-fit: cover; 
@@ -134,7 +157,7 @@
 }
 
 /* --- OVERLAY CONTENT --- */
-.carousel-overlay-content {
+.tot-carousel-overlay-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -145,14 +168,14 @@
   text-align: left;
 }
 
-.carousel-item-title {
+.tot-carousel-item-title {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.5rem;
   margin-bottom: 10px;
   font-weight: 300;
 }
 
-.carousel-item-desc {
+.tot-carousel-item-desc {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
   max-width: 600px;
@@ -160,7 +183,7 @@
 }
 
 /* --- NAVIGATION ARROWS --- */
-.nav-arrow {
+.tot-nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -179,77 +202,72 @@
   justify-content: center;
 }
 
-.nav-arrow:hover {
+.tot-nav-arrow:hover {
   background: rgba(255, 255, 255, 0.9);
-  color: #6F3132;
+  color: #D6A04A;
 }
 
-.nav-arrow.prev { left: 30px; }
-.nav-arrow.next { right: 30px; }
+.tot-nav-arrow.prev { left: 30px; }
+.tot-nav-arrow.next { right: 30px; }
 
 /* --- THE DOTS (FIXED FOR ROUNDNESS) --- */
-.carousel-dots-container {
+.tot-carousel-dots-container {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex !important;
   flex-direction: row !important;
-  align-items: center !important;  /* Stops dots from stretching vertically */
+  align-items: center !important;
   justify-content: center !important;
   gap: 12px;
   z-index: 10;
   width: auto;
 }
 
-.dot-indicator {
-  /* Forced square dimensions for perfect circles */
+.tot-dot-indicator {
   width: 12px !important;
   height: 12px !important;
   min-width: 12px !important;
   min-height: 12px !important;
-  
-  border-radius: 50% !important; /* Rounding */
+  border-radius: 50% !important;
   background: transparent !important;
   border: 1.5px solid white !important;
-  
-  padding: 0 !important; /* Removes browser button padding */
+  padding: 0 !important;
   margin: 0 !important;
   cursor: pointer;
-  flex-shrink: 0 !important; /* Prevents squashing into ovals */
+  flex-shrink: 0 !important;
   transition: all 0.3s ease;
-  
-  /* Reset browser specific button behaviors */
   appearance: none !important;
   -webkit-appearance: none !important;
   outline: none !important;
   line-height: 0 !important;
 }
 
-.dot-indicator.active {
+.tot-dot-indicator.active {
   background: white !important;
   transform: scale(1.2);
 }
 
 /* --- MARQUEE STRIP --- */
-.marquee-strip {
-  background: #6F3132;
-  color: #F7F7F0;
+.tot-marquee-strip {
+  background: #D6A04A;
+  color: #ffffff;
   padding: 20px 0;
   overflow: hidden;
   position: relative;
   z-index: 1;
+  border-bottom: 1px solid #ffffff;
 }
 
-.marquee-content {
+.tot-marquee-content {
   display: flex;
   animation: marquee 15s linear infinite;
-  /* gap: 80px;  <-- REMOVED TO FIX JUMP */
   white-space: nowrap;
-  width: max-content; /* Ensures content doesn't wrap */
+  width: max-content;
 }
 
-.marquee-content span {
+.tot-marquee-content span {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
@@ -258,51 +276,43 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  
-  /* ADDED: Replaces the gap to ensure smooth loop calculation */
   margin-right: 80px; 
 }
 
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* --- SHOP BUTTON SECTION --- */
-.collections-shop-action {
+.tot-shop-action {
   padding: 80px 0 100px;
   text-align: center;
   position: relative;
   z-index: 1;
 }
 
-/* Shop Action Heading */
-.shop-action-heading {
+.tot-shop-action-heading {
   font-family: 'Josefin Sans', sans-serif;
   font-size: 2.5rem;
-  color: #6F3132;
+  color: #6F3026;
   margin-bottom: 15px;
   font-weight: 400;
   letter-spacing: 0.02em;
 }
 
-.shop-action-subtext {
+.tot-shop-action-subtext {
   font-family: 'Lato', sans-serif;
   font-size: 1.1rem;
-  color: #8C6C5F;
+  color: #59483D;
   margin-bottom: 35px;
   font-weight: 300;
 }
 
-/* Enhanced Button */
-.collections-btn {
+.tot-collections-btn {
   font-family: 'Josefin Sans', sans-serif;
   padding: 20px 45px;
-  background: #6F3132;
+  background: #6F3026;
   color: white;
   text-decoration: none;
   letter-spacing: 0.1em;
@@ -314,12 +324,12 @@
   gap: 12px;
   font-size: 1rem;
   font-weight: 500;
-  box-shadow: 0 4px 15px rgba(111, 49, 50, 0.3);
+  box-shadow: 0 4px 15px rgba(111, 48, 38, 0.25);
   position: relative;
   overflow: hidden;
 }
 
-.collections-btn::before {
+.tot-collections-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -330,195 +340,175 @@
   transition: left 0.5s ease;
 }
 
-.collections-btn:hover::before {
+.tot-collections-btn:hover::before {
   left: 100%;
 }
 
-.collections-btn:hover { 
-  background: #A15F22;
+.tot-collections-btn:hover {
+  background: #D6A04A;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(111, 49, 50, 0.4);
+  box-shadow: 0 6px 20px rgba(214, 160, 74, 0.35);
 }
 
-.collections-btn svg {
+.tot-collections-btn svg {
   transition: transform 0.3s ease;
 }
 
-.collections-btn:hover svg {
+.tot-collections-btn:hover svg {
   transform: translateX(5px);
+}
+
+/* --- ToT hero button spacing --- */
+.tot-hero .hero-cta {
+  margin-top: 24px;
+}
+
+/* --- ToT closing video section --- */
+.tot-video-section {
+  width: 100%;
+  height: 70vh;
+  max-height: 700px;
+  overflow: hidden;
+}
+
+.tot-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tot-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tot-video-overlay-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.tot-video-quote {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: #F7F7F0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  max-width: 800px;
+  line-height: 1.5;
+  margin: 0;
 }
 
 /* --- RESPONSIVE FIXES --- */
 @media (max-width: 1024px) {
-  .full-screen-wrapper { height: 60vh; }
-  .collections-title { font-size: 3.5rem; }
-  
-  /* NEW: Faster marquee for iPad/Tablet */
-  .marquee-content {
-    animation-duration: 10s;
-  }
+  .tot-full-screen-wrapper { height: 60vh; }
+  .tot-collections-title { font-size: 3.5rem; }
+  .tot-marquee-content { animation-duration: 10s; }
 }
 
 @media (max-width: 768px) {
-  .collections-hero { padding: 50px 0 40px; }
-  .hero-content-wrapper { padding: 0 20px; }
-  .collections-title { font-size: 2.5rem; }
-  .intro-text { font-size: 1rem; }
-  .intro-text.intro-bold { font-size: 1.15rem; margin-bottom: 18px; }
-  .full-screen-wrapper { height: 50vh; }
-  .carousel-item-title { font-size: 1.8rem; }
-  
-  .nav-arrow { width: 40px; height: 40px; }
-  .nav-arrow.prev { left: 10px; }
-  .nav-arrow.next { right: 10px; }
-  
-  .carousel-dots-container {
-    bottom: 20px;
-    gap: 10px;
-  }
-  
-  .dot-indicator {
+  .tot-collections-hero { padding: 50px 0 40px; }
+  .tot-hero-content-wrapper { padding: 0 20px; }
+  .tot-collections-title { font-size: 2rem; white-space: normal; }
+  .tot-intro-text { font-size: 1rem; }
+  .tot-intro-text.intro-bold { font-size: 1.15rem; margin-bottom: 18px; }
+  .tot-full-screen-wrapper { height: 50vh; }
+  .tot-carousel-item-title { font-size: 1.8rem; }
+  .tot-nav-arrow { width: 40px; height: 40px; }
+  .tot-nav-arrow.prev { left: 10px; }
+  .tot-nav-arrow.next { right: 10px; }
+  .tot-carousel-dots-container { bottom: 20px; gap: 10px; }
+  .tot-dot-indicator {
     width: 10px !important;
     height: 10px !important;
     min-width: 10px !important;
     min-height: 10px !important;
   }
-  
-  /* --- MARQUEE FIXES FOR MOBILE --- */
-  .marquee-strip {
-    padding: 15px 0;
-  }
-
-  .marquee-content {
-    /* Force gap to 0 to prevent "snap" calculation errors */
+  .tot-marquee-strip { padding: 15px 0; }
+  .tot-marquee-content {
     gap: 0 !important; 
-    /* Use hardware acceleration to prevent jitter */
     will-change: transform;
     animation-duration: 9s; 
   }
-  
-  .marquee-content span {
+  .tot-marquee-content span {
     font-size: 0.9rem;
-    /* Internal gap for icon+text (keep this) */
     gap: 8px; 
-    /* Reduce loop spacing on mobile so it looks continuous */
     margin-right: 30px; 
   }
-  
-  /* Shop Action Section - Mobile */
-  .collections-shop-action { padding: 60px 0 80px; }
-  
-  .shop-action-heading {
-    font-size: 1.8rem;
-    padding: 0 20px;
+  .tot-shop-action { padding: 60px 0 80px; }
+  .tot-shop-action-heading { font-size: 1.8rem; padding: 0 20px; }
+  .tot-shop-action-subtext { font-size: 1rem; padding: 0 20px; }
+  .tot-collections-btn { padding: 16px 35px; font-size: 0.9rem; }
+  .tot-video-section { height: 45vh; }
+  .tot-video-quote {
+    font-size: 1.15rem;
+    padding: 0 10px;
   }
-  
-  .shop-action-subtext {
-    font-size: 1rem;
-    padding: 0 20px;
-  }
-  
-  .collections-btn {
-    padding: 16px 35px;
-    font-size: 0.9rem;
-  }
-}
-/* ================================================
-   COLLECTIONS HUB - Selection Cards
-   ================================================ */
-.collections-hub-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-  max-width: 1200px;
-  margin: 20px auto 100px;
-  padding: 0 40px;
-  position: relative;
-  z-index: 1;
 }
 
-.collection-hub-card {
+/* --- Watch Ad marquee (links to promo video) --- */
+/* --- Watch Ad marquee (links to promo video) --- */
+.tot-watch-ad-marquee {
   display: block;
-  position: relative;
+  background: #D6A04A;
+  color: #ffffff;
+  padding: 16px 0;
+  overflow: hidden;
   text-decoration: none;
-  overflow: hidden;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 4px 24px rgba(111, 49, 50, 0.08);
-  transition: transform 0.4s var(--ease-out-expo, ease), box-shadow 0.4s ease;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #ffffff;
 }
 
-.collection-hub-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(111, 49, 50, 0.16);
+.tot-watch-ad-marquee:hover {
+  background: #D6A04A;
 }
 
-.collection-hub-card-image {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
+.tot-watch-ad-marquee-content {
+  display: flex;
+  animation: totWatchAdMarquee 18s linear infinite;
+  white-space: nowrap;
+  width: max-content;
 }
 
-.collection-hub-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s var(--ease-out-expo, ease);
-}
-
-.collection-hub-card:hover .collection-hub-card-image img {
-  transform: scale(1.06);
-}
-
-.collection-hub-card-content {
-  padding: 28px 30px 34px;
-  text-align: left;
-}
-
-.collection-hub-card-label {
+.tot-watch-ad-marquee-content span {
   font-family: 'Josefin Sans', sans-serif;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #B38A6A;
-  font-size: 0.72rem;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.collection-hub-card-title {
-  font-family: 'Josefin Sans', sans-serif;
-  font-size: 1.9rem;
-  color: #6F3132;
-  margin: 0 0 12px;
-  letter-spacing: 0.01em;
-}
-
-.collection-hub-card-desc {
-  font-family: 'Lato', sans-serif;
-  color: #4a4a4a;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 18px;
-}
-
-.collection-hub-card-cta {
-  font-family: 'Josefin Sans', sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  color: #6F3132;
-  font-weight: 600;
-  transition: letter-spacing 0.3s ease;
-}
-
-.collection-hub-card:hover .collection-hub-card-cta {
+  font-size: 1.05rem;
+  font-weight: 400;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-right: 70px;
+}
+
+.tot-watch-ad-marquee-content span em {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+@keyframes totWatchAdMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
-  .collections-hub-grid {
-    grid-template-columns: 1fr;
-    padding: 0 20px;
-    gap: 24px;
+  .tot-watch-ad-marquee-content span {
+    font-size: 0.85rem;
+    margin-right: 35px;
+  }
+  .tot-watch-ad-marquee-content {
+    animation-duration: 12s;
   }
 }

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import HeroVideo from '../components/HeroVideo';
+import WatchFilmMarquee from '../components/WatchFilmMarquee';
 import VisionSection from '../components/VisionSection';
 import AboutSection from '../components/AboutSection';
 import MissionSection from '../components/MissionSection';
 import BrandStory from '../components/BrandStory';
 import FeaturedCollection from '../components/FeaturedCollection';
 import './Home.css';
+import heroImage from '../images/HeroImage.jpg';
 
 // Elegant heritage divider component
 const HeritageDivider = ({ variant = 'default' }) => (
@@ -40,7 +42,13 @@ const Home = () => {
   return (
     <div className="home-page-container page-loaded">
       {/* Hero with Image */}
-      <HeroVideo />
+      <HeroVideo buttonText="EXPLORE COLLECTIONS" collectionSelector bgImage={heroImage} className="home-hero-custom" />
+
+      <WatchFilmMarquee
+        href="https://youtu.be/5G_e2IazRRw?si=voVvooyCnurQQg43"
+        className="watch-ad-marquee"
+        contentClassName="watch-ad-marquee-content"
+      />
       
       
       

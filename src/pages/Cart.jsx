@@ -16,7 +16,6 @@ const Cart = () => {
       return;
     }
     
-    // Load cart items from sessionStorage
     const savedCart = sessionStorage.getItem('cartItems');
     if (savedCart) {
       try {
@@ -56,7 +55,6 @@ const Cart = () => {
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
-      // Handle both string and number price formats
       const price = typeof item.price === 'string' 
         ? parseFloat(item.price.replace(/[₹,]/g, '')) 
         : (item.priceRaw || item.price || 0);
@@ -147,6 +145,21 @@ const Cart = () => {
                     {item.color && (
                       <p style={{ fontSize: '0.875rem', color: '#6b6b6b', marginBottom: '15px' }}>
                         Color: {item.color}
+                      </p>
+                    )}
+                    {item.measurements && Object.entries(item.measurements).some(([k, v]) => k !== 'unit' && v) && (
+                      <p style={{ fontSize: '0.8rem', color: '#8C6C5F', marginBottom: '15px' }}>
+                        Custom fit ({item.measurements.unit === 'cm' ? 'cm' : 'in'}):
+                        {item.measurements.bust && ` Bust ${item.measurements.bust}`}
+                        {item.measurements.waist && ` Waist ${item.measurements.waist}`}
+                        {item.measurements.hips && ` Hips ${item.measurements.hips}`}
+                        {item.measurements.shoulder && ` Shoulder ${item.measurements.shoulder}`}
+                        {item.measurements.chest && ` Chest ${item.measurements.chest}`}
+                      </p>
+                    )}
+                    {item.note && (
+                      <p style={{ fontSize: '0.8rem', color: '#8C6C5F', fontStyle: 'italic', marginBottom: '8px' }}>
+                        Note: "{item.note}"
                       </p>
                     )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '15px' }}>
@@ -260,7 +273,6 @@ const Cart = () => {
                 className="auth-button"
                 style={{ width: '100%', marginTop: '30px' }}
                 onClick={() => {
-                  // Save cart items to sessionStorage for checkout
                   sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
                   navigate('/checkout');
                 }}
@@ -289,4 +301,3 @@ const Cart = () => {
 };
 
 export default Cart;
-

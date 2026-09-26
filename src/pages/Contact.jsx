@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Contact.css';
 import HeroVideo from '../components/HeroVideo';
+import heroImage from '../images/HeroImage.jpg';
 // Importing icons from react-icons library
 import { FaInstagram, FaFacebookF, FaPinterest, FaLinkedin, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
@@ -21,6 +22,8 @@ const Contact = () => {
         title='Contact Us'  
         subtitle="We'd love to hear from you."
         fullHeight={true}
+        bgImage={heroImage}
+        collectionSelector
       />
       
       <section className="contact-content">

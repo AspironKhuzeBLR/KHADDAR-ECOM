@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../services/supabaseClient';
 import {
   getDashboardSummary,
   getRecentOrders,
@@ -21,22 +22,29 @@ import './AdminDashboard.css'
 
 const logo = '/logo_file_page-0001.png';
 
-// 1. EXACT CATEGORY MAPPING
 const CATEGORY_MAP = {
   "Men's Wear": ["Shirts", "Blazers/Jackets", "Kurtas", "Trousers", "Co-ords"],
-  "Women's Wear": ["Dresses", "Corsets", "Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
+  "Women's Wear": ["Dresses", "Corsets", "Tops/Tunics", "Shirts/Blouses", "Skirts/Trousers", "Co-ords", "Kurtas"]
 };
+
+// Flat list of individual piece names for the "Individual Pieces" dropdown,
+// derived from CATEGORY_MAP but with combined entries (e.g. "Skirts/Trousers")
+// split into their own separate options.
+const PIECE_OPTIONS = Array.from(
+  new Set(
+    Object.values(CATEGORY_MAP)
+      .flat()
+      .flatMap(cat => cat.split('/'))
+  )
+);
 
 const AdminDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
-  
-  // Sidebar Toggle State for Mobile
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Dashboard Data State
   const [stats, setStats] = useState({
     totalSales: 0,
     totalOrders: 0,
@@ -46,7 +54,6 @@ const AdminDashboard = () => {
   const [recentOrders, setRecentOrders] = useState([]);
   const [revenueData, setRevenueData] = useState(null);
 
-  // Products State
   const [products, setProducts] = useState([]);
   const [productsPage, setProductsPage] = useState(1);
   const PRODUCTS_PER_PAGE = 10;
@@ -56,7 +63,6 @@ const AdminDashboard = () => {
   const [orderSearchTerm, setOrderSearchTerm] = useState('');
   const [orderStatusFilter, setOrderStatusFilter] = useState('all');
 
-  // 2. PRODUCT FORM STATE
   const initialProductState = {
     name: '',
     price: '',
@@ -64,23 +70,24 @@ const AdminDashboard = () => {
     sub_category: '',
     description: '',
     is_featured: false,
+    is_live: true,
+    collection: 'kok',
+    hasPieces: false,
+    pieces: [{ label: '', price: '' }],
     sizes: [
       { size: 'S', stock: '' },
       { size: 'M', stock: '' },
       { size: 'L', stock: '' },
       { size: 'XL', stock: '' }
     ],
-    existingImages: [], // URLs already in DB
-    newFiles: []        // File objects waiting to be uploaded
+    existingImages: [],
+    newFiles: []
   };
   
   const [currentProduct, setCurrentProduct] = useState(initialProductState);
 
-  // Orders State
   const [allOrders, setAllOrders] = useState([]);
   const [ordersPage, setOrdersPage] = useState(1);
-
-  // --- Data Fetching Logic ---
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -144,8 +151,6 @@ const AdminDashboard = () => {
     setIsSidebarOpen(false);
   };
 
-  // --- Product Handlers ---
-
   const handleSizeChange = (index, field, value) => {
     const updatedSizes = [...currentProduct.sizes];
     if (field === 'stock') {
@@ -175,7 +180,7 @@ const AdminDashboard = () => {
       const newFileObjects = files.map(file => ({
         file: file,
         preview: URL.createObjectURL(file),
-        id: Date.now() + Math.random() // Temp ID for UI
+        id: Date.now() + Math.random()
       }));
 
       setCurrentProduct(prev => ({
@@ -199,18 +204,55 @@ const AdminDashboard = () => {
     });
   };
 
+  // WORKAROUND for a backend bug: editing a product's category through the
+  // normal update API doesn't actually update the product_categories join
+  // table (it only gets set correctly when a product is first created).
+  // This writes the correct category links directly to Supabase instead,
+  // looking up the right category IDs live so it stays correct even as
+  // new categories get added later.
+  const fixProductCategoryLink = async (productId, mainCategoryName, subCategoryName) => {
+    if (!supabase || !productId) return;
+    try {
+      const { data: mainCat, error: mainErr } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('name', mainCategoryName)
+        .eq('type', 'main')
+        .maybeSingle();
+      if (mainErr) throw mainErr;
+
+      const { data: subCat, error: subErr } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('name', subCategoryName)
+        .eq('type', 'sub')
+        .eq('parent_id', mainCat?.id)
+        .maybeSingle();
+      if (subErr) throw subErr;
+
+      const categoryIds = [mainCat?.id, subCat?.id].filter(Boolean);
+      if (categoryIds.length === 0) return;
+
+      // Remove old links, then insert the correct current ones
+      await supabase.from('product_categories').delete().eq('product_id', productId);
+      await supabase.from('product_categories').insert(
+        categoryIds.map((category_id) => ({ product_id: productId, category_id }))
+      );
+    } catch (err) {
+      console.error('Failed to fix product category link in Supabase:', err);
+    }
+  };
+
   const handleProductSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Upload ALL new images concurrently
       const uploadPromises = currentProduct.newFiles.map(item => 
         uploadImageToSupabase(item.file)
       );
       const newUploadedUrls = await Promise.all(uploadPromises);
 
-      // 2. Combine Existing URLs + New URLs
       const allImages = [
         ...currentProduct.existingImages.map((img, i) => ({
           image_url: img.image_url || img, 
@@ -226,9 +268,29 @@ const AdminDashboard = () => {
 
       const totalStock = currentProduct.sizes.reduce((sum, s) => sum + Number(s.stock || 0), 0);
 
+      const cleanName = currentProduct.name.replace(/^tot\s*-\s*/i, '').trim();
+      const finalName = currentProduct.collection === 'tot' ? `ToT - ${cleanName}` : cleanName;
+
+      const cleanDescription = (currentProduct.description || '').replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+      let finalDescription = cleanDescription;
+      if (currentProduct.hasPieces) {
+        const validPieces = currentProduct.pieces.filter(p => p.label && p.price);
+        if (validPieces.length > 0) {
+          const piecesData = {
+            fullSet: Number(currentProduct.price),
+            pieces: validPieces.map(p => ({ label: p.label, price: Number(p.price) }))
+          };
+          const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(piecesData))));
+          finalDescription = `${cleanDescription}\n\n[[PIECES_DATA:${encoded}]]`;
+        }
+      }
+      if (!currentProduct.is_live) {
+        finalDescription = `${finalDescription}\n\n[[HIDDEN]]`;
+      }
+
       const payload = {
-        name: currentProduct.name,
-        description: currentProduct.description || "",
+        name: finalName,
+        description: finalDescription,
         price: Math.round(Number(currentProduct.price)),
         stock: totalStock,
         main_category: currentProduct.main_category,
@@ -238,16 +300,22 @@ const AdminDashboard = () => {
           stock: s.stock === '' ? 0 : Number(s.stock) 
         })),
         is_featured: Boolean(currentProduct.is_featured),
-        images: allImages // Send array of images
+        images: allImages
       };
 
       console.log("Sending data to backend:", payload);
 
+      let savedProductId = currentProduct.id;
       if (isEditingProduct) {
         await updateProduct(currentProduct.id, payload);
       } else {
-        await addProduct(payload);
+        const created = await addProduct(payload);
+        savedProductId = created?.id || created?.product?.id || created?.data?.id;
       }
+
+      // Directly fix the category link in Supabase (see comment on the
+      // helper above for why this is needed)
+      await fixProductCategoryLink(savedProductId, currentProduct.main_category, currentProduct.sub_category);
 
       setIsProductModalOpen(false);
       resetProductForm();
@@ -258,6 +326,34 @@ const AdminDashboard = () => {
       alert(`Error: ${error.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleToggleLive = async (product, e) => {
+    if (e) e.stopPropagation();
+    const nextIsLive = !product.isLive;
+    const previousProducts = [...products];
+    setProducts(prev => prev.map(p => (p.id === product.id ? { ...p, isLive: nextIsLive } : p)));
+
+    try {
+      const cleanDescription = (product.rawDescription || '').replace(/\n*\[\[HIDDEN\]\]/i, '').trim();
+      const finalDescription = nextIsLive ? cleanDescription : `${cleanDescription}\n\n[[HIDDEN]]`;
+
+      await updateProduct(product.id, {
+        name: product.rawName || product.name,
+        description: finalDescription,
+        price: Math.round(Number(product.price)),
+        stock: product.stock,
+        main_category: product.category,
+        sub_category: product.subCategory,
+        sizes: product.sizes,
+        is_featured: Boolean(product.isFeatured),
+        images: product.images
+      });
+    } catch (error) {
+      setProducts(previousProducts);
+      console.error('Visibility toggle failed:', error);
+      alert(`❌ Error: Could not update visibility - ${error.message}`);
     }
   };
 
@@ -281,11 +377,9 @@ const AdminDashboard = () => {
     }
   };
 
-  // --- UPDATED LOGIC HERE ---
   const openEditModal = (product, e) => {
     if (e) e.stopPropagation();
     
-    // Debugging: Check console to see exactly what 'product.images' is
     console.log("Opening product:", product.name);
     console.log("Raw images:", product.images);
 
@@ -298,51 +392,74 @@ const AdminDashboard = () => {
       ? product.sizes 
       : defaultSizes;
 
-    // --- FIX: Handle Stringified JSON & Normalize Keys ---
     let initialImages = [];
     let rawImages = product.images;
 
-    // 1. If it's a string that looks like JSON, parse it
     if (typeof rawImages === 'string') {
       try {
         if (rawImages.trim().startsWith('[') || rawImages.trim().startsWith('{')) {
            rawImages = JSON.parse(rawImages);
         } else {
-           // Treat as single string URL
            rawImages = [{ image_url: rawImages }];
         }
       } catch (err) {
         console.warn("Failed to parse image JSON:", err);
-        // Fallback: treat as single string
         rawImages = [{ image_url: rawImages }];
       }
     }
 
-    // 2. Now process it as an array
     if (Array.isArray(rawImages) && rawImages.length > 0) {
       initialImages = rawImages.map(img => {
         if (typeof img === 'string') return { image_url: img };
-        // Handle "url" vs "image_url" mismatch
         return { 
           image_url: img.image_url || img.url || img.src || '', 
           ...img 
         };
-      }).filter(img => img.image_url); // Filter out any empty/bad objects
+      }).filter(img => img.image_url);
     } 
-    // 3. Fallback: Legacy single image
     else if (product.image) {
       initialImages = [{ image_url: product.image }];
     }
-    // --- END FIX ---
+
+    const totProductPrefix = /^tot\s*-\s*/i;
+    const isTotProduct = totProductPrefix.test(product.rawName || product.name || '');
+
+    const rawDescription = product.rawDescription || product.description || '';
+    const isHiddenProduct = /\[\[HIDDEN\]\]/i.test(rawDescription);
+    const descriptionWithoutHidden = rawDescription.replace(/\n*\[\[HIDDEN\]\]/i, '').trim();
+    const piecesMatch = descriptionWithoutHidden.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
+    let parsedPieces = { hasPieces: false, pieces: [{ label: '', price: '' }] };
+    let cleanDescription = descriptionWithoutHidden;
+    if (piecesMatch) {
+      try {
+        let data;
+        try {
+          data = JSON.parse(decodeURIComponent(escape(atob(piecesMatch[1]))));
+        } catch (e) {
+          data = JSON.parse(piecesMatch[1]); // fallback for older plain-JSON format
+        }
+        parsedPieces = {
+          hasPieces: true,
+          pieces: data.pieces?.length > 0 ? data.pieces : [{ label: '', price: '' }]
+        };
+      } catch (e) {
+        console.error('Failed to parse pieces data', e);
+      }
+      cleanDescription = descriptionWithoutHidden.replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim();
+    }
 
     setCurrentProduct({
       id: product.id,
-      name: product.name,
+      name: (product.name || '').replace(totProductPrefix, '').trim(),
       price: product.price,
       main_category: product.category || product.mainCategory || "Men's Wear",
       sub_category: product.subCategory || "",
-      description: product.description || "",
+      description: cleanDescription,
       is_featured: product.isFeatured || false,
+      is_live: !isHiddenProduct,
+      collection: isTotProduct ? 'tot' : 'kok',
+      hasPieces: parsedPieces.hasPieces,
+      pieces: parsedPieces.pieces,
       sizes: productSizes,
       existingImages: initialImages,
       newFiles: []
@@ -361,8 +478,6 @@ const AdminDashboard = () => {
   const handleProductRowClick = (product) => {
     setSelectedProduct(product);
   };
-
-  // --- Order Handlers ---
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     const previousOrders = [...allOrders];
@@ -388,8 +503,6 @@ const AdminDashboard = () => {
       alert(`❌ Error: ${error.message || 'Could not update status'}`);
     }
   };
-
-  // --- Helpers ---
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
@@ -431,14 +544,12 @@ const AdminDashboard = () => {
   }
 
   const filteredOrders = allOrders.filter(order => {
-    // 1. Search Logic (Checks Name or ID)
     const searchTerm = orderSearchTerm.toLowerCase();
     const matchesSearch = 
       (order.customer_name?.toLowerCase() || '').includes(searchTerm) ||
       (order.order_number?.toLowerCase() || '').includes(searchTerm) ||
       (order.order_id?.toLowerCase() || '').includes(searchTerm);
 
-    // 2. Filter Logic (Checks Status)
     const matchesStatus = orderStatusFilter === 'all' || 
       order.order_status?.toLowerCase() === orderStatusFilter.toLowerCase();
 
@@ -447,7 +558,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {/* Mobile Header */}
       <div className="mobile-header">
         <button className="menu-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
           ☰
@@ -456,7 +566,6 @@ const AdminDashboard = () => {
         <div style={{ width: '30px' }}></div> 
       </div>
 
-      {/* Sidebar */}
       <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="admin-logo">
           <img src={logo} alt="Khaddar" />
@@ -487,13 +596,11 @@ const AdminDashboard = () => {
         </nav>
       </aside>
       
-      {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)}></div>
       )}
 
       <main className="admin-content">
-        {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="dashboard-content fade-in">
             <header className="page-header">
@@ -562,7 +669,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* PRODUCTS TAB */}
         {activeTab === 'products' && (
           <div className="products-content fade-in">
             <header className="page-header">
@@ -597,7 +703,6 @@ const AdminDashboard = () => {
                     >
                       <td>{(productsPage - 1) * PRODUCTS_PER_PAGE + (index + 1)}</td>
                       <td>
-                         {/* Display first image from array, or legacy string */}
                          <img 
                             src={Array.isArray(product.images) && product.images.length > 0 ? (product.images[0].image_url || product.images[0].url || product.images[0]) : product.image} 
                             alt={product.name} 
@@ -614,6 +719,14 @@ const AdminDashboard = () => {
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
                         <div className="action-buttons">
+                          <label className="live-toggle-label" title={product.isLive ? 'Live on site - untick to hide' : 'Hidden from site - tick to make live'}>
+                            <input
+                              type="checkbox"
+                              checked={!!product.isLive}
+                              onChange={(e) => handleToggleLive(product, e)}
+                            />
+                            Live
+                          </label>
                           <button className="action-btn edit" onClick={(e) => openEditModal(product, e)}>Edit</button>
                           <button className="action-btn delete" onClick={(e) => handleDeleteProduct(product.id, e)}>Delete</button>
                         </div>
@@ -635,7 +748,6 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* ORDERS TAB */}
         {activeTab === 'orders' && (
           <div className="orders-content fade-in">
             <header className="page-header">
@@ -645,7 +757,7 @@ const AdminDashboard = () => {
                   alignItems: 'center', 
                   marginBottom: '10px',
                   width: '100%',
-                  flexWrap: 'wrap' // This ensures it looks good on smaller screens too
+                  flexWrap: 'wrap'
                 }}>
                   <h1 style={{ margin: 0 }}>Manage Orders</h1>
 
@@ -677,7 +789,6 @@ const AdminDashboard = () => {
                     >
                       <option value="all">All Statuses</option>
                       <option value="pending">Pending</option>
-                      {/* <option value="confirmed">Confirmed</option> */}
                       <option value="paid">Paid</option>
                       <option value="completed">Completed</option>
                       <option value="cancelled">Cancelled</option>
@@ -711,7 +822,6 @@ const AdminDashboard = () => {
                           className="status-select"
                         >
                           <option value="pending">Pending</option>
-                          {/* <option value="confirmed">Confirmed (COD)</option> */}
                           <option value="paid">Paid</option>
                           <option value="completed">Completed</option>
                           <option value="cancelled">Cancelled</option>
@@ -732,7 +842,6 @@ const AdminDashboard = () => {
         )}
       </main>
 
-      {/* Product Edit/Add Modal */}
       {isProductModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content admin-modal">
@@ -741,6 +850,17 @@ const AdminDashboard = () => {
               <div className="form-group">
                 <label>Product Name</label>
                 <input type="text" value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} required />
+              </div>
+
+              <div className="form-group">
+                <label>Collection</label>
+                <select
+                  value={currentProduct.collection}
+                  onChange={(e) => setCurrentProduct({ ...currentProduct, collection: e.target.value })}
+                >
+                  <option value="kok">Kolours of Kutch</option>
+                  <option value="tot">Threads of Travancore</option>
+                </select>
               </div>
 
               <div className="form-row">
@@ -756,6 +876,87 @@ const AdminDashboard = () => {
                   </select>
                 </div>
               </div>
+
+              <div className="form-group set-toggle-group">
+                <label className="set-toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.is_live}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, is_live: e.target.checked })}
+                  />
+                  <span>Show product live on site <em>(untick to keep it hidden from customers)</em></span>
+                </label>
+              </div>
+
+              <div className="form-group set-toggle-group">
+                <label className="set-toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={currentProduct.hasPieces}
+                    onChange={(e) => setCurrentProduct({ ...currentProduct, hasPieces: e.target.checked })}
+                  />
+                  <span>This product is a set <em>(customers can buy the full set OR individual pieces)</em></span>
+                </label>
+              </div>
+
+              {currentProduct.hasPieces && (
+                <div className="pieces-panel">
+                  <p className="pieces-panel-hint">
+                    The full set price uses the main Price field above. Just add prices for the individual pieces below.
+                  </p>
+
+                  <label className="pieces-list-label">Individual Pieces</label>
+                  <div className="pieces-list">
+                    {currentProduct.pieces.map((piece, idx) => (
+                      <div key={idx} className="piece-row">
+                        <select
+                          value={piece.label}
+                          onChange={(e) => {
+                            const updated = [...currentProduct.pieces];
+                            updated[idx].label = e.target.value;
+                            setCurrentProduct({ ...currentProduct, pieces: updated });
+                          }}
+                          className="piece-name-input"
+                        >
+                          <option value="">Select piece</option>
+                          {PIECE_OPTIONS.map(opt => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          placeholder="Price (₹)"
+                          value={piece.price}
+                          onChange={(e) => {
+                            const updated = [...currentProduct.pieces];
+                            updated[idx].price = e.target.value;
+                            setCurrentProduct({ ...currentProduct, pieces: updated });
+                          }}
+                          className="piece-price-input"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = currentProduct.pieces.filter((_, i) => i !== idx);
+                            setCurrentProduct({ ...currentProduct, pieces: updated.length > 0 ? updated : [{ label: '', price: '' }] });
+                          }}
+                          className="piece-remove-btn"
+                          title="Remove piece"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentProduct({ ...currentProduct, pieces: [...currentProduct.pieces, { label: '', price: '' }] })}
+                    className="add-piece-btn"
+                  >
+                    + Add Piece
+                  </button>
+                </div>
+              )}
 
               <div className="form-row">
                 <div className="form-group">
@@ -808,7 +1009,6 @@ const AdminDashboard = () => {
                   <div className="image-preview-grid">
                     {currentProduct.existingImages.map((img, idx) => (
                       <div key={`exist-${idx}`} className="preview-item">
-                        {/* SAFE RENDER: Ensure we access the right property */}
                         <img src={img.image_url || img} alt="Existing" />
                         <button type="button" className="remove-image-btn" onClick={() => handleRemoveImage('existing', idx)}>&times;</button>
                       </div>
@@ -830,7 +1030,6 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Product Details Modal (VIEW ONLY) - UPDATED TO SHOW GALLERY */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
           <div className="modal-content product-details-modal" onClick={e => e.stopPropagation()}>
@@ -840,10 +1039,8 @@ const AdminDashboard = () => {
             </div>
 
             <div className="product-details-body">
-              {/* Left Side: Image Gallery */}
               <div className="product-details-image">
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '10px', overflowY: 'auto', maxHeight: '400px' }}>
-                  {/* Reuse logic for View Mode */}
                   {(() => {
                     let images = selectedProduct.images;
                     if (typeof images === 'string') {

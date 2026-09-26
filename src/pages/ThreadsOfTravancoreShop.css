@@ -1,0 +1,44 @@
+/* ToT's own premium ivory/gold/Kasavu palette, distinct from Kolours of Kutch */
+.tot-shop-page {
+  --tot-burnt-sienna: #6F3026;
+  --tot-ivory-sand: #F5F1E9;
+  --tot-stormy-sky: #59483D;
+  --tot-sage-green: #8D957E;
+  --tot-gold: #D6A04A;
+  --tot-card-white: #FFFCF6;
+  --tot-border: #E4D6C5;
+  background-color: var(--tot-ivory-sand);
+}
+
+.tot-shop-page .products-category-title {
+  font-family: 'Josefin Sans', sans-serif;
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .category-description {
+  color: var(--tot-stormy-sky);
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 30px;
+}
+
+.tot-shop-page .product-card {
+  background: var(--tot-card-white);
+  border: 1px solid var(--tot-border);
+  box-shadow: none;
+}
+
+.tot-shop-page .product-name {
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .price-value {
+  color: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .product-choose-btn {
+  background: var(--tot-burnt-sienna);
+}
+
+.tot-shop-page .product-choose-btn:hover {
+  background: var(--tot-gold);
+}

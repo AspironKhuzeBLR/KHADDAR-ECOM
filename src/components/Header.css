@@ -6,7 +6,6 @@
   z-index: 1000;
   transition: all 0.3s ease;
   background-color: #F7F7F0;
-  border-bottom: 1px solid #8C6C5F;
 }
 
 /* =========================================
@@ -16,7 +15,6 @@
 /* Transparent background */
 .header.transparent-page:not(.scrolled) {
   background-color: transparent;
-  border-bottom: 1px solid transparent;
   box-shadow: none;
 }
 
@@ -54,8 +52,22 @@
    ========================================= */
 .header.scrolled {
   background-color: #F7F7F0;
-  border-bottom: 1px solid #8C6C5F;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* ToT-only header theme (scrolled/solid state only - the transparent
+   pre-scroll state over the hero stays white for readability, same as
+   every other hero page) */
+.header.header-tot-theme.scrolled {
+  background-color: #F5F1E9;
+}
+
+.header.header-tot-theme.scrolled .nav-link {
+  color: #59483D;
+}
+
+.header.header-tot-theme.scrolled .nav-link:hover {
+  color: #6F3026;
 }
 
 .header-icons {
@@ -319,6 +331,9 @@
   position: relative;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   z-index: 1;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link::after {
@@ -353,7 +368,8 @@
 
 .nav-link-wrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link-wrapper::after {
@@ -602,7 +618,6 @@
   .header,
   .header.transparent-page:not(.scrolled) {
     background-color: #F7F7F0 !important;
-    border-bottom: 1px solid #8C6C5F !important;
   }
 
   /* Force Dark Icons */
@@ -840,5 +855,85 @@
 @media (min-width: 1201px) {
   .mobile-arrow {
     display: none;
+  }
+}
+/* Collections nav dropdown - minimal text style, matching homepage hero selector */
+.nav-collections-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.97);
+  padding: 12px 20px;
+  border-radius: 2px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.15);
+  z-index: 30;
+  white-space: nowrap;
+  animation: navCollectionsIn 0.18s ease-out;
+}
+
+@keyframes navCollectionsIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-collections-dropdown a {
+  color: #6F3132;
+  text-decoration: none;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.nav-collections-dropdown a:hover {
+  border-bottom-color: #6F3132;
+}
+
+.nav-collections-dropdown .nav-collections-divider {
+  color: rgba(111, 49, 50, 0.4);
+  margin: 0 16px;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 1200px) {
+  .nav-collections-dropdown {
+    position: static;
+    box-shadow: none;
+    background: transparent;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 0 10px 20px;
+    gap: 10px;
+  }
+  .nav-collections-dropdown .nav-collections-divider {
+    display: none;
+  }
+  .nav-collections-dropdown a {
+    color: inherit;
+  }
+}
+
+/* Fix the Collections nav dropdown on mobile - the desktop -80px offset
+   pushes it off-screen on narrow viewports, so reset it back to a normal
+   in-flow block matching the other mobile dropdown menus */
+@media (max-width: 1200px) {
+  .collections-nav-dropdown {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border-left: 2px solid #8C6C5F;
+    border-radius: 0 !important;
+    padding: 5px 0 5px 20px !important;
+    background: transparent !important;
+    white-space: normal !important;
   }
 }

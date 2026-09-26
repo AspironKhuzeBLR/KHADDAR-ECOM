@@ -1,18 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Community.css';
 import HeroVideo from '../components/HeroVideo';
+import heroImage from '../images/HeroImage.jpg';
 
 const Community = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [totSlide, setTotSlide] = useState(0);
+  const [insightSlide, setInsightSlide] = useState(0);
   const videoRef = useRef(null);
+
+  const totImages = [
+    '/blog-images/tot1.jpg',
+    '/blog-images/tot2.jpg',
+    '/blog-images/tot3.jpg',
+    '/blog-images/tot4.jpg',
+    '/blog-images/tot5.jpg'
+  ];
 
   const artisanImages = [
     '/blog-images/IMG_1625.PNG',
     '/blog-images/IMG_1626.PNG',
     '/blog-images/IMG_1627.PNG',
     '/blog-images/IMG_1628.PNG'
+  ];
+
+  const insightImages = [
+    '/community_insights/ftimg1.png',
+    '/community_insights/ftimg2.png',
+    '/community_insights/ftimg3.png'
   ];
 
   useEffect(() => {
@@ -23,11 +40,27 @@ const Community = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setTotSlide((prev) => (prev + 1) % totImages.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [totImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % artisanImages.length);
     }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(interval);
   }, [artisanImages.length]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setInsightSlide((prev) => (prev + 1) % insightImages.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [insightImages.length]);
 
   const handleOpenModal = (e) => {
     e.preventDefault();
@@ -53,7 +86,82 @@ const Community = () => {
         title='Community' 
         subtitle='Building bridges between tradition and innovation, one collaboration at a time.'
         fullHeight={true}
+        bgImage={heroImage}
+        collectionSelector
+        className="subtitle-tagline-size"
       />
+
+      {/* Threads of Travancore Artisan Blog - appears first, same pattern as Kutch section below */}
+      <section className="artisan-story-section">
+        <div className="container">
+          <div className="artisan-story-wrapper">
+            <div className="story-icon">❖</div>
+            <span className="story-label">Our Weavers</span>
+            <h2 className="story-heading">The Women of the Loom</h2>
+
+            <div className="story-content-grid">
+              <div className="story-pattern story-pattern-left">
+                <div className="pattern-diamond"></div>
+                <div className="pattern-dots"></div>
+              </div>
+              <div className="story-pattern story-pattern-right">
+                <div className="pattern-diamond"></div>
+                <div className="pattern-dots"></div>
+              </div>
+
+              <div className="story-photo-section">
+                <div className="story-photo-wrapper">
+                  <div className="carousel-container">
+                    {totImages.map((image, index) => (
+                      <div
+                        key={index}
+                        className={`carousel-slide ${index === totSlide ? 'active' : ''}`}
+                        style={{
+                          opacity: index === totSlide ? 1 : 0,
+                          transform: index === totSlide ? 'scale(1)' : 'scale(0.95)'
+                        }}
+                      >
+                        <img
+                          src={image}
+                          alt="Threads of Travancore artisans"
+                          className="story-collage-image"
+                        />
+                        <div className="glow-sweep"></div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="image-outline-glow"></div>
+                </div>
+              </div>
+
+              <div className="story-text-content">
+                <div className="text-decorative-accent"></div>
+                <p className="story-paragraph">
+                  From the weaving communities of Thiruvananthapuram and the former Travancore
+                  region, these women carry forward a tradition that has endured through
+                  generations. For many, weaving is more than a livelihood—it is a skill inherited
+                  through family, shaped by experience, and deeply intertwined with everyday life.
+                </p>
+                <p className="story-paragraph">
+                  Some found their way to this craft while rebuilding their lives after the
+                  devastating floods of 2018, while others have spent decades at the loom,
+                  following a path laid down by their mothers, grandmothers and ancestors. Many
+                  began learning as young as fifteen, and have since devoted 25 to 30 years to
+                  refining their craft.
+                </p>
+                <p className="story-paragraph">
+                  Their knowledge lives not in manuals, but in practice—in the rhythm of the pit
+                  loom, the handling of each thread and the patience required to create something
+                  by hand. At Khaddar, we engage with these artisans through shared values and
+                  mutual respect, supporting the continuation of a craft that reflects Kerala's
+                  rich textile heritage while creating space for it within a contemporary world.
+                </p>
+                <div className="text-decorative-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Artisan Story Section */}
       <section className="artisan-story-section">
@@ -118,6 +226,43 @@ const Community = () => {
           </div>
         </div>
       </section>
+
+      <section className="community-insights-section">
+        <div className="container insights-header">
+          <div className="section-icon">❖</div>
+          <span className="section-label">From Our Community</span>
+          <h2 className="section-heading">Insights</h2>
+        </div>
+
+        <div className="insights-slideshow">
+          {insightImages.map((image, index) => (
+            <div
+              key={image}
+              className={`insights-slide ${index === insightSlide ? 'insights-slide-active' : ''}`}
+            >
+              <img src={image} alt={`Community insight ${index + 1}`} />
+            </div>
+          ))}
+
+          <div className="insights-dots-container">
+            {insightImages.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                className={`insights-dot ${index === insightSlide ? 'active' : ''}`}
+                onClick={() => setInsightSlide(index)}
+                aria-label={`Show insight ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="community-section-divider">
+        <span className="divider-line"></span>
+        <span className="divider-motif">❖</span>
+        <span className="divider-line"></span>
+      </div>
 
       <section className="community-video">
         <div className="video-section-wrapper">
@@ -206,4 +351,3 @@ const Community = () => {
 };
 
 export default Community;
-

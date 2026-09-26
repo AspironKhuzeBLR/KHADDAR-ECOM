@@ -3,12 +3,9 @@
 @import './styles/patterns.css';
 
 :root, html, body {
-  /* "only light" is a stronger enforcement for supported browsers */
   color-scheme: light;
   color-scheme: only light; 
   
-  /* Ensure the canvas itself is white, preventing the browser 
-     from painting the over-scroll area black */
   background-color: #ffffff !important;
   color: #1a1a1a !important;
 }
@@ -211,3 +208,43 @@ h1, h2, h3, h4, h5, h6, p {
   }
 }
 
+/* Thin, semi-transparent scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(111, 49, 50, 0.35);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(111, 49, 50, 0.55);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 49, 50, 0.35) transparent;
+}
+
+/* Custom scrollbar - thin maroon thumb, fully transparent track */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(111, 49, 50, 0.35);
+  border-radius: 10px;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 49, 50, 0.35) transparent;
+}

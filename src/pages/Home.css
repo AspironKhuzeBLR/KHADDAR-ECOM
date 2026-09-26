@@ -206,3 +206,57 @@
     transform: none;
   }
 }
+
+/* --- Watch Ad marquee (links to promo video) --- */
+.watch-ad-marquee {
+  display: block;
+  background: #D6A04A;
+  color: #ffffff;
+  padding: 16px 0;
+  border-bottom: 1px solid #ffffff;
+  overflow: hidden;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.watch-ad-marquee:hover {
+  background: #D6A04A;
+}
+
+.watch-ad-marquee-content {
+  display: flex;
+  animation: watchAdMarquee 18s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.watch-ad-marquee-content span {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-right: 70px;
+}
+
+.watch-ad-marquee-content span em {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+@keyframes watchAdMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .watch-ad-marquee-content span {
+    font-size: 0.85rem;
+    margin-right: 35px;
+  }
+  .watch-ad-marquee-content {
+    animation-duration: 12s;
+  }
+}

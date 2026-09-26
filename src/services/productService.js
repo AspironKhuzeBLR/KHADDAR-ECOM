@@ -21,7 +21,6 @@ import { supabase } from './supabaseClient';
 const API_BASE_URL = API_CONFIG.API_BASE_URL;
 const REQUEST_TIMEOUT = API_CONFIG.TIMEOUT || 15000;
 
-// Helper: Add timeout to fetch requests
 const withTimeout = (promise, timeout = REQUEST_TIMEOUT) => {
   let timeoutHandle;
   const timeoutPromise = new Promise((_, reject) => {
@@ -36,18 +35,14 @@ const withTimeout = (promise, timeout = REQUEST_TIMEOUT) => {
   ]);
 };
 
-// Helper: Build URL with query parameters
 const buildUrl = (path, params = {}) => {
-  // Handle both absolute URLs and relative paths (for proxy)
   let baseUrl;
   if (API_BASE_URL) {
     baseUrl = `${API_BASE_URL}${path}`;
   } else {
-    // In development with proxy, use relative path
     baseUrl = path;
   }
   
-  // Build query string
   const queryParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== '') {
@@ -59,13 +54,11 @@ const buildUrl = (path, params = {}) => {
   return queryString ? `${baseUrl}?${queryString}` : baseUrl;
 };
 
-// Helper: Handle API response
 const handleResponse = async (response) => {
   if (!response.ok) {
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json();
-      // LOG THIS: This will tell us exactly which field is failing!
       console.error("BACKEND VALIDATION ERROR:", data); 
       throw new Error(data?.message || data?.error || JSON.stringify(data));
     }
@@ -81,22 +74,10 @@ const handleResponse = async (response) => {
   return response.text();
 };
 
-// Helper: Get admin token
 const getAdminToken = () => {
   return sessionStorage.getItem('adminToken');
 };
 
-/**
- * Fetch products with pagination and filters
- * @param {Object} options - Query options
- * @param {number} options.page - Page number (default: 1)
- * @param {number} options.limit - Items per page (default: 12)
- * @param {number|string} options.category - Category ID to filter by
- * @param {boolean} options.inStockOnly - Filter only in-stock products
- * @param {string} options.mainCategory - Main category filter (Men's Wear, Women's Wear)
- * @returns {Promise<Object>} { products: [], pagination: { page, limit, total, totalPages } }
- */
-// Main category IDs (from API)
 const MAIN_CATEGORY_IDS = {
   "Men's Wear": 1,
   "Women's Wear": 4
@@ -117,8 +98,6 @@ export const fetchProducts = async (options = {}) => {
       limit
     };
     
-    // If a specific sub-category is selected, use it
-    // Otherwise, if mainCategory is specified, use the main category ID
     if (mainCategory && MAIN_CATEGORY_IDS[mainCategory]) {
         params.main_category = MAIN_CATEGORY_IDS[mainCategory];
     }
@@ -142,10 +121,8 @@ export const fetchProducts = async (options = {}) => {
 
     const data = await handleResponse(response);
     
-    // Transform API response to consistent format
     const products = data.products || data.data || data || [];
     
-    // Normalize pagination format (API uses currentPage, we normalize to page)
     const apiPagination = data.pagination || {};
     const pagination = {
       page: apiPagination.currentPage || parseInt(page),
@@ -156,11 +133,16 @@ export const fetchProducts = async (options = {}) => {
       hasPrevPage: apiPagination.hasPrevPage || false
     };
 
-    // Transform product data to match frontend expectations
     const transformedProducts = products.map(transformProduct);
 
+    // Hide any product explicitly unpublished from the admin dashboard.
+    const visibleProducts = transformedProducts.filter((p) => {
+      if (!p.isLive) return false;
+      return true;
+    });
+
     return {
-      products: transformedProducts,
+      products: visibleProducts,
       pagination
     };
     } catch (error) {
@@ -169,11 +151,6 @@ export const fetchProducts = async (options = {}) => {
   }
 };
 
-/**
- * Fetch product by ID
- * @param {number|string} productId - Product ID
- * @returns {Promise<Object>} Product detail object
- */
 export const fetchProductById = async (productId) => {
   try {
     const path = `${API_CONFIG.ENDPOINTS.PRODUCTS}/${productId}`;
@@ -198,31 +175,19 @@ export const fetchProductById = async (productId) => {
   }
 };
 
-/**
- * Fetch product detail by slug or ID
- * Supports both numeric IDs and string slugs
- * @param {string|number} productSlugOrId - Product slug or ID
- * @returns {Promise<Object|null>} Product detail object or null if not found
- */
 export const fetchProductDetail = async (productSlugOrId) => {
   try {
-    // Check if it's a numeric ID (either number or string of digits)
     const isNumericId = /^\d+$/.test(productSlugOrId);
     
     if (isNumericId) {
-      // Fetch directly by ID
       return await fetchProductById(productSlugOrId);
     }
     
-    // Try to extract ID from slug patterns like 'mens-wear-21' or 'product-21'
     const idMatch = productSlugOrId.match(/[-_](\d+)$/);
     if (idMatch) {
       return await fetchProductById(idMatch[1]);
     }
     
-    // If no ID found, the slug might be the actual product slug from API
-    // Try fetching all products and finding by slug (fallback)
-    // For now, return null - products should use ID-based URLs
     console.error('Could not determine product ID from:', productSlugOrId);
     return null;
   } catch (error) {
@@ -231,10 +196,6 @@ export const fetchProductDetail = async (productSlugOrId) => {
   }
 };
 
-/**
- * Fetch all categories
- * @returns {Promise<Array>} Array of categories
- */
 export const fetchCategories = async () => {
   try {
     const path = API_CONFIG.ENDPOINTS.CATEGORIES;
@@ -257,20 +218,12 @@ export const fetchCategories = async () => {
   }
 };
 
-/**
- * Fetch categories filtered by main category (for sidebar navigation)
- * @param {string} gender - 'men' or 'women' to filter categories
- * @returns {Promise<Array>} Array of categories
- */
 export const fetchCategoriesByGender = async (gender) => {
   try {
     const allCategories = await fetchCategories();
     
-    // Map gender to main_category
     const mainCategory = gender === 'men' ? "Men's Wear" : "Women's Wear";
     
-    // Filter categories by main_category if the data includes it
-    // Otherwise return all categories
     const filteredCategories = allCategories.filter(cat => {
       if (cat.main_category) {
         return cat.main_category === mainCategory;
@@ -293,28 +246,17 @@ export const fetchCategoriesByGender = async (gender) => {
 // ADMIN API FUNCTIONS
 // ============================================
 
-/**
- * Add a new product (Admin)
- * @param {Object} productData - Product data to add
- * @returns {Promise<Object>} Created product
- */
-// In productService.js
-// Inside productService.js
-
 export const addProduct = async (productData) => {
   const token = getAdminToken();
   try {
     const url = `${API_BASE_URL}/admin/products`;
     
-    // Check if we are sending a File (FormData) or just JSON
     const isFormData = productData instanceof FormData;
 
     const headers = {
       'Authorization': `Bearer ${token}`
     };
 
-    // IMPORTANT: When sending FormData, DO NOT set 'Content-Type'. 
-    // The browser will set it automatically with the correct "boundary".
     if (!isFormData) {
       headers['Content-Type'] = 'application/json';
     }
@@ -332,13 +274,6 @@ export const addProduct = async (productData) => {
   }
 };
 
-/**
- * Update a product (Admin)
- * @param {number|string} productId - Product ID to update
- * @param {Object} productData - Updated product data
- * @returns {Promise<Object>} Updated product
- */
-// NEW VERSION - USE THIS
 export const updateProduct = async (productId, productData) => {
   const token = getAdminToken();
   try {
@@ -352,7 +287,6 @@ export const updateProduct = async (productId, productData) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        // FIX: Send productData directly as it is already formatted in the Dashboard
         body: JSON.stringify(productData) 
       })
     );
@@ -364,11 +298,6 @@ export const updateProduct = async (productId, productData) => {
   }
 };
 
-/**
- * Delete a product (Admin)
- * @param {number|string} productId - Product ID to delete
- * @returns {Promise<Object>} Deletion result
- */
 export const deleteProduct = async (productId) => {
   const token = getAdminToken();
   
@@ -394,11 +323,6 @@ export const deleteProduct = async (productId) => {
   }
 };
 
-/**
- * Fetch all products for admin (with pagination)
- * @param {Object} options - Query options
- * @returns {Promise<Object>} { products: [], pagination: {} }
- */
 export const fetchAdminProducts = async (options = {}) => {
   const {
     page = 1,
@@ -421,33 +345,34 @@ export const fetchAdminProducts = async (options = {}) => {
     const data = await handleResponse(response);
     const products = data.products || data.data || data || [];
     
-    // Transform for admin display
-    // Inside fetchAdminProducts in productService.js
-const transformedProducts = products.map(product => {
-  const { mainCategory, subCategory } = extractCategories(product.categories);
-  return {
-    id: product.id,
-    name: product.name,
-    category: mainCategory || product.main_category || "Men's Wear",
-    subCategory: subCategory || product.sub_category || '',
-    price: product.price,
-    stock: product.stock || 0,
-    image: product.images?.[0]?.image_url || product.image || '',
-    description: product.description || '',
-    slug: product.slug || '',
-    isFeatured: product.is_featured || false,
-    
-    // ADD THIS LINE: It ensures sizes are passed to the dashboard
-    sizes: product.sizes || [
-      { size: 'S', stock: 0 },
-      { size: 'M', stock: 0 },
-      { size: 'L', stock: 0 },
-      { size: 'XL', stock: 0 }
-      ]
+    const transformedProducts = products.map(product => {
+      const { mainCategory, subCategory } = extractCategories(product.categories);
+      const { description: cleanDesc } = extractPiecesData(product.description);
+      const totProductPrefix = /^tot\s*-\s*/i;
+      return {
+        id: product.id,
+        name: (product.name || '').replace(totProductPrefix, '').trim(),
+        category: mainCategory || product.main_category || "Men's Wear",
+        subCategory: subCategory || product.sub_category || '',
+        price: product.price,
+        stock: product.stock || 0,
+        image: product.images?.[0]?.image_url || product.image || '',
+        images: product.images || [],
+        description: cleanDesc,
+        rawName: product.name || '',
+        rawDescription: product.description || '',
+        slug: product.slug || '',
+        isFeatured: product.is_featured || false,
+        isLive: !isMarkedHidden(product.description),
+        sizes: product.sizes || [
+          { size: 'S', stock: 0 },
+          { size: 'M', stock: 0 },
+          { size: 'L', stock: 0 },
+          { size: 'XL', stock: 0 }
+        ]
       };
     });
 
-    // Normalize pagination
     const apiPagination = data.pagination || {};
     return {
       products: transformedProducts,
@@ -468,9 +393,6 @@ const transformedProducts = products.map(product => {
 // HELPER FUNCTIONS
 // ============================================
 
-/**
- * Extract main and sub category from categories array
- */
 const extractCategories = (categories) => {
   if (!categories || !Array.isArray(categories)) {
     return { mainCategory: '', subCategory: '' };
@@ -486,14 +408,67 @@ const extractCategories = (categories) => {
 };
 
 /**
- * Transform API product to frontend format
+ * Threads of Travancore products are tagged in the admin panel's Collection
+ * dropdown, stored internally as a "ToT - " name prefix.
  */
+const TOT_PREFIX = /^tot\s*-\s*/i;
+
+const toTitleCase = (str) =>
+  str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+/**
+ * A product can be hidden from customer-facing pages (while staying fully
+ * editable/manageable in the admin dashboard) via a "[[HIDDEN]]" marker
+ * appended to its description - toggled by the "Show product live on site"
+ * checkbox in the admin dashboard's product form and product list.
+ */
+const HIDDEN_MARKER = /\n*\[\[HIDDEN\]\]/i;
+const isMarkedHidden = (rawText) => /\[\[HIDDEN\]\]/i.test(rawText || '');
+
+/**
+ * Set/piece pricing is encoded invisibly in the description field as
+ * [[PIECES_DATA:{...}]]  This extracts it and returns a clean description.
+ */
+const extractPiecesData = (rawDescription) => {
+  const description = (rawDescription || '').replace(HIDDEN_MARKER, '').trim();
+  const match = description.match(/\[\[PIECES_DATA:(.*?)\]\]/s);
+  if (!match) {
+    return { description, pieces: null, fullSetPrice: null };
+  }
+  let parsed = null;
+  try {
+    // Base64-decoded format (current)
+    parsed = JSON.parse(decodeURIComponent(escape(atob(match[1]))));
+  } catch (e) {
+    // Fallback: older plain-JSON format, in case any products were saved before this fix
+    try {
+      parsed = JSON.parse(match[1]);
+    } catch (e2) {
+      parsed = null;
+    }
+  }
+  return {
+    description: description.replace(/\[\[PIECES_DATA:.*?\]\]/s, '').trim(),
+    pieces: parsed?.pieces || null,
+    fullSetPrice: parsed?.fullSet ?? null
+  };
+};
+
 const transformProduct = (product) => {
   const { mainCategory, subCategory } = extractCategories(product.categories);
-  
+  const rawName = product.name || '';
+  const isTot = TOT_PREFIX.test(rawName);
+  const { description, pieces, fullSetPrice } = extractPiecesData(product.description);
+
   return {
     id: product.id,
-    name: product.name,
+    name: toTitleCase(rawName.replace(TOT_PREFIX, '').trim()),
+    collection: isTot ? 'tot' : 'kok',
+    isLive: !isMarkedHidden(product.description),
     price: formatPrice(product.price),
     priceRaw: product.price,
     category: subCategory || product.sub_category || '',
@@ -503,14 +478,13 @@ const transformProduct = (product) => {
     stock: product.stock || 0,
     inStock: (product.stock || 0) > 0,
     slug: product.slug || `product-${product.id}`,
-    description: product.description || '',
+    description: description,
+    pieces: pieces,
+    fullSetPrice: fullSetPrice,
     isFeatured: product.is_featured || false
   };
 };
 
-/**
- * Transform API product detail to frontend format
- */
 const transformProductDetail = (product) => {
   if (!product) return null;
   
@@ -536,9 +510,14 @@ const transformProductDetail = (product) => {
       { size: 'XL', chest: '40', waist: '36' }
     ]
   };
+
+  const { description, pieces, fullSetPrice } = extractPiecesData(product.description);
+
   return {
     id: product.id,
-    name: product.name,
+    name: (product.name || '').replace(TOT_PREFIX, '').trim(),
+    collection: TOT_PREFIX.test(product.name || '') ? 'tot' : 'kok',
+    isLive: !isMarkedHidden(product.description),
     category: subCategory || product.sub_category || '',
     mainCategory: resolvedMainCategory,
     gender: resolvedMainCategory === "Men's Wear" ? 'men' : 'women',
@@ -549,7 +528,9 @@ const transformProductDetail = (product) => {
     image: images[0] || '',
     sizes: product.sizes || ['S', 'M', 'L', 'XL'],
     colors: product.colors || ['Default'],
-    description: product.description || '',
+    description: description,
+    pieces: pieces,
+    fullSetPrice: fullSetPrice,
     details: product.details || 'Handwoven Fabric and Organic Cotton',
     care: product.care || 'Hand wash with mild detergent. Dry inside out in shade.',
     stock: product.stock || 0,
@@ -560,10 +541,6 @@ const transformProductDetail = (product) => {
   };
 };
 
-
-/**
- * Format price to Indian Rupee format
- */
 const formatPrice = (price) => {
   if (typeof price === 'string' && price.includes('₹')) {
     return price;
@@ -571,29 +548,42 @@ const formatPrice = (price) => {
   const numPrice = parseFloat(price) || 0;
   return `₹${numPrice.toLocaleString('en-IN')}`;
 };
-/**
- * Uploads a file to Supabase Storage
- * @param {File} file - The file object from the input
- * @returns {Promise<string>} The public URL of the uploaded image
- */
-// Inside src/services/productService.js
+
+export const expandProductsWithPieces = (products) => {
+  const expanded = [];
+  products.forEach((product) => {
+    expanded.push(product);
+    if (product.pieces && product.pieces.length > 0) {
+      product.pieces.forEach((piece) => {
+        expanded.push({
+          ...product,
+          virtualId: `${product.id}-piece-${piece.label.toLowerCase().replace(/\s+/g, '-')}`,
+          name: `${product.name} - ${piece.label}`,
+          price: formatPrice(piece.price),
+          priceRaw: piece.price,
+          category: piece.label, // e.g. a "Trousers" piece is filterable under "Trousers", not the parent's own category (e.g. "Co-ords")
+          isPieceVariant: true,
+          pieceLabel: piece.label
+        });
+      });
+    }
+  });
+  return expanded;
+};
 
 export const uploadImageToSupabase = async (file) => {
   try {
-    // Check if Supabase is configured
     if (!supabase) {
       throw new Error('Supabase is not configured. Please add REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY to your .env file.');
     }
 
-    // 1. Create a clean file name
     const fileExt = file.name.split('.').pop();
     const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
     
-    // 2. MATCH THE DEVELOPER'S FOLDER: "product images"
     const filePath = `product images/${fileName}`;
 
     const { error } = await supabase.storage
-      .from('product-images') // Bucket name
+      .from('product-images')
       .upload(filePath, file);
 
     if (error) throw error;
