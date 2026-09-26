@@ -76,9 +76,9 @@ const ShopWomen = () => {
   // Client-side filter: match by category name (works for both real products,
   // whose `category` is their real sub-category, and virtual piece cards,
   // whose `category` was set to the piece's own label)
-  const filteredProducts = selectedCategoryData
+    const filteredProducts = selectedCategoryData
     ? allProducts.filter(p => p.category === (selectedCategoryData.name || selectedCategoryData.sub_category))
-    : allProducts;
+    : allProducts.filter(p => !p.isPieceVariant);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
   const products = filteredProducts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
