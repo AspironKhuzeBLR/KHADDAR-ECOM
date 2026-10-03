@@ -68,7 +68,7 @@ const ThreadsOfTravancore = () => {
                   the collection brings together pure <strong>handloom cotton</strong>, the quiet elegance of Kerala's
                   whites and <strong>Kasavu</strong>, and contemporary silhouettes with a subtle Indian sensibility.
                   Woven on traditional <strong>pit looms</strong>, the cotton is exceptionally light, soft and
-                  breathable, naturally suited to Kerala's climate. The distinctive <strong>Kasavu borders</strong>
+                  breathable, naturally suited to Kerala's climate. The distinctive <strong>Kasavu borders</strong>{' '}
                   are created with fine copper strings coated in silver and gold, giving the zari its
                   characteristic depth and lustre. Every garment carries not only the material, but
                   the accumulated knowledge of generations who have worked with it.
