@@ -11,7 +11,7 @@
 // Backend API Configuration
 const isDevelopment = process.env.NODE_ENV === 'development';
 const BACKEND_BASE_URL = process.env.REACT_APP_API_BASE_URL ||
-  (isDevelopment ? '' : 'https://djbudi2bkm.us-east-1.awsapprunner.com');
+  (isDevelopment ? '' : 'https://khaddar-api-834892141462.asia-south1.run.app');
 
 export const API_CONFIG = {
   // Backend API base URL
