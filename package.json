@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Khaddar - A conscious fashion brand celebrating Indian craftsmanship",
   "private": true,
-  "proxy": "https://djbudi2bkm.us-east-1.awsapprunner.com",
+  "proxy": "https://khaddar-api-834892141462.asia-south1.run.app",
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
     "chart.js": "^4.5.1",

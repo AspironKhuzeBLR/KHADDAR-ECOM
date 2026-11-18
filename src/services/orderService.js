@@ -178,8 +178,9 @@ export const getOrderById = async (orderId) => {
 export const getPaymentStatus = async (orderId) => {
     try {
         // Explicitly using the production URL provided by your developer
-        const url = `https://djbudi2bkm.us-east-1.awsapprunner.com/api/orders/${orderId}/payment/status`;
-        
+        // const url = `https://khaddar-api-834892141462.asia-south1.run.app/api/orders/${orderId}/payment/status`;
+        const path = `${API_CONFIG.ENDPOINTS.ORDERS}/${orderId}/payment/status`;
+        const url = API_BASE_URL ? `${API_BASE_URL}${path}` : path;
         console.log('Verifying payment status at:', url);
 
         const response = await withTimeout(
